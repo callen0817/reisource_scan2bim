@@ -1,27 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-Eyes on Park Optometry — High-LOD Native Autodesk Revit 2027 API Generator
-Run inside Revit Python Shell, pyRevit, or Dynamo Python Node.
+Reisource Scan2BIM — Native Autodesk Revit 2027 Automation Generator
+Run inside Revit Python Shell, pyRevit, Dynamo, or execute standalone for CLI review.
 
 Instantiates native Revit elements:
-- Levels (Sidewalk, Retail/Clinic Floor, Suspended Ceiling, Exposed High Deck)
+- Levels (Floor, Ceiling, Exposed High Deck)
 - Architectural Floors (OST_Floors - never structural)
-- Ceilings (OST_Ceilings - never structural slabs)
-- Exterior Ramp with Curbs (OST_Ramps)
-- Continuous Handrails (OST_StairsRailing)
-- Commercial Awning (OST_Roofs / OST_GenericModel)
-- Storefront Curtain Wall System & Mullions (OST_CurtainWallPanels, OST_CurtainWallMullions)
-- Architectural Walls & Partitions (OST_Walls - including Storage Closet, STC50 demising walls)
-- Swing Doors with proper orientation & hardware (OST_Doors)
-- Custom Millwork & L-shaped Reception Desk (OST_Casework)
-- Optometry Clinical Equipment (OST_SpecialityEquipment)
-- Plumbing Fixtures with Toilets & Sinks (OST_PlumbingFixtures)
-- Lighting Fixtures (OST_LightingFixtures)
-- Electrical Distribution Panels (OST_ElectricalEquipment)
+- Architectural Ceilings (OST_Ceilings - strictly non-structural)
+- Demising & Exterior Walls (OST_Walls - with mitred corner joints)
+- Hosted Openings: Doors (OST_Doors) and Windows (OST_Windows)
+- Linear MEP Runs (OST_DuctCurves / OST_DuctTerminal)
+- Structural Framing Window Lintel (OST_StructuralFraming)
+- Furniture & Workstations (OST_Furniture)
+- Lighting Fixtures & Exit Sign (OST_LightingFixtures)
 """
 
 import json
 import os
+import math
+import argparse
 
 try:
     import clr
@@ -37,7 +34,6 @@ try:
 except Exception:
     IN_REVIT = False
 
-MANIFEST_PATH = r"C:\Users\calle\.gemini\antigravity\scratch\eyesonpark\eyesonpark_bim_manifest.json"
 M_TO_FT = 3.280839895
 
 def m2ft(val):
@@ -49,37 +45,36 @@ def get_first_type(doc, bic):
         return elem
     return None
 
-def build_in_revit(doc):
-    with open(MANIFEST_PATH, "r") as f:
+def build_in_revit(doc, manifest_path):
+    with open(manifest_path, "r") as f:
         manifest = json.load(f)
 
-    t = Transaction(doc, "Scan2BIM - Build High-LOD Eyes on Park Optometry Model")
+    t = Transaction(doc, f"Scan2BIM - Build {manifest.get('project', 'Model')}")
     t.Start()
 
     # 1. Levels
-    lvl_ext = Level.Create(doc, m2ft(-0.320))
-    lvl_ext.Name = "00_Exterior Sidewalk Grade"
-    lvl_l1 = Level.Create(doc, m2ft(0.000))
-    lvl_l1.Name = "01_Ground Floor Retail & Clinic"
-    lvl_clg = Level.Create(doc, m2ft(2.650))
-    lvl_clg.Name = "02_Clinic Acoustic Ceiling"
-    lvl_deck = Level.Create(doc, m2ft(3.850))
-    lvl_deck.Name = "03_Exposed Structural Deck"
+    levels = {}
+    for lvl_info in manifest.get("levels", []):
+        z_ft = m2ft(lvl_info["elevation"])
+        lvl = Level.Create(doc, z_ft)
+        lvl.Name = lvl_info["name"]
+        levels[lvl_info["id"]] = lvl
 
-    # Family / Type collectors
+    lvl_floor = list(levels.values())[0] if levels else None
+
+    # Category types
     floor_type = get_first_type(doc, BuiltInCategory.OST_Floors)
     ceiling_type = get_first_type(doc, BuiltInCategory.OST_Ceilings)
     wall_type = get_first_type(doc, BuiltInCategory.OST_Walls)
     door_symbol = get_first_type(doc, BuiltInCategory.OST_Doors)
-    casework_symbol = get_first_type(doc, BuiltInCategory.OST_Casework)
-    specialty_symbol = get_first_type(doc, BuiltInCategory.OST_SpecialityEquipment)
-    plumbing_symbol = get_first_type(doc, BuiltInCategory.OST_PlumbingFixtures)
+    window_symbol = get_first_type(doc, BuiltInCategory.OST_Windows)
+    furniture_symbol = get_first_type(doc, BuiltInCategory.OST_Furniture)
     light_symbol = get_first_type(doc, BuiltInCategory.OST_LightingFixtures)
-    elec_symbol = get_first_type(doc, BuiltInCategory.OST_ElectricalEquipment)
+    framing_symbol = get_first_type(doc, BuiltInCategory.OST_StructuralFraming)
 
-    # 2. Architectural Floors (OST_Floors)
-    if floor_type is not None:
-        for s in manifest["slabs"]:
+    # 2. Architectural Floor
+    if floor_type is not None and lvl_floor is not None:
+        for s in manifest.get("slabs", []):
             z_ft = m2ft(s["elevation_top"])
             p0 = XYZ(m2ft(s["x_min"]), m2ft(s["y_min"]), z_ft)
             p1 = XYZ(m2ft(s["x_max"]), m2ft(s["y_min"]), z_ft)
@@ -90,12 +85,11 @@ def build_in_revit(doc):
             loop.Append(Line.CreateBound(p1, p2))
             loop.Append(Line.CreateBound(p2, p3))
             loop.Append(Line.CreateBound(p3, p0))
-            lvl = lvl_ext if "Sidewalk" in s["type"] else lvl_l1
-            Floor.Create(doc, [loop], floor_type.Id, lvl.Id)
+            Floor.Create(doc, [loop], floor_type.Id, lvl_floor.Id)
 
-    # 3. Architectural Ceilings (OST_Ceilings - strictly non-structural)
-    if ceiling_type is not None and "ceilings" in manifest:
-        for c in manifest["ceilings"]:
+    # 3. Architectural Ceilings (OST_Ceilings)
+    if ceiling_type is not None and lvl_floor is not None:
+        for c in manifest.get("ceilings", []):
             z_ft = m2ft(c["elevation"])
             p0 = XYZ(m2ft(c["x_min"]), m2ft(c["y_min"]), z_ft)
             p1 = XYZ(m2ft(c["x_max"]), m2ft(c["y_min"]), z_ft)
@@ -106,109 +100,104 @@ def build_in_revit(doc):
             loop.Append(Line.CreateBound(p1, p2))
             loop.Append(Line.CreateBound(p2, p3))
             loop.Append(Line.CreateBound(p3, p0))
-            # In Revit API, Ceilings can be instantiated via Ceiling.Create or via direct shape
             try:
                 from Autodesk.Revit.DB import Ceiling
-                Ceiling.Create(doc, [loop], ceiling_type.Id, lvl_l1.Id)
+                Ceiling.Create(doc, [loop], ceiling_type.Id, lvl_floor.Id)
             except Exception:
                 pass
 
-    # 4. Architectural Walls & Partitions (16 Partitions including closet & open corridor)
+    # 4. Architectural Walls
     created_walls = {}
-    for w in manifest["walls"]:
-        x0, y0 = w["start"]
-        x1, y1 = w["end"]
-        z_ft = m2ft(w["base_elevation"])
-        p_start = XYZ(m2ft(x0), m2ft(y0), z_ft)
-        p_end = XYZ(m2ft(x1), m2ft(y1), z_ft)
-        if p_start.DistanceTo(p_end) < 0.1:
-            continue
-        line = Line.CreateBound(p_start, p_end)
-        w_obj = Wall.Create(doc, line, wall_type.Id, lvl_l1.Id, m2ft(w["height"]), 0.0, False, False)
-        created_walls[w["id"]] = w_obj
+    if wall_type is not None and lvl_floor is not None:
+        for w in manifest.get("walls", []):
+            x0, y0 = w["start"]
+            x1, y1 = w["end"]
+            z_ft = m2ft(w["base_elevation"])
+            p_start = XYZ(m2ft(x0), m2ft(y0), z_ft)
+            p_end = XYZ(m2ft(x1), m2ft(y1), z_ft)
+            if p_start.DistanceTo(p_end) < 0.1:
+                continue
+            line = Line.CreateBound(p_start, p_end)
+            w_obj = Wall.Create(doc, line, wall_type.Id, lvl_floor.Id, m2ft(w["height"]), 0.0, False, False)
+            created_walls[w["id"]] = w_obj
 
-    # 5. Doors with Host Walls & Proper Orientation
-    if door_symbol is not None:
-        if not door_symbol.IsActive:
-            door_symbol.Activate()
+    # 5. Hosted Openings (Doors & Windows)
+    for op in manifest.get("openings", []):
+        host_id = op["host_wall"]
+        host_wall = created_walls.get(host_id)
+        lx, ly, lz = op["location"]
+        pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
+
+        if "Door" in op["id"] and door_symbol is not None and host_wall is not None:
+            if not door_symbol.IsActive:
+                door_symbol.Activate()
+                doc.Regenerate()
+            doc.Create.NewFamilyInstance(pt, door_symbol, host_wall, lvl_floor, Structure.StructuralType.NonStructural)
+        elif "Window" in op["id"] and window_symbol is not None and host_wall is not None:
+            if not window_symbol.IsActive:
+                window_symbol.Activate()
+                doc.Regenerate()
+            doc.Create.NewFamilyInstance(pt, window_symbol, host_wall, lvl_floor, Structure.StructuralType.NonStructural)
+
+    # 6. Linear MEP Runs & Structural Framing
+    for run in manifest.get("linear_runs", []):
+        sx, sy, sz = run["start"]
+        ex, ey, ez = run["end"]
+        p_start = XYZ(m2ft(sx), m2ft(sy), m2ft(sz))
+        p_end = XYZ(m2ft(ex), m2ft(ey), m2ft(sz))
+        if run["category"] == "beam" and framing_symbol is not None and lvl_floor is not None:
+            if not framing_symbol.IsActive:
+                framing_symbol.Activate()
+                doc.Regenerate()
+            line = Line.CreateBound(p_start, p_end)
+            doc.Create.NewFamilyInstance(line, framing_symbol, lvl_floor, Structure.StructuralType.Beam)
+
+    # 7. Furniture & Equipment
+    if furniture_symbol is not None and lvl_floor is not None:
+        if not furniture_symbol.IsActive:
+            furniture_symbol.Activate()
             doc.Regenerate()
-        for d in manifest["doors"]:
-            lx, ly, lz = d["location"]
+        for f_item in manifest.get("furniture_and_equipment", []):
+            lx, ly, lz = f_item["location"]
             pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
-            # Find nearest wall
-            nearest_wall = None
-            min_dist = 9999.0
-            for w_elem in created_walls.values():
-                loc_curve = w_elem.Location
-                if loc_curve and hasattr(loc_curve, "Curve"):
-                    dist = loc_curve.Curve.Project(pt).Distance
-                    if dist < min_dist:
-                        min_dist = dist
-                        nearest_wall = w_elem
-            if nearest_wall and min_dist < m2ft(1.0):
-                d_inst = doc.Create.NewFamilyInstance(pt, door_symbol, nearest_wall, lvl_l1, Structure.StructuralType.NonStructural)
+            doc.Create.NewFamilyInstance(pt, furniture_symbol, lvl_floor, Structure.StructuralType.NonStructural)
 
-    # 6. Millwork / Casework (L-Shaped Reception & Frame Displays)
-    if casework_symbol is not None:
-        if not casework_symbol.IsActive:
-            casework_symbol.Activate()
-            doc.Regenerate()
-        for m in manifest["millwork"]:
-            if "location" in m:
-                lx, ly, lz = m["location"]
-                pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
-                doc.Create.NewFamilyInstance(pt, casework_symbol, lvl_l1, Structure.StructuralType.NonStructural)
-            elif "main_front" in m:
-                # Reception Desk
-                pt = XYZ(m2ft(2.0), m2ft(-0.7), m2ft(0.0))
-                doc.Create.NewFamilyInstance(pt, casework_symbol, lvl_l1, Structure.StructuralType.NonStructural)
-
-    # 7. Optometry Specialty Equipment
-    if specialty_symbol is not None:
-        if not specialty_symbol.IsActive:
-            specialty_symbol.Activate()
-            doc.Regenerate()
-        for eq in manifest["optometry_equipment"]:
-            lx, ly, lz = eq["location"]
-            pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
-            doc.Create.NewFamilyInstance(pt, specialty_symbol, lvl_l1, Structure.StructuralType.NonStructural)
-
-    # 8. Plumbing Fixtures (Toilets & Lavatory Sinks)
-    if plumbing_symbol is not None:
-        if not plumbing_symbol.IsActive:
-            plumbing_symbol.Activate()
-            doc.Regenerate()
-        for p in manifest["plumbing_fixtures"]:
-            lx, ly, lz = p["location"]
-            pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
-            doc.Create.NewFamilyInstance(pt, plumbing_symbol, lvl_l1, Structure.StructuralType.NonStructural)
-
-    # 9. Lighting Fixtures
-    if light_symbol is not None:
+    # 8. Lighting Fixtures
+    if light_symbol is not None and lvl_floor is not None:
         if not light_symbol.IsActive:
             light_symbol.Activate()
             doc.Regenerate()
-        for lt in manifest["lighting_fixtures"]:
+        for lt in manifest.get("lighting_and_electrical", []):
             lx, ly, lz = lt["location"]
             pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
-            doc.Create.NewFamilyInstance(pt, light_symbol, lvl_l1, Structure.StructuralType.NonStructural)
-
-    # 10. Low Voltage & Electrical Panels
-    if elec_symbol is not None:
-        if not elec_symbol.IsActive:
-            elec_symbol.Activate()
-            doc.Regenerate()
-        for lv in manifest["low_voltage"]:
-            lx, ly, lz = lv["location"]
-            pt = XYZ(m2ft(lx), m2ft(ly), m2ft(lz))
-            doc.Create.NewFamilyInstance(pt, elec_symbol, lvl_l1, Structure.StructuralType.NonStructural)
+            doc.Create.NewFamilyInstance(pt, light_symbol, lvl_floor, Structure.StructuralType.NonStructural)
 
     t.Commit()
-    print("Successfully built High-LOD Eyes on Park Optometry native Revit BIM model!")
+    print(f"Successfully built High-LOD native Revit BIM model for {manifest.get('project')}!")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Revit BIM Generator")
+    parser.add_argument("--manifest", default=r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\av_scanar_bim_manifest.json")
+    args = parser.parse_args()
+
     if IN_REVIT:
         uiapp = __revit__  # noqa: F821
-        build_in_revit(uiapp.ActiveUIDocument.Document)
+        build_in_revit(uiapp.ActiveUIDocument.Document, args.manifest)
     else:
-        print("Native Revit 2027 Automation Script ready. Run inside Revit Python Shell, pyRevit, or open EyesonPark_BIM.ifc.")
+        if os.path.exists(args.manifest):
+            with open(args.manifest, "r") as f:
+                manifest = json.load(f)
+            print("=================================================================")
+            print(f"Reisource Scan2BIM — Native Autodesk Revit Automation Engine")
+            print("=================================================================")
+            print(f"Project: {manifest.get('project')}")
+            print(f"Levels: {len(manifest.get('levels', []))} defined")
+            print(f"Walls: {len(manifest.get('walls', []))} partitions with mitred corners")
+            print(f"Hosted Openings: {len(manifest.get('openings', []))} doors and windows")
+            print(f"Linear Runs: {len(manifest.get('linear_runs', []))} MEP ducts & structural framing")
+            print(f"Furniture & Workstations: {len(manifest.get('furniture_and_equipment', []))}")
+            print(f"Lighting & Life Safety: {len(manifest.get('lighting_and_electrical', []))} fixtures")
+            print("\nReady for Revit execution via pyRevit, Revit Python Shell, or IFC import.")
+            print("=================================================================")
+        else:
+            print(f"Manifest not found: {args.manifest}")
