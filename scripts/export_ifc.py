@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Reisource Scan2BIM — Native IFC4 Exporter Engine
-Implements Quartz & BIMCraft parametric principles:
-- True parametric wall opening voids:
+AV scanAR Data Sync — Native IFC4 Exporter
+Implements:
+- Standard ifcopenshell.api project setup
+- Parametric wall opening voids:
   * IfcOpeningElement
   * IfcRelVoidsElement (physical opening void cutting host IfcWall)
   * IfcRelFillsElement (IfcDoor / IfcWindow filling the void)
@@ -13,13 +14,15 @@ Implements Quartz & BIMCraft parametric principles:
 """
 
 import os
-import sys
 import time
 import json
 import math
-import argparse
+import numpy as np
 import ifcopenshell
 import ifcopenshell.api
+
+MANIFEST_PATH = r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\av_scanar_bim_manifest.json"
+OUT_IFC_PATH = r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\AV_scanAR_BIM.ifc"
 
 def make_solid_box(model, dx, dy, dz, ox=0.0, oy=0.0, oz=0.0):
     rect = model.createIfcRectangleProfileDef("AREA", None, None, float(dx), float(dy))
@@ -56,14 +59,14 @@ def add_surface_style(model, shape_rep_item, name, r, g, b, transparency=0.0):
     style = model.createIfcSurfaceStyle(name, "BOTH", [rendering])
     model.createIfcStyledItem(shape_rep_item, [style], name)
 
-def export_ifc_from_manifest(manifest_path, output_path):
+def export_ifc():
     t0 = time.time()
-    with open(manifest_path, "r") as f:
+    with open(MANIFEST_PATH, "r") as f:
         manifest = json.load(f)
 
     # 1. Project Initialization via ifcopenshell.api
     model = ifcopenshell.api.run("project.create_file", version="IFC4")
-    project = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcProject", name=manifest.get("project", "Scan2BIM Project"))
+    project = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcProject", name=manifest.get("project", "AV scanAR BIM"))
     ifcopenshell.api.run("unit.assign_unit", model, length={"is_metric": True, "raw": "METERS"})
 
     context = ifcopenshell.api.run("context.add_context", model, context_type="Model")
@@ -72,8 +75,8 @@ def export_ifc_from_manifest(manifest_path, output_path):
         context_type="Model", context_identifier="Body", target_view="MODEL_VIEW", parent=context
     )
 
-    site = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSite", name=manifest.get("site_address", "Project Site"))
-    building = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuilding", name="Main Facility")
+    site = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSite", name=manifest.get("site_address", "Executive Office Site"))
+    building = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuilding", name="High-Rise Executive Suite")
     storey_l1 = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuildingStorey", name="01_Ground_Floor")
 
     ifcopenshell.api.run("aggregate.assign_object", model, relating_object=project, products=[site])
@@ -95,7 +98,7 @@ def export_ifc_from_manifest(manifest_path, output_path):
         solid = make_solid_box(model, dx, dy, dz, 0.0, 0.0, 0.0)
         slab.Representation = create_shape(model, body, solid)
         s_item = slab.Representation.Representations[0].Items[0]
-        add_surface_style(model, s_item, "Floor_Finish", 0.28, 0.29, 0.31)
+        add_surface_style(model, s_item, "Carpet_Tile_Charcoal", 0.28, 0.29, 0.31)
         contained_elements.append(slab)
 
     # 3. Ceilings (IfcCovering / CEILING)
@@ -111,7 +114,7 @@ def export_ifc_from_manifest(manifest_path, output_path):
         solid = make_solid_box(model, dx, dy, dz, 0.0, 0.0, 0.0)
         clg.Representation = create_shape(model, body, solid)
         c_item = clg.Representation.Representations[0].Items[0]
-        add_surface_style(model, c_item, "Ceiling_Finish", 0.94, 0.94, 0.95)
+        add_surface_style(model, c_item, "Acoustic_Ceiling_Drywall", 0.94, 0.94, 0.95)
         contained_elements.append(clg)
 
     # 4. Architectural Walls
@@ -127,8 +130,8 @@ def export_ifc_from_manifest(manifest_path, output_path):
         cy = 0.5 * (y0 + y1)
         cz = w["base_elevation"]
 
-        ux = (x1 - x0) / length if length > 1e-4 else 1.0
-        uy = (y1 - y0) / length if length > 1e-4 else 0.0
+        ux = (x1 - x0) / length
+        uy = (y1 - y0) / length
         x_axis = (ux, uy, 0.0)
 
         wall = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcWall", name=w["name"], predefined_type="SOLIDWALL")
@@ -162,24 +165,25 @@ def export_ifc_from_manifest(manifest_path, output_path):
         ow = op["width"]
         oh = op["height"]
         sill = op.get("sill_z", 0.0)
-        thick_void = w_meta["thick"] + 0.10
+        thick_void = w_meta["thick"] + 0.10  # 10cm extra to cleanly cut host wall faces
         x_axis = (w_meta["ux"], w_meta["uy"], 0.0)
 
-        # Void Solid
+        # 1. Create Opening Void Element
         void_solid = make_solid_box(model, ow, thick_void, oh, 0.0, 0.0, 0.0)
         void_elem = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcOpeningElement", name=f"Opening_{op['id']}", predefined_type="OPENING")
         void_elem.ObjectPlacement = create_local_placement(model, lx, ly, sill, x_axis=x_axis)
         void_elem.Representation = create_shape(model, body, void_solid)
 
-        # Relate void to host wall via IfcRelVoidsElement
+        # 2. Relate void to host wall via IfcRelVoidsElement
         model.create_entity("IfcRelVoidsElement",
             GlobalId=ifcopenshell.guid.new(),
             RelatingBuildingElement=host_wall,
             RelatedOpeningElement=void_elem
         )
 
-        # Filling Door or Window
+        # 3. Create Filling Door or Window
         if "Door" in op.get("type", "") or "Door" in op["id"]:
+            # High-LOD Wood-cased glass pivot door: outer wooden casing + black steel perimeter + glass leaf
             casing_d = op.get("casing_depth", 0.32)
             casing_solid = make_solid_box(model, ow + 0.08, casing_d, oh + 0.04, 0.0, 0.0, 0.0)
             leaf_solid = make_solid_box(model, ow - 0.04, 0.05, oh - 0.03, 0.0, 0.0, 0.0)
@@ -191,17 +195,19 @@ def export_ifc_from_manifest(manifest_path, output_path):
             f_item = filling_elem.Representation.Representations[0].Items[0]
             add_surface_style(model, f_item, "Architectural_Wood_Casing", 0.68, 0.48, 0.32)
         else:
+            # High-LOD Punched Window: Aluminum perimeter frame + insulated glazing unit + roller shade cassette
             frame_solid = make_solid_box(model, ow, 0.12, oh, 0.0, 0.0, 0.0)
             glass_solid = make_solid_box(model, ow - 0.10, 0.024, oh - 0.10, 0.0, 0.0, 0.0)
+            shade_box = make_solid_box(model, ow, 0.10, 0.12, 0.0, 0.0, oh*0.5 - 0.06)
             filling_elem = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcWindow", name=op["name"], predefined_type="WINDOW")
             filling_elem.OverallWidth = float(ow)
             filling_elem.OverallHeight = float(oh)
             filling_elem.ObjectPlacement = create_local_placement(model, lx, ly, sill, x_axis=x_axis)
-            filling_elem.Representation = create_shape(model, body, [frame_solid, glass_solid])
+            filling_elem.Representation = create_shape(model, body, [frame_solid, glass_solid, shade_box])
             f_item = filling_elem.Representation.Representations[0].Items[0]
-            add_surface_style(model, f_item, "Window_Frame_Metal", 0.22, 0.20, 0.18)
+            add_surface_style(model, f_item, "Window_Anodized_Bronze", 0.22, 0.20, 0.18)
 
-        # Relate filling element to opening void via IfcRelFillsElement
+        # 4. Relate filling element to opening void via IfcRelFillsElement
         model.create_entity("IfcRelFillsElement",
             GlobalId=ifcopenshell.guid.new(),
             RelatingOpeningElement=void_elem,
@@ -230,13 +236,13 @@ def export_ifc_from_manifest(manifest_path, output_path):
             elem.ObjectPlacement = create_local_placement(model, cx, cy, cz, x_axis=x_axis)
             elem.Representation = create_shape(model, body, solid)
             r_item = elem.Representation.Representations[0].Items[0]
-            add_surface_style(model, r_item, "MEP_Ductwork", 0.90, 0.90, 0.92)
+            add_surface_style(model, r_item, "Slot_Diffuser_Matte_White", 0.90, 0.90, 0.92)
         else:
             elem = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBeam", name=run["name"], predefined_type="BEAM")
             elem.ObjectPlacement = create_local_placement(model, cx, cy, cz, x_axis=x_axis)
             elem.Representation = create_shape(model, body, solid)
             r_item = elem.Representation.Representations[0].Items[0]
-            add_surface_style(model, r_item, "Structural_Framing", 0.45, 0.48, 0.52)
+            add_surface_style(model, r_item, "Structural_Steel_Primer", 0.45, 0.48, 0.52)
         contained_elements.append(elem)
 
     # 7. Furniture & Equipment (IfcFurnishingElement)
@@ -245,10 +251,29 @@ def export_ifc_from_manifest(manifest_path, output_path):
         dx, dy, dz = furn["dimensions"]
         f_elem = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcFurnishingElement", name=furn["name"])
         f_elem.ObjectPlacement = create_local_placement(model, lx, ly, lz)
-        solid = make_solid_box(model, dx, dy, dz, 0.0, 0.0, 0.0)
-        f_elem.Representation = create_shape(model, body, solid)
-        f_item = f_elem.Representation.Representations[0].Items[0]
-        add_surface_style(model, f_item, "Furniture_Finish", 0.35, 0.36, 0.38)
+        if "Cabinet" in furn["id"]:
+            # Supply cabinet body + handles
+            body_solid = make_solid_box(model, dx, dy, dz, 0.0, 0.0, 0.0)
+            handle1 = make_solid_cylinder(model, 0.012, 0.15, -dx*0.5 + 0.02, -0.06, 0.9)
+            handle2 = make_solid_cylinder(model, 0.012, 0.15, -dx*0.5 + 0.02, 0.06, 0.9)
+            f_elem.Representation = create_shape(model, body, [body_solid, handle1, handle2])
+            f_item = f_elem.Representation.Representations[0].Items[0]
+            add_surface_style(model, f_item, "Cabinet_Charcoal_Steel", 0.22, 0.23, 0.25)
+        elif "Workstation" in furn["id"]:
+            # Workstation desk top + dual metal trestle legs + privacy modesty panel + monitor
+            top = make_solid_box(model, dx, dy, 0.035, 0.0, 0.0, dz - 0.035)
+            leg_l = make_solid_box(model, dx - 0.10, 0.05, dz - 0.035, 0.0, -dy*0.5 + 0.08, 0.0)
+            leg_r = make_solid_box(model, dx - 0.10, 0.05, dz - 0.035, 0.0, dy*0.5 - 0.08, 0.0)
+            monitor = make_solid_box(model, 0.04, 0.85, 0.38, 0.15, 0.0, dz + 0.12)
+            stand = make_solid_box(model, 0.18, 0.22, 0.12, 0.15, 0.0, dz)
+            f_elem.Representation = create_shape(model, body, [top, leg_l, leg_r, monitor, stand])
+            f_item = f_elem.Representation.Representations[0].Items[0]
+            add_surface_style(model, f_item, "Desk_White_Oak", 0.82, 0.72, 0.55)
+        else:
+            solid = make_solid_box(model, dx, dy, dz, 0.0, 0.0, 0.0)
+            f_elem.Representation = create_shape(model, body, solid)
+            f_item = f_elem.Representation.Representations[0].Items[0]
+            add_surface_style(model, f_item, "Linen_Drape_Sheer", 0.85, 0.84, 0.82, transparency=0.4)
         contained_elements.append(f_elem)
 
     # 8. Lighting and Electrical (IfcLightFixture)
@@ -269,23 +294,16 @@ def export_ifc_from_manifest(manifest_path, output_path):
             add_surface_style(model, l_item, "Downlight_LED_Diffuser", 0.98, 0.98, 0.95)
         contained_elements.append(elem)
 
-    # 9. Spatial Structure Assignment
+    # 9. Aggregate all elements into Storey Level 1
     ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey_l1, products=contained_elements)
 
-    # 10. Write File
-    model.write(output_path)
+    # 10. Write Model
+    model.write(OUT_IFC_PATH)
     duration = time.time() - t0
-    size_kb = os.path.getsize(output_path) / 1024.0
-    print(f"Generated High-LOD Native IFC4 Model: {output_path}")
-    print(f"  Size: {size_kb:.1f} KB in {duration:.2f}s | Elements: {len(contained_elements)}")
+    size_kb = os.path.getsize(OUT_IFC_PATH) / 1024.0
+    print(f"Successfully generated High-LOD Native IFC4 Model: {OUT_IFC_PATH}")
+    print(f"  File size: {size_kb:.1f} KB in {duration:.2f}s")
+    print(f"  Contained {len(contained_elements)} elements with IfcOpeningElement voids, IfcDuctSegment, IfcBeam, and IfcFurnishingElement.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Export BIM Manifest to Native IFC4")
-    parser.add_argument("--manifest", default=r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\av_scanar_bim_manifest.json")
-    parser.add_argument("--out", default=r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\AV_scanAR_BIM.ifc")
-    args = parser.parse_args()
-
-    if os.path.exists(args.manifest):
-        export_ifc_from_manifest(args.manifest, args.out)
-    else:
-        print(f"Manifest not found: {args.manifest}")
+    export_ifc()

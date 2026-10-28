@@ -1,0 +1,265 @@
+{
+  "project": "AV scanAR Executive Studio & Survey Lab",
+  "site_address": "Manhattan High-Rise Executive Suite, New York, NY",
+  "units": "meters",
+  "scanner_info": {
+    "device": "NavVis VLX-3 (Serial G10-760)",
+    "calibration": "C10.0 rev0",
+    "panoramas_count": 8,
+    "raw_points_count": 3178000,
+    "voxel_subsampled_points": 64132,
+    "coordinate_system": "Raw ASTM E57 Local Survey Frame"
+  },
+  "levels": [
+    {
+      "id": "Level_00",
+      "name": "00_Finished_Floor",
+      "elevation": -0.570
+    },
+    {
+      "id": "Level_01",
+      "name": "01_Suspended_Ceiling",
+      "elevation": 2.246
+    },
+    {
+      "id": "Level_02",
+      "name": "02_Structural_High_Deck",
+      "elevation": 3.080
+    }
+  ],
+  "slabs": [
+    {
+      "id": "Floor_Main_Office",
+      "name": "Commercial Heavy-Traffic Carpet Tile Floor",
+      "type": "InteriorFloor",
+      "x_min": -2.85,
+      "x_max": 1.85,
+      "y_min": -1.25,
+      "y_max": 2.90,
+      "elevation_top": -0.570,
+      "thickness": 0.120,
+      "finish": "Charcoal_Acoustic_Carpet_Tile"
+    }
+  ],
+  "ceilings": [
+    {
+      "id": "Ceiling_Acoustic_Drywall",
+      "name": "Suspended Acoustic Drywall Ceiling with Diffuser Reveal",
+      "type": "SuspendedCeiling",
+      "x_min": -2.65,
+      "x_max": 1.65,
+      "y_min": -1.15,
+      "y_max": 2.75,
+      "elevation": 2.246,
+      "thickness": 0.035,
+      "finish": "Matte_White_Acoustic_GWB"
+    }
+  ],
+  "walls": [
+    {
+      "id": "Wall_North_Demising",
+      "name": "North Demising Partition (STC 50 Acoustic)",
+      "start": [-2.520, 2.640],
+      "end": [1.520, 2.640],
+      "base_elevation": -0.570,
+      "height": 2.816,
+      "thickness": 0.124,
+      "type": "Interior_Demising_Wall",
+      "finish": "Warm_Grey_Eggshell_Paint"
+    },
+    {
+      "id": "Wall_West_Party",
+      "name": "West Demising Party Wall (with Equipment Cabinet)",
+      "start": [-2.520, -1.080],
+      "end": [-2.520, 2.640],
+      "base_elevation": -0.570,
+      "height": 2.816,
+      "thickness": 0.124,
+      "type": "Interior_Demising_Wall",
+      "finish": "Warm_Grey_Eggshell_Paint"
+    },
+    {
+      "id": "Wall_South_Exterior",
+      "name": "South Exterior Structural Facade Wall (with Punched Windows)",
+      "start": [-2.520, -1.080],
+      "end": [1.520, -1.080],
+      "base_elevation": -0.570,
+      "height": 2.816,
+      "thickness": 0.305,
+      "type": "Exterior_Curtain_Pier_Wall",
+      "finish": "Off_White_Architectural_Concrete"
+    },
+    {
+      "id": "Wall_East_Corridor",
+      "name": "East Corridor Enclosure Partition (with Entry Portal)",
+      "start": [1.520, -1.080],
+      "end": [1.520, 2.640],
+      "base_elevation": -0.570,
+      "height": 2.816,
+      "thickness": 0.124,
+      "type": "Interior_Demising_Wall",
+      "finish": "Warm_Grey_Eggshell_Paint"
+    }
+  ],
+  "openings": [
+    {
+      "id": "Door_Office_Entry",
+      "name": "Architectural Wood-Cased Glazed Pivot Entry Door",
+      "host_wall": "Wall_East_Corridor",
+      "location": [1.520, 1.750, -0.570],
+      "width": 0.914,
+      "height": 2.134,
+      "sill_z": -0.570,
+      "rough_opening_width": 0.965,
+      "rough_opening_height": 2.184,
+      "casing_depth": 0.320,
+      "swing_direction": "Inward_Left_Hand_Reverse",
+      "hardware": "Architectural_Black_Steel_Frame_Muntins_And_Closer",
+      "exit_sign": true
+    },
+    {
+      "id": "Window_South_01",
+      "name": "South High-Rise Architectural Punched Window 1",
+      "host_wall": "Wall_South_Exterior",
+      "location": [-1.600, -1.080, 0.150],
+      "width": 1.500,
+      "height": 1.900,
+      "sill_z": 0.150,
+      "glazing": "Double_Insulated_LowE_Clear",
+      "treatments": "Motorized_Solar_Roller_Shade"
+    },
+    {
+      "id": "Window_South_02",
+      "name": "South High-Rise Architectural Punched Window 2",
+      "host_wall": "Wall_South_Exterior",
+      "location": [0.200, -1.080, 0.150],
+      "width": 1.500,
+      "height": 1.900,
+      "sill_z": 0.150,
+      "glazing": "Double_Insulated_LowE_Clear",
+      "treatments": "Motorized_Solar_Roller_Shade"
+    }
+  ],
+  "linear_runs": [
+    {
+      "id": "Duct_Slot_Diffuser_North",
+      "name": "Recessed Linear Supply Air Slot Diffuser",
+      "category": "duct",
+      "start": [-2.100, 2.200, 2.246],
+      "end": [0.900, 2.200, 2.246],
+      "profile": "rectangular",
+      "width": 0.150,
+      "height": 0.080,
+      "drop_z": 2.185,
+      "justification": "top"
+    },
+    {
+      "id": "Beam_Exterior_Window_Lintel",
+      "name": "Structural Steel Window Header Lintel",
+      "category": "beam",
+      "start": [-2.520, -1.080, 2.050],
+      "end": [1.520, -1.080, 2.050],
+      "profile": "rectangular",
+      "width": 0.250,
+      "height": 0.200,
+      "justification": "top"
+    }
+  ],
+  "furniture_and_equipment": [
+    {
+      "id": "Cabinet_Survey_Equipment_West",
+      "name": "Heavy-Duty Double-Door Metal Equipment Supply Cabinet",
+      "location": [-2.680, 1.450, -0.570],
+      "dimensions": [0.320, 0.800, 1.920],
+      "finish": "Dark_Grey_Powdercoated_Steel",
+      "category": "Storage",
+      "host_wall": "Wall_West_Party"
+    },
+    {
+      "id": "Desk_North_Run_Parallel",
+      "name": "Continuous Engineering Workstation Counter (Parallel to North Wall)",
+      "location": [-0.585, 2.174, -0.570],
+      "dimensions": [3.146, 0.548, 0.756],
+      "finish": "Natural_White_Oak_Top_White_Frame",
+      "category": "WorkstationCounter",
+      "orientation": "Along_X_Parallel_To_North_Wall"
+    },
+    {
+      "id": "Table_Peninsula_West_Perpendicular",
+      "name": "Collaborative Workstation Table 1 (Perpendicular to North Wall)",
+      "location": [-1.350, 1.050, -0.570],
+      "dimensions": [0.750, 1.700, 0.756],
+      "finish": "Natural_White_Oak_Top_White_Frame",
+      "category": "PeninsulaTable",
+      "orientation": "Along_Y_Perpendicular_To_North_Wall"
+    },
+    {
+      "id": "Table_Peninsula_East_Perpendicular",
+      "name": "Collaborative Workstation Table 2 (Perpendicular to North Wall)",
+      "location": [0.650, 0.950, -0.570],
+      "dimensions": [0.750, 1.800, 0.756],
+      "finish": "Natural_White_Oak_Top_White_Frame",
+      "category": "PeninsulaTable",
+      "orientation": "Along_Y_Perpendicular_To_North_Wall"
+    },
+    {
+      "id": "Monitor_North_CAD_01",
+      "name": "CAD Ultrawide Curved Display 1 (North Desk Left)",
+      "location": [-1.300, 2.330, 0.186],
+      "dimensions": [0.650, 0.080, 0.380],
+      "facing": "South",
+      "category": "Display"
+    },
+    {
+      "id": "Monitor_North_CAD_02",
+      "name": "CAD Ultrawide Curved Display 2 (North Desk Right)",
+      "location": [-0.050, 2.440, 0.186],
+      "dimensions": [0.650, 0.080, 0.380],
+      "facing": "South",
+      "category": "Display"
+    },
+    {
+      "id": "Monitor_Peninsula_East",
+      "name": "Collaborative Monitor Display (East Peninsula Table)",
+      "location": [0.350, 1.400, 0.186],
+      "dimensions": [0.080, 0.550, 0.380],
+      "facing": "West",
+      "category": "Display"
+    },
+    {
+      "id": "Monitor_Peninsula_West",
+      "name": "Collaborative Monitor Display (West Peninsula Table)",
+      "location": [-1.150, 1.600, 0.186],
+      "dimensions": [0.080, 0.550, 0.380],
+      "facing": "East",
+      "category": "Display"
+    }
+  ],
+  "lighting_and_electrical": [
+    {
+      "id": "Light_Exit_Sign_Illuminated",
+      "name": "Emergency Illuminated Red LED Exit Sign",
+      "location": [1.520, 1.750, 1.700],
+      "dimensions": [0.320, 0.060, 0.180],
+      "type": "ExitSign"
+    },
+    {
+      "id": "Downlight_LED_Aisle_01",
+      "name": "Recessed Circular LED Downlight (West Aisle)",
+      "location": [-1.350, 0.100, 2.246],
+      "type": "Downlight"
+    },
+    {
+      "id": "Downlight_LED_Aisle_02",
+      "name": "Recessed Circular LED Downlight (Center Aisle)",
+      "location": [-0.350, 1.050, 2.246],
+      "type": "Downlight"
+    },
+    {
+      "id": "Downlight_LED_Aisle_03",
+      "name": "Recessed Circular LED Downlight (East Aisle)",
+      "location": [0.650, 0.100, 2.246],
+      "type": "Downlight"
+    }
+  ]
+}

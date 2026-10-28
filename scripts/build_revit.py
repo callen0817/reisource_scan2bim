@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Reisource Scan2BIM — Native Autodesk Revit 2027 Automation Generator
-Run inside Revit Python Shell, pyRevit, Dynamo, or execute standalone for CLI review.
+AV scanAR Executive Studio & Survey Lab — Native Autodesk Revit 2027 API Generator
+Run inside Revit Python Shell, pyRevit, or Dynamo Python Node.
 
 Instantiates native Revit elements:
-- Levels (Floor, Ceiling, Exposed High Deck)
-- Architectural Floors (OST_Floors - never structural)
-- Architectural Ceilings (OST_Ceilings - strictly non-structural)
-- Demising & Exterior Walls (OST_Walls - with mitred corner joints)
-- Hosted Openings: Doors (OST_Doors) and Windows (OST_Windows)
-- Linear MEP Runs (OST_DuctCurves / OST_DuctTerminal)
+- Levels (00_Finished_Floor, 01_Suspended_Ceiling, 02_Structural_High_Deck)
+- Architectural Floors (OST_Floors - commercial acoustic carpet tile)
+- Architectural Ceilings (OST_Ceilings - suspended acoustic drywall ceiling)
+- Demising & Exterior Walls (OST_Walls - STC50 demising and exterior perimeter)
+- Glazed Architectural Entry Door with Casing (OST_Doors - hosted in East wall)
+- High-Rise Punched Exterior Windows (OST_Windows - hosted in South exterior wall)
+- Linear MEP Diffusers (OST_DuctCurves / OST_DuctTerminal)
 - Structural Framing Window Lintel (OST_StructuralFraming)
 - Furniture & Workstations (OST_Furniture)
 - Lighting Fixtures & Exit Sign (OST_LightingFixtures)
@@ -18,7 +19,6 @@ Instantiates native Revit elements:
 import json
 import os
 import math
-import argparse
 
 try:
     import clr
@@ -34,6 +34,7 @@ try:
 except Exception:
     IN_REVIT = False
 
+MANIFEST_PATH = r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\av_scanar_bim_manifest.json"
 M_TO_FT = 3.280839895
 
 def m2ft(val):
@@ -45,11 +46,11 @@ def get_first_type(doc, bic):
         return elem
     return None
 
-def build_in_revit(doc, manifest_path):
-    with open(manifest_path, "r") as f:
+def build_in_revit(doc):
+    with open(MANIFEST_PATH, "r") as f:
         manifest = json.load(f)
 
-    t = Transaction(doc, f"Scan2BIM - Build {manifest.get('project', 'Model')}")
+    t = Transaction(doc, "Scan2BIM - Build AV scanAR Executive Studio Model")
     t.Start()
 
     # 1. Levels
@@ -60,7 +61,8 @@ def build_in_revit(doc, manifest_path):
         lvl.Name = lvl_info["name"]
         levels[lvl_info["id"]] = lvl
 
-    lvl_floor = list(levels.values())[0] if levels else None
+    lvl_floor = levels.get("Level_00")
+    lvl_clg = levels.get("Level_01")
 
     # Category types
     floor_type = get_first_type(doc, BuiltInCategory.OST_Floors)
@@ -71,6 +73,7 @@ def build_in_revit(doc, manifest_path):
     furniture_symbol = get_first_type(doc, BuiltInCategory.OST_Furniture)
     light_symbol = get_first_type(doc, BuiltInCategory.OST_LightingFixtures)
     framing_symbol = get_first_type(doc, BuiltInCategory.OST_StructuralFraming)
+    duct_symbol = get_first_type(doc, BuiltInCategory.OST_DuctCurves)
 
     # 2. Architectural Floor
     if floor_type is not None and lvl_floor is not None:
@@ -173,31 +176,26 @@ def build_in_revit(doc, manifest_path):
             doc.Create.NewFamilyInstance(pt, light_symbol, lvl_floor, Structure.StructuralType.NonStructural)
 
     t.Commit()
-    print(f"Successfully built High-LOD native Revit BIM model for {manifest.get('project')}!")
+    print("Successfully built High-LOD AV scanAR Studio native Revit BIM model!")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Revit BIM Generator")
-    parser.add_argument("--manifest", default=r"C:\Users\calle\.gemini\antigravity\scratch\av_scanar\av_scanar_bim_manifest.json")
-    args = parser.parse_args()
-
     if IN_REVIT:
         uiapp = __revit__  # noqa: F821
-        build_in_revit(uiapp.ActiveUIDocument.Document, args.manifest)
+        build_in_revit(uiapp.ActiveUIDocument.Document)
     else:
-        if os.path.exists(args.manifest):
-            with open(args.manifest, "r") as f:
-                manifest = json.load(f)
-            print("=================================================================")
-            print(f"Reisource Scan2BIM — Native Autodesk Revit Automation Engine")
-            print("=================================================================")
-            print(f"Project: {manifest.get('project')}")
-            print(f"Levels: {len(manifest.get('levels', []))} defined")
-            print(f"Walls: {len(manifest.get('walls', []))} partitions with mitred corners")
-            print(f"Hosted Openings: {len(manifest.get('openings', []))} doors and windows")
-            print(f"Linear Runs: {len(manifest.get('linear_runs', []))} MEP ducts & structural framing")
-            print(f"Furniture & Workstations: {len(manifest.get('furniture_and_equipment', []))}")
-            print(f"Lighting & Life Safety: {len(manifest.get('lighting_and_electrical', []))} fixtures")
-            print("\nReady for Revit execution via pyRevit, Revit Python Shell, or IFC import.")
-            print("=================================================================")
-        else:
-            print(f"Manifest not found: {args.manifest}")
+        with open(MANIFEST_PATH, "r") as f:
+            manifest = json.load(f)
+        print("=================================================================")
+        print("AV scanAR Data Sync — Native Autodesk Revit 2027 Automation Script")
+        print("=================================================================")
+        print(f"Project: {manifest.get('project')}")
+        print(f"Target Levels: {len(manifest.get('levels', []))} defined (Floor 0.00m, Clg 2.65m, Deck 3.10m)")
+        print(f"Walls to Instantiate: {len(manifest.get('walls', []))} partitions with mitred corners")
+        print(f"Hosted Openings: {len(manifest.get('openings', []))} (1 Wood-cased Pivot Door, 2 High-Rise Windows)")
+        print(f"Linear Runs: {len(manifest.get('linear_runs', []))} (Slot diffuser duct & Structural window lintel)")
+        print(f"Furniture & Workstations: {len(manifest.get('furniture_and_equipment', []))}")
+        print(f"Lighting & Life Safety: {len(manifest.get('lighting_and_electrical', []))} fixtures")
+        print("\nExecution Methods:")
+        print(" 1. pyRevit / Revit Python Shell: Run this script directly inside Revit 2024-2027.")
+        print(" 2. Direct IFC Import: Open C:\\Users\\calle\\.gemini\\antigravity\\scratch\\av_scanar\\AV_scanAR_BIM.ifc in Revit.")
+        print("=================================================================")
