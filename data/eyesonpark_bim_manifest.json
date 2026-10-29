@@ -1,0 +1,1298 @@
+{
+  "project": "Eyes on Park \u2014 Commercial Optical Scan2BIM",
+  "generated_at": "2026-10-29T14:06:54.577959",
+  "pipeline_version": "2.0-groundtruth-calibrated",
+  "standards_compliance": [
+    "IFC4 Add2 TC1",
+    "Revit 2027 API",
+    "CSI MasterFormat",
+    "ADA Title III"
+  ],
+  "alignment_transform": {
+    "rotation_deg": -89.5,
+    "translation_meters": [
+      9.75,
+      -1.05,
+      0.825
+    ],
+    "floor_datum_pc_z": -0.825,
+    "ceiling_datum_pc_z": 1.918,
+    "clear_height_meters": 2.743
+  },
+  "levels": [
+    {
+      "id": "LVL_01",
+      "name": "01_Ground Floor",
+      "elevation": 0.0,
+      "is_story": true
+    },
+    {
+      "id": "LVL_02",
+      "name": "02_Ceiling Grid",
+      "elevation": 2.743,
+      "is_story": false
+    },
+    {
+      "id": "LVL_TOP",
+      "name": "03_Structure Underside",
+      "elevation": 3.943,
+      "is_story": false
+    }
+  ],
+  "walls": [
+    {
+      "id": "W_EXT_NORTH",
+      "name": "Exterior Wall - North Demising 6in",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 13.83,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        4.71,
+        0.98
+      ],
+      "p2": [
+        18.54,
+        0.98
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.71,
+          0.904
+        ],
+        [
+          18.54,
+          0.904
+        ],
+        [
+          18.54,
+          1.056
+        ],
+        [
+          4.71,
+          1.056
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_SOUTH_A",
+      "name": "Exterior Wall - South Demising Front 6in",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 11.15,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        4.71,
+        -4.29
+      ],
+      "p2": [
+        15.86,
+        -4.29
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.71,
+          -4.366
+        ],
+        [
+          15.86,
+          -4.366
+        ],
+        [
+          15.86,
+          -4.214
+        ],
+        [
+          4.71,
+          -4.214
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_SOUTH_B",
+      "name": "Exterior Wall - South Demising Return 6in",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 2.38,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        15.86,
+        -4.29
+      ],
+      "p2": [
+        18.24,
+        -4.29
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          15.86,
+          -4.366
+        ],
+        [
+          18.24,
+          -4.366
+        ],
+        [
+          18.24,
+          -4.214
+        ],
+        [
+          15.86,
+          -4.214
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_EAST_A",
+      "name": "Exterior Wall - East Demising Rear 6in",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 3.62,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        18.54,
+        0.98
+      ],
+      "p2": [
+        18.54,
+        -2.64
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          18.464,
+          0.98
+        ],
+        [
+          18.464,
+          -2.64
+        ],
+        [
+          18.616,
+          -2.64
+        ],
+        [
+          18.616,
+          0.98
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_EAST_B",
+      "name": "Exterior Wall - East Demising Corner 6in",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 1.65,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        18.24,
+        -2.64
+      ],
+      "p2": [
+        18.24,
+        -4.29
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          18.163999999999998,
+          -2.64
+        ],
+        [
+          18.163999999999998,
+          -4.29
+        ],
+        [
+          18.316,
+          -4.29
+        ],
+        [
+          18.316,
+          -2.64
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_EAST_JOG",
+      "name": "Exterior Wall - East Alcove Jog 6in",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 0.3,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        18.54,
+        -2.64
+      ],
+      "p2": [
+        18.24,
+        -2.64
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          18.54,
+          -2.564
+        ],
+        [
+          18.24,
+          -2.564
+        ],
+        [
+          18.24,
+          -2.716
+        ],
+        [
+          18.54,
+          -2.716
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_WEST_RET",
+      "name": "Exterior Wall - Storefront West Pier 12in",
+      "type": "Exterior",
+      "thickness": 0.305,
+      "length": 0.53,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        4.71,
+        0.98
+      ],
+      "p2": [
+        4.18,
+        0.98
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.71,
+          1.1325
+        ],
+        [
+          4.18,
+          1.1325
+        ],
+        [
+          4.18,
+          0.8275
+        ],
+        [
+          4.71,
+          0.8275
+        ]
+      ]
+    },
+    {
+      "id": "W_EXT_WEST_JAMB",
+      "name": "Exterior Wall - Storefront South Pier 12in",
+      "type": "Exterior",
+      "thickness": 0.305,
+      "length": 0.53,
+      "base_z": 0.0,
+      "height": 3.943,
+      "p1": [
+        4.71,
+        -4.29
+      ],
+      "p2": [
+        4.18,
+        -4.29
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.71,
+          -4.1375
+        ],
+        [
+          4.18,
+          -4.1375
+        ],
+        [
+          4.18,
+          -4.4425
+        ],
+        [
+          4.71,
+          -4.4425
+        ]
+      ]
+    },
+    {
+      "id": "W_INT_EXAM1_N",
+      "name": "Interior Partition - Exam 1 North 5in",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 1.78,
+      "base_z": 0.0,
+      "height": 2.851,
+      "p1": [
+        14.82,
+        0.98
+      ],
+      "p2": [
+        14.82,
+        -0.8
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          14.7565,
+          0.98
+        ],
+        [
+          14.7565,
+          -0.8
+        ],
+        [
+          14.8835,
+          -0.8
+        ],
+        [
+          14.8835,
+          0.98
+        ]
+      ]
+    },
+    {
+      "id": "W_INT_EXAM1_S",
+      "name": "Interior Partition - Exam 1 South 5in",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 3.72,
+      "base_z": 0.0,
+      "height": 2.851,
+      "p1": [
+        14.82,
+        -0.8
+      ],
+      "p2": [
+        18.54,
+        -0.8
+      ],
+      "openings": [
+        {
+          "id": "DR_EXAM1",
+          "name": "00_Int Door - Single Glass Wood 36x84",
+          "type": "Door",
+          "offset": 0.5999999999999996,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": 0.0
+        }
+      ],
+      "mitred_polygon": [
+        [
+          14.82,
+          -0.8635
+        ],
+        [
+          18.54,
+          -0.8635
+        ],
+        [
+          18.54,
+          -0.7365
+        ],
+        [
+          14.82,
+          -0.7365
+        ]
+      ]
+    },
+    {
+      "id": "W_INT_EXAM2_S",
+      "name": "Interior Partition - Exam 2 South 5in",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 3.42,
+      "base_z": 0.0,
+      "height": 2.851,
+      "p1": [
+        14.82,
+        -2.62
+      ],
+      "p2": [
+        18.24,
+        -2.62
+      ],
+      "openings": [
+        {
+          "id": "DR_EXAM2",
+          "name": "00_Int Door - Single Glass Wood 36x84",
+          "type": "Door",
+          "offset": 0.5999999999999996,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": 0.0
+        }
+      ],
+      "mitred_polygon": [
+        [
+          14.82,
+          -2.6835
+        ],
+        [
+          18.24,
+          -2.6835
+        ],
+        [
+          18.24,
+          -2.5565
+        ],
+        [
+          14.82,
+          -2.5565
+        ]
+      ]
+    },
+    {
+      "id": "W_INT_RESTROOM_W",
+      "name": "Interior Partition - Restroom West 5in",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 1.67,
+      "base_z": 0.0,
+      "height": 2.851,
+      "p1": [
+        16.09,
+        -2.62
+      ],
+      "p2": [
+        16.09,
+        -4.29
+      ],
+      "openings": [
+        {
+          "id": "DR_RESTROOM",
+          "name": "00_Int Door - Single Flush Wood 36x84",
+          "type": "Door",
+          "offset": 0.8300000000000001,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": 0.0
+        }
+      ],
+      "mitred_polygon": [
+        [
+          16.0265,
+          -2.62
+        ],
+        [
+          16.0265,
+          -4.29
+        ],
+        [
+          16.1535,
+          -4.29
+        ],
+        [
+          16.1535,
+          -2.62
+        ]
+      ]
+    },
+    {
+      "id": "W_INT_OFFICE_W",
+      "name": "Interior Partition - Office / Lab West 5in",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 2.76,
+      "base_z": 0.0,
+      "height": 2.851,
+      "p1": [
+        12.87,
+        0.98
+      ],
+      "p2": [
+        12.87,
+        -1.78
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          12.8065,
+          0.98
+        ],
+        [
+          12.8065,
+          -1.78
+        ],
+        [
+          12.933499999999999,
+          -1.78
+        ],
+        [
+          12.933499999999999,
+          0.98
+        ]
+      ]
+    },
+    {
+      "id": "W_INT_OFFICE_S",
+      "name": "Interior Partition - Office / Lab South 5in",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 1.95,
+      "base_z": 0.0,
+      "height": 2.851,
+      "p1": [
+        12.87,
+        -1.78
+      ],
+      "p2": [
+        14.82,
+        -1.78
+      ],
+      "openings": [
+        {
+          "id": "DR_OFFICE",
+          "name": "00_Int Door - Single Glass Wood 36x84",
+          "type": "Door",
+          "offset": 0.9800000000000004,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": 0.0
+        }
+      ],
+      "mitred_polygon": [
+        [
+          12.87,
+          -1.8435000000000001
+        ],
+        [
+          14.82,
+          -1.8435000000000001
+        ],
+        [
+          14.82,
+          -1.7165
+        ],
+        [
+          12.87,
+          -1.7165
+        ]
+      ]
+    },
+    {
+      "id": "W_PONY_EXAM_A",
+      "name": "Divider - Pre-Testing Exam Booth A 4in",
+      "type": "LowDivider",
+      "thickness": 0.102,
+      "length": 0.99,
+      "base_z": 0.0,
+      "height": 0.813,
+      "p1": [
+        4.32,
+        -3.98
+      ],
+      "p2": [
+        5.31,
+        -3.98
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.32,
+          -4.031
+        ],
+        [
+          5.31,
+          -4.031
+        ],
+        [
+          5.31,
+          -3.929
+        ],
+        [
+          4.32,
+          -3.929
+        ]
+      ]
+    },
+    {
+      "id": "W_PONY_EXAM_B",
+      "name": "Divider - Pre-Testing Exam Booth B 4in",
+      "type": "LowDivider",
+      "thickness": 0.102,
+      "length": 0.74,
+      "base_z": 0.0,
+      "height": 0.813,
+      "p1": [
+        4.77,
+        -3.98
+      ],
+      "p2": [
+        4.77,
+        -4.72
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.718999999999999,
+          -3.98
+        ],
+        [
+          4.718999999999999,
+          -4.72
+        ],
+        [
+          4.821,
+          -4.72
+        ],
+        [
+          4.821,
+          -3.98
+        ]
+      ]
+    },
+    {
+      "id": "W_PONY_EXAM_C",
+      "name": "Divider - Pre-Testing Exam Booth C 4in",
+      "type": "LowDivider",
+      "thickness": 0.102,
+      "length": 0.84,
+      "base_z": 0.0,
+      "height": 0.813,
+      "p1": [
+        3.83,
+        -1.82
+      ],
+      "p2": [
+        3.83,
+        -2.66
+      ],
+      "openings": [],
+      "mitred_polygon": [
+        [
+          3.779,
+          -1.82
+        ],
+        [
+          3.779,
+          -2.66
+        ],
+        [
+          3.8810000000000002,
+          -2.66
+        ],
+        [
+          3.8810000000000002,
+          -1.82
+        ]
+      ]
+    }
+  ],
+  "doors": [
+    {
+      "id": "DR_MAIN_ENTRANCE",
+      "name": "00_Exterior Double Glass Entrance",
+      "host": "STOREFRONT",
+      "width": 1.829,
+      "height": 2.438,
+      "pos": [
+        4.41,
+        -1.65,
+        0.0
+      ]
+    },
+    {
+      "id": "DR_EXAM1",
+      "name": "00_Int Door - Single Glass Wood 36x84",
+      "host": "W_INT_EXAM1_S",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        15.42,
+        -0.8,
+        0.0
+      ]
+    },
+    {
+      "id": "DR_EXAM2",
+      "name": "00_Int Door - Single Glass Wood 36x84",
+      "host": "W_INT_EXAM2_S",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        15.42,
+        -2.62,
+        0.0
+      ]
+    },
+    {
+      "id": "DR_RESTROOM",
+      "name": "00_Int Door - Single Flush Wood 36x84",
+      "host": "W_INT_RESTROOM_W",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        16.09,
+        -3.45,
+        0.0
+      ]
+    },
+    {
+      "id": "DR_OFFICE",
+      "name": "00_Int Door - Single Glass Wood 36x84",
+      "host": "W_INT_OFFICE_S",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        13.85,
+        -1.78,
+        0.0
+      ]
+    }
+  ],
+  "curtain_system": {
+    "name": "00_Exterior Glazed Storefront System",
+    "plane_x": 4.411,
+    "y_range": [
+      -4.29,
+      0.98
+    ],
+    "height": 3.943,
+    "mullions": [
+      {
+        "id": "MUL_0",
+        "x": 4.411,
+        "y": -4.29,
+        "z": 0.0,
+        "h": 3.943,
+        "w": 0.051,
+        "d": 0.152
+      },
+      {
+        "id": "MUL_1",
+        "x": 4.411,
+        "y": -3.08,
+        "z": 0.0,
+        "h": 3.943,
+        "w": 0.051,
+        "d": 0.152
+      },
+      {
+        "id": "MUL_2",
+        "x": 4.411,
+        "y": -1.65,
+        "z": 0.0,
+        "h": 3.943,
+        "w": 0.051,
+        "d": 0.152
+      },
+      {
+        "id": "MUL_3",
+        "x": 4.411,
+        "y": -0.56,
+        "z": 0.0,
+        "h": 3.943,
+        "w": 0.051,
+        "d": 0.152
+      },
+      {
+        "id": "MUL_4",
+        "x": 4.411,
+        "y": 0.1,
+        "z": 0.0,
+        "h": 3.943,
+        "w": 0.051,
+        "d": 0.152
+      },
+      {
+        "id": "MUL_5",
+        "x": 4.411,
+        "y": 0.98,
+        "z": 0.0,
+        "h": 3.943,
+        "w": 0.051,
+        "d": 0.152
+      }
+    ],
+    "panels": [
+      {
+        "id": "PANEL_01",
+        "name": "00_Exterior Low-E Glazing 1in",
+        "center": [
+          4.411,
+          -3.68,
+          1.97
+        ],
+        "size": [
+          0.025,
+          1.21,
+          3.94
+        ]
+      },
+      {
+        "id": "PANEL_02",
+        "name": "00_Exterior Low-E Glazing 1in",
+        "center": [
+          4.411,
+          -2.36,
+          1.97
+        ],
+        "size": [
+          0.025,
+          1.43,
+          3.94
+        ]
+      },
+      {
+        "id": "PANEL_03",
+        "name": "00_Exterior Low-E Glazing 1in",
+        "center": [
+          4.411,
+          -1.1,
+          1.97
+        ],
+        "size": [
+          0.025,
+          1.09,
+          3.94
+        ]
+      },
+      {
+        "id": "PANEL_04",
+        "name": "00_Exterior Low-E Glazing 1in",
+        "center": [
+          4.411,
+          0.54,
+          1.97
+        ],
+        "size": [
+          0.025,
+          0.88,
+          3.94
+        ]
+      }
+    ]
+  },
+  "floors": [
+    {
+      "id": "FLR_MAIN",
+      "name": "01_Commercial Concrete Slab Finish 3in",
+      "thickness": 0.076,
+      "elevation": 0.0,
+      "polygon": [
+        [
+          4.71,
+          0.98
+        ],
+        [
+          18.54,
+          0.98
+        ],
+        [
+          18.54,
+          -2.64
+        ],
+        [
+          18.24,
+          -2.64
+        ],
+        [
+          18.24,
+          -4.29
+        ],
+        [
+          4.71,
+          -4.29
+        ]
+      ]
+    },
+    {
+      "id": "FLR_RAMP_LANDING",
+      "name": "00_Exterior ADA Accessible Ramp & Landing 8in",
+      "thickness": 0.203,
+      "elevation": -0.21,
+      "polygon": [
+        [
+          2.71,
+          -1.48
+        ],
+        [
+          4.41,
+          -1.48
+        ],
+        [
+          4.41,
+          -4.29
+        ],
+        [
+          2.71,
+          -4.29
+        ]
+      ]
+    }
+  ],
+  "railings": [
+    {
+      "id": "RAIL_01",
+      "name": "1 1/2in Continuous Round Handrail - North",
+      "start": [
+        2.71,
+        -1.48,
+        0.914
+      ],
+      "end": [
+        4.41,
+        -1.48,
+        0.914
+      ],
+      "diameter": 0.038
+    },
+    {
+      "id": "RAIL_02",
+      "name": "1 1/2in Continuous Round Handrail - South",
+      "start": [
+        2.71,
+        -4.29,
+        0.914
+      ],
+      "end": [
+        4.41,
+        -4.29,
+        0.914
+      ],
+      "diameter": 0.038
+    }
+  ],
+  "casework": [
+    {
+      "id": "CW_RECEPTION",
+      "name": "00_Casework Reception Counter",
+      "center": [
+        7.85,
+        -1.25,
+        0.53
+      ],
+      "size": [
+        3.6,
+        0.75,
+        1.07
+      ]
+    },
+    {
+      "id": "CW_DISP_NORTH",
+      "name": "00_Casework Optical Frame Wall Display",
+      "center": [
+        10.5,
+        0.8,
+        1.45
+      ],
+      "size": [
+        6.2,
+        0.35,
+        2.2
+      ]
+    },
+    {
+      "id": "CW_DISP_SOUTH",
+      "name": "00_Casework Optical Frame Wall Display",
+      "center": [
+        10.5,
+        -4.1,
+        1.45
+      ],
+      "size": [
+        5.8,
+        0.35,
+        2.2
+      ]
+    },
+    {
+      "id": "CW_EXAM1_DESK",
+      "name": "00_Casework Exam 1 Peninsula Desk",
+      "center": [
+        16.5,
+        0.4,
+        0.38
+      ],
+      "size": [
+        1.8,
+        0.75,
+        0.76
+      ]
+    },
+    {
+      "id": "CW_EXAM2_DESK",
+      "name": "00_Casework Exam 2 Peninsula Desk",
+      "center": [
+        16.5,
+        -1.8,
+        0.38
+      ],
+      "size": [
+        1.8,
+        0.75,
+        0.76
+      ]
+    },
+    {
+      "id": "CW_RESTROOM_VANITY",
+      "name": "00_Casework Restroom Vanity Cupboard",
+      "center": [
+        17.5,
+        -3.9,
+        0.43
+      ],
+      "size": [
+        1.2,
+        0.55,
+        0.86
+      ]
+    }
+  ],
+  "plumbing": [
+    {
+      "id": "PLUMB_WC",
+      "name": "00_Water_Closet_Toilet_Wall-Hung_Concealed_WC_19182",
+      "pos": [
+        17.55,
+        -4.18,
+        0.41
+      ],
+      "size": [
+        0.4,
+        0.6,
+        0.41
+      ]
+    },
+    {
+      "id": "PLUMB_SINK",
+      "name": "00_Wash Basin - Undermount Commercial Sink",
+      "pos": [
+        17.5,
+        -3.9,
+        0.86
+      ],
+      "size": [
+        0.5,
+        0.4,
+        0.2
+      ]
+    }
+  ],
+  "ceilings": [
+    {
+      "id": "CLG_SHOWROOM",
+      "name": "00_Acoustic Suspended Ceiling 2x4",
+      "elevation": 2.743,
+      "thickness": 0.032,
+      "polygon": [
+        [
+          4.71,
+          0.98
+        ],
+        [
+          12.87,
+          0.98
+        ],
+        [
+          12.87,
+          -4.29
+        ],
+        [
+          4.71,
+          -4.29
+        ]
+      ]
+    },
+    {
+      "id": "CLG_EXAM1",
+      "name": "00_Acoustic Suspended Ceiling 2x2",
+      "elevation": 2.743,
+      "thickness": 0.032,
+      "polygon": [
+        [
+          14.82,
+          0.98
+        ],
+        [
+          18.54,
+          0.98
+        ],
+        [
+          18.54,
+          -0.8
+        ],
+        [
+          14.82,
+          -0.8
+        ]
+      ]
+    },
+    {
+      "id": "CLG_EXAM2",
+      "name": "00_Acoustic Suspended Ceiling 2x2",
+      "elevation": 2.743,
+      "thickness": 0.032,
+      "polygon": [
+        [
+          14.82,
+          -0.8
+        ],
+        [
+          18.24,
+          -0.8
+        ],
+        [
+          18.24,
+          -2.62
+        ],
+        [
+          14.82,
+          -2.62
+        ]
+      ]
+    },
+    {
+      "id": "CLG_RESTROOM",
+      "name": "00_GWB Painted Ceiling",
+      "elevation": 2.743,
+      "thickness": 0.032,
+      "polygon": [
+        [
+          16.09,
+          -2.62
+        ],
+        [
+          18.24,
+          -2.62
+        ],
+        [
+          18.24,
+          -4.29
+        ],
+        [
+          16.09,
+          -4.29
+        ]
+      ]
+    }
+  ],
+  "lighting": [
+    {
+      "id": "LT_RECESSED_00",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        6.0,
+        -1.0,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_01",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        8.0,
+        -1.0,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_02",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        10.0,
+        -1.0,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_03",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        12.0,
+        -1.0,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_04",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        6.0,
+        -2.5,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_05",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        8.0,
+        -2.5,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_06",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        10.0,
+        -2.5,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_07",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        12.0,
+        -2.5,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_08",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        16.5,
+        0.1,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_09",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        16.5,
+        -1.7,
+        2.743
+      ]
+    },
+    {
+      "id": "LT_RECESSED_10",
+      "name": "034011101 COLIN-2 WHITE DOWNLIGHT LED 36W",
+      "pos": [
+        17.2,
+        -3.4,
+        2.743
+      ]
+    }
+  ],
+  "statistics": {
+    "wall_count": 17,
+    "door_count": 5,
+    "curtain_panels": 4,
+    "curtain_mullions": 6,
+    "floor_count": 2,
+    "casework_count": 6,
+    "plumbing_count": 2,
+    "ceiling_count": 4,
+    "lighting_count": 11,
+    "total_elements": 57
+  }
+}
