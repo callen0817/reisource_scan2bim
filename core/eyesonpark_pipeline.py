@@ -165,18 +165,35 @@ class EyesOnParkConverter:
             ])
         ]
 
-    def build_manifest(self):
+    def build_manifest(self, input_cloud=r"C:\Users\calle\Downloads\EyesOnPark.e57"):
         """Builds comprehensive JSON manifest of all BIM elements."""
         manifest = {
             "project": "Eyes on Park — Commercial Optical Scan2BIM",
             "generated_at": datetime.datetime.now().isoformat(),
             "pipeline_version": "2.0-groundtruth-calibrated",
             "standards_compliance": ["IFC4 Add2 TC1", "Revit 2027 API", "CSI MasterFormat", "ADA Title III"],
+            "point_cloud_modes": {
+                "relocated_project_cloud": {
+                    "path": input_cloud,
+                    "transform": "ZERO_TRANSFORM (Direct 1:1 Revit Project Coordinates)",
+                    "rotation_deg": 0.0,
+                    "translation_meters": [0.0, 0.0, 0.0],
+                    "floor_datum_z": 0.000,
+                    "ceiling_datum_z": 2.743,
+                    "mean_surface_residual_mm": 35.9
+                },
+                "raw_slam_capture_cloud": {
+                    "path": r"C:\Users\calle\Downloads\RS scan2bim_data\Eye_on_Park.e57",
+                    "panos_path": r"C:\Users\calle\Downloads\RS scan2bim_data\panorama_Eye_on_Park",
+                    "transform": "R_z = -89.5 deg, T = [+9.750, -1.050, +0.825] m",
+                    "floor_datum_z": -0.825,
+                    "ceiling_datum_z": 1.918
+                }
+            },
             "alignment_transform": {
-                "rotation_deg": -89.5,
-                "translation_meters": [9.750, -1.050, 0.825],
-                "floor_datum_pc_z": -0.825,
-                "ceiling_datum_pc_z": 1.918,
+                "native_recap_mode": "IDENTITY (X_revit = X_pc, Y_revit = Y_pc, Z_revit = Z_pc)",
+                "floor_datum_z": 0.000,
+                "ceiling_datum_z": 2.743,
                 "clear_height_meters": 2.743
             },
             "levels": self.levels,
