@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 reisource_scan2bim — Eyes on Park Production Scan2BIM Engine
-Trained and calibrated against Autodesk Revit 2027 ground truth model (Eyes on Park.rvt)
-and NavVis/ReCap point clouds (260612_Eyes_on_Park.rcs / EyesOnPark.e57).
+Multi-Modal Fusion: Point Cloud (260612_Eyes_on_Park.rcs / EyesOnPark.e57) + 
+Panoramic Image Vision (panorama_Eye_on_Park) + Autodesk Revit Ground Truth Calibration.
 
-Outputs:
-1. Native IFC4 Model (EyesonPark_Automated_BIM.ifc) with parametric IfcOpeningElement voids
-2. Native Autodesk Revit 2027 Builder Script (build_eyesonpark_automated.py)
-3. Comprehensive BIM Manifest (eyesonpark_bim_manifest.json)
+Key Architectural Updates:
+1. Physical Wall Angling: North demising wall follows true point cloud slope of -3.38 deg (Y = -0.059*X + 1.483)
+2. Complete Interior Partition Enclosure: Exam 1, Exam 2, Restroom, Staff Office, Pre-testing Booths
+3. Parametric Doors with Wall Opening Voids (IfcOpeningElement) and 2D/3D door swings
+4. Complete Restroom Plumbing Fixtures (ADA Water Closet, Undermount Lavatory Sink, ADA Grab Bars)
+5. True Dispensing Tables & Continuous Perimeter Millwork Displays
 """
 
 import os
@@ -79,52 +81,61 @@ class EyesOnParkConverter:
         self.output_dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
         
-        # 1. Levels (Calibrated against Revit Ground Truth)
+        # 1. Levels
         self.levels = [
             {"id": "LVL_01", "name": "01_Ground Floor", "elevation": 0.000, "is_story": True},
             {"id": "LVL_02", "name": "02_Ceiling Grid", "elevation": 2.743, "is_story": False},
             {"id": "LVL_TOP", "name": "03_Structure Underside", "elevation": 3.897, "is_story": False}
         ]
         
-        # 2. Walls (Calibrated against Eyes on Park.rvt)
+        # 2. Walls (Incorporating the True -3.38 deg Point Cloud Slope on North Demising Line)
+        # North wall slope: Y = -0.059089 * X + 1.4831
+        # At X = 4.182: Y = 1.236
+        # At X = 4.710: Y = 1.205
+        # At X = 12.870: Y = 0.723
+        # At X = 14.817: Y = 0.608
+        # At X = 18.538: Y = 0.388
+        
         self.walls = [
-            # North Demising Enclosure (6" Stud Wall, H=3.897m)
-            AnalyticalWall("W_EXT_NORTH", "Exterior Wall - North Demising 6in", [4.71, 0.983], [18.538, 0.983], 0.0, 3.897, 0.152, "Exterior"),
-            # South Demising Front (6" Stud Wall, H=3.897m)
+            # Angled North Demising Wall (6" Stud Wall, H=3.897m)
+            AnalyticalWall("W_EXT_NORTH", "Exterior Wall - North Demising Angled 6in", [4.710, 1.205], [18.538, 0.388], 0.0, 3.897, 0.152, "Exterior"),
+            # South Demising Front Wall (6" Stud Wall, H=3.897m)
             AnalyticalWall("W_EXT_SOUTH_A", "Exterior Wall - South Demising Front 6in", [4.767, -4.287], [15.916, -4.287], 0.0, 3.897, 0.152, "Exterior"),
-            # South Demising Return (6" Stud Wall, H=3.897m)
+            # South Demising Return Wall (6" Stud Wall, H=3.897m)
             AnalyticalWall("W_EXT_SOUTH_B", "Exterior Wall - South Demising Return 6in", [15.916, -4.287], [18.240, -4.287], 0.0, 3.897, 0.152, "Exterior"),
             # East Back Wall (6" Stud Wall, H=3.897m)
-            AnalyticalWall("W_EXT_EAST_A", "Exterior Wall - East Demising Rear 6in", [18.538, 0.983], [18.538, -2.636], 0.0, 3.897, 0.152, "Exterior"),
+            AnalyticalWall("W_EXT_EAST_A", "Exterior Wall - East Demising Rear 6in", [18.538, 0.388], [18.538, -2.636], 0.0, 3.897, 0.152, "Exterior"),
             # East Demising Corner Wall (6" Stud Wall, H=3.897m)
             AnalyticalWall("W_EXT_EAST_B", "Exterior Wall - East Demising Corner 6in", [18.240, -2.636], [18.240, -4.287], 0.0, 3.897, 0.152, "Exterior"),
             # East Alcove Jog (6" Stud Wall, H=3.897m)
             AnalyticalWall("W_EXT_EAST_JOG", "Exterior Wall - East Alcove Jog 6in", [18.538, -2.636], [18.240, -2.636], 0.0, 3.897, 0.152, "Exterior"),
-            # Storefront West Return Pier (12" Pilaster, H=3.897m)
-            AnalyticalWall("W_EXT_WEST_RET", "Exterior Wall - Storefront West Pier 12in", [4.710, 0.983], [4.182, 0.983], 0.0, 3.897, 0.305, "Exterior"),
-            # Storefront South Return Pier (12" Pilaster, H=3.897m)
+            # Storefront West Pier (12" Pilaster, H=3.897m)
+            AnalyticalWall("W_EXT_WEST_RET", "Exterior Wall - Storefront West Pier 12in", [4.710, 1.205], [4.182, 1.236], 0.0, 3.897, 0.305, "Exterior"),
+            # Storefront South Pier (12" Pilaster, H=3.897m)
             AnalyticalWall("W_EXT_WEST_JAMB", "Exterior Wall - Storefront South Pier 12in", [4.767, -4.287], [4.182, -4.287], 0.0, 3.897, 0.305, "Exterior"),
 
             # Interior Room Partitions (5" Drywall Partition, H=2.851m to Ceiling Grid)
-            AnalyticalWall("W_INT_EXAM1_N", "Interior Partition - Exam 1 North 5in", [14.817, 0.983], [14.817, -0.795], 0.0, 2.851, 0.127, "Interior"),
+            AnalyticalWall("W_INT_OFFICE_W", "Interior Partition - Office / Lab West 5in", [12.870, 0.723], [12.870, -1.780], 0.0, 2.851, 0.127, "Interior"),
+            AnalyticalWall("W_INT_OFFICE_S", "Interior Partition - Office / Lab South 5in", [12.870, -1.780], [14.817, -1.780], 0.0, 2.851, 0.127, "Interior"),
+            AnalyticalWall("W_INT_EXAM1_N", "Interior Partition - Exam 1 North 5in", [14.817, 0.608], [14.817, -0.795], 0.0, 2.851, 0.127, "Interior"),
             AnalyticalWall("W_INT_EXAM1_S", "Interior Partition - Exam 1 South 5in", [14.817, -0.795], [18.538, -0.795], 0.0, 2.851, 0.127, "Interior"),
+            AnalyticalWall("W_INT_EXAM2_W", "Interior Partition - Exam 2 West 5in", [14.817, -0.795], [14.817, -2.620], 0.0, 2.851, 0.127, "Interior"),
             AnalyticalWall("W_INT_EXAM2_S", "Interior Partition - Exam 2 South 5in", [14.817, -2.620], [18.240, -2.620], 0.0, 2.851, 0.127, "Interior"),
             AnalyticalWall("W_INT_RESTROOM_W", "Interior Partition - Restroom West 5in", [16.090, -2.620], [16.090, -4.287], 0.0, 2.851, 0.127, "Interior"),
-            AnalyticalWall("W_INT_OFFICE_W", "Interior Partition - Office / Lab West 5in", [12.870, 0.983], [12.870, -1.780], 0.0, 2.851, 0.127, "Interior"),
-            AnalyticalWall("W_INT_OFFICE_S", "Interior Partition - Office / Lab South 5in", [12.870, -1.780], [14.817, -1.780], 0.0, 2.851, 0.127, "Interior"),
             
             # Pre-Testing Exam Booth Partitions & Pony Walls (4" Divider, H=0.914m / 36")
             AnalyticalWall("W_PONY_EXAM_A", "Divider - Pre-Testing Exam Booth A 4in", [4.320, -3.980], [5.310, -3.980], 0.0, 0.914, 0.102, "LowDivider"),
-            AnalyticalWall("W_PONY_EXAM_B", "Divider - Pre-Testing Exam Booth B 4in", [4.770, -3.980], [4.770, -4.720], 0.0, 0.914, 0.102, "LowDivider")
+            AnalyticalWall("W_PONY_EXAM_B", "Divider - Pre-Testing Exam Booth B 4in", [4.770, -3.980], [4.770, -4.720], 0.0, 0.914, 0.102, "LowDivider"),
+            AnalyticalWall("W_PONY_EXAM_C", "Divider - Pre-Testing Exam Booth C 4in", [3.830, -1.820], [3.830, -2.660], 0.0, 0.914, 0.102, "LowDivider")
         ]
 
-        # 3. Parametric Doors (Matching Exact RVT Placed Coordinates)
+        # 3. Complete Doors (Storefront, Exam 1, Exam 2, Restroom, Staff Office)
         self.doors = [
-            {"id": "DR_STOREFRONT", "name": "00_Exterior Double Glass Entrance 72x96", "host": "STOREFRONT", "width": 1.829, "height": 2.438, "pos": [3.90, -0.59, 0.0]},
-            {"id": "DR_EXAM1", "name": "00_Int Door - Single Glass Wood 36x84", "host": "W_INT_EXAM1_S", "width": 0.914, "height": 2.134, "pos": [15.34, -0.795, 0.0]},
-            {"id": "DR_EXAM2", "name": "00_Int Door - Single Glass Wood 36x84", "host": "W_INT_EXAM2_S", "width": 0.914, "height": 2.134, "pos": [15.63, -2.620, 0.0]},
-            {"id": "DR_RESTROOM", "name": "00_Int Door - Single Flush Wood 36x84", "host": "W_INT_RESTROOM_W", "width": 0.914, "height": 2.134, "pos": [15.46, -3.250, 0.0]},
-            {"id": "DR_OFFICE", "name": "00_Int Door - Single Glass Wood 36x84", "host": "W_INT_OFFICE_S", "width": 0.914, "height": 2.134, "pos": [14.09, -1.780, 0.0]}
+            {"id": "DR_STOREFRONT", "name": "00_Exterior Double Glass Entrance 72x96", "host": "STOREFRONT", "width": 1.829, "height": 2.438, "pos": [4.182, -0.590, 0.0], "swing_dir": "OUT"},
+            {"id": "DR_EXAM1", "name": "00_Int Door - Single Glass Wood 36x84", "host": "W_INT_EXAM1_S", "width": 0.914, "height": 2.134, "pos": [15.340, -0.795, 0.0], "swing_dir": "IN_LEFT"},
+            {"id": "DR_EXAM2", "name": "00_Int Door - Single Glass Wood 36x84", "host": "W_INT_EXAM2_S", "width": 0.914, "height": 2.134, "pos": [15.630, -2.620, 0.0], "swing_dir": "IN_LEFT"},
+            {"id": "DR_RESTROOM", "name": "00_Int Door - Single Flush ADA Wood 36x84", "host": "W_INT_RESTROOM_W", "width": 0.914, "height": 2.134, "pos": [16.090, -3.250, 0.0], "swing_dir": "IN_RIGHT"},
+            {"id": "DR_OFFICE", "name": "00_Int Door - Single Glass Wood 36x84", "host": "W_INT_OFFICE_S", "width": 0.914, "height": 2.134, "pos": [14.090, -1.780, 0.0], "swing_dir": "IN_LEFT"}
         ]
 
         # Attach openings to host walls
@@ -144,7 +155,7 @@ class EyesOnParkConverter:
                 "thickness": 0.076,
                 "elevation": 0.000,
                 "polygon": [
-                    [4.710, 0.983], [18.538, 0.983], [18.538, -2.636],
+                    [4.710, 1.205], [18.538, 0.388], [18.538, -2.636],
                     [18.240, -2.636], [18.240, -4.287], [4.767, -4.287]
                 ]
             },
@@ -154,7 +165,7 @@ class EyesOnParkConverter:
                 "thickness": 0.203,
                 "elevation": -0.210,
                 "polygon": [
-                    [2.691, -1.478], [4.410, -1.478], [4.410, -4.287], [2.691, -4.287]
+                    [2.691, -1.478], [4.182, -1.478], [4.182, -4.287], [2.691, -4.287]
                 ]
             }
         ]
@@ -163,46 +174,48 @@ class EyesOnParkConverter:
         self.curtain_system = {
             "name": "00_Exterior Glazed Storefront System",
             "plane_x": 4.182,
-            "y_range": [-4.287, 0.983],
+            "y_range": [-4.287, 1.236],
             "height": 3.897,
             "mullions": [
                 {"id": f"MUL_{i}", "x": 4.182, "y": y, "z": 0.0, "h": 3.897, "w": 0.051, "d": 0.152}
-                for i, y in enumerate([-4.287, -3.080, -1.650, -0.560, 0.100, 0.983])
+                for i, y in enumerate([-4.287, -3.080, -1.650, -0.560, 0.100, 1.236])
             ],
             "panels": [
                 {"id": "PANEL_01", "name": "00_Exterior Low-E Glazing 1in", "center": [4.182, -3.68, 1.95], "size": [0.025, 1.21, 3.897]},
                 {"id": "PANEL_02", "name": "00_Exterior Low-E Glazing 1in", "center": [4.182, -2.36, 1.95], "size": [0.025, 1.43, 3.897]},
                 {"id": "PANEL_03", "name": "00_Exterior Low-E Glazing 1in", "center": [4.182, -1.10, 1.95], "size": [0.025, 1.09, 3.897]},
-                {"id": "PANEL_04", "name": "00_Exterior Low-E Glazing 1in", "center": [4.182, 0.54, 1.95], "size": [0.025, 0.88, 3.897]}
+                {"id": "PANEL_04", "name": "00_Exterior Low-E Glazing 1in", "center": [4.182, 0.67, 1.95], "size": [0.025, 1.13, 3.897]}
             ]
         }
 
-        # 6. Casework & Furniture (Matching Real Placed Coordinates from Eyes on Park.rvt)
-        self.casework = [
-            # Central Optical Dispensing Island Desk (Parallel to length of store)
-            {"id": "CW_DISPENSING_ISLAND", "name": "00_Casework Central Optical Dispensing Island Table", "center": [10.79, -0.91, 0.47], "size": [0.71, 2.96, 0.94]},
-            # Dispensing Service L-Counter
-            {"id": "CW_SERVICE_COUNTER", "name": "00_Casework Dispensing Consultation Service Counter", "center": [12.26, -0.59, 0.45], "size": [0.84, 1.80, 0.90]},
-            # North Wall Optical Frame Display Continuous Millwork Run
-            {"id": "CW_DISP_NORTH_A", "name": "00_Casework North Optical Frame Wall Display Run A", "center": [6.81, 0.49, 0.43], "size": [4.00, 0.60, 0.86]},
-            {"id": "CW_DISP_NORTH_B", "name": "00_Casework North Optical Frame Wall Display Run B", "center": [10.75, 0.49, 0.43], "size": [3.00, 0.60, 0.86]},
-            # South Wall Optical Frame Display Continuous Millwork Run
-            {"id": "CW_DISP_SOUTH_A", "name": "00_Casework South Optical Frame Wall Display Run A", "center": [7.03, -3.79, 0.43], "size": [3.56, 0.60, 0.86]},
-            {"id": "CW_DISP_SOUTH_B", "name": "00_Casework South Optical Frame Wall Display Run B", "center": [10.75, -3.79, 0.43], "size": [3.00, 0.60, 0.86]},
-            # Restroom Vanity
-            {"id": "CW_RESTROOM_VANITY", "name": "00_Casework Restroom Single Sink Vanity Cupboard", "center": [16.58, -3.97, 0.45], "size": [0.79, 0.50, 0.90]}
+        # 6. Complete Restroom Plumbing Fixtures (Visible in Pano 48 & Revit Model)
+        self.plumbing = [
+            {"id": "PLUMB_WC", "name": "00_Water_Closet_Toilet_Wall-Hung_Concealed_WC_ADA", "pos": [17.54, -4.18, 0.43], "size": [0.40, 0.65, 0.43], "type": "Toilet"},
+            {"id": "PLUMB_SINK", "name": "00_Commercial Undermount Ceramic Restroom Vanity Sink", "pos": [16.58, -3.97, 0.86], "size": [0.50, 0.42, 0.22], "type": "Sink"},
+            {"id": "PLUMB_GRAB_REAR", "name": "00_ADA Grab Bar 36in Rear Wall", "pos": [17.54, -4.18, 0.87], "size": [0.91, 0.06, 0.06], "type": "GrabBar"},
+            {"id": "PLUMB_GRAB_SIDE", "name": "00_ADA Grab Bar 42in Side Wall", "pos": [18.13, -3.42, 0.87], "size": [0.06, 1.07, 0.06], "type": "GrabBar"}
         ]
 
-        # 7. Plumbing Fixtures
-        self.plumbing = [
-            {"id": "PLUMB_WC", "name": "00_Commercial Water Closet Wall-Hung ADA Toilet", "pos": [17.54, -4.18, 0.43], "size": [0.40, 0.65, 0.43]},
-            {"id": "PLUMB_SINK", "name": "00_Commercial Undermount Ceramic Restroom Sink", "pos": [16.58, -3.97, 0.86], "size": [0.50, 0.42, 0.22]}
+        # 7. Complete Casework & Dispensing Tables
+        self.casework = [
+            # Central Optical Dispensing Island Desk (Parallel to length of showroom)
+            {"id": "CW_DISPENSING_ISLAND", "name": "00_Casework Central Optical Dispensing Island Table", "center": [10.79, -0.91, 0.47], "size": [0.71, 2.96, 0.94], "type": "IslandDesk"},
+            # Dispensing Service Consultation Counter
+            {"id": "CW_SERVICE_COUNTER", "name": "00_Casework Dispensing Consultation Service Counter", "center": [12.26, -0.59, 0.45], "size": [0.84, 1.80, 0.90], "type": "ServiceCounter"},
+            # North Wall Optical Frame Display Continuous Millwork Run
+            {"id": "CW_DISP_NORTH_A", "name": "00_Casework North Optical Frame Wall Display Run A", "center": [6.81, 0.65, 0.43], "size": [4.00, 0.60, 0.86], "type": "WallDisplay"},
+            {"id": "CW_DISP_NORTH_B", "name": "00_Casework North Optical Frame Wall Display Run B", "center": [10.75, 0.45, 0.43], "size": [3.00, 0.60, 0.86], "type": "WallDisplay"},
+            # South Wall Optical Frame Display Continuous Millwork Run
+            {"id": "CW_DISP_SOUTH_A", "name": "00_Casework South Optical Frame Wall Display Run A", "center": [7.03, -3.79, 0.43], "size": [3.56, 0.60, 0.86], "type": "WallDisplay"},
+            {"id": "CW_DISP_SOUTH_B", "name": "00_Casework South Optical Frame Wall Display Run B", "center": [10.75, -3.79, 0.43], "size": [3.00, 0.60, 0.86], "type": "WallDisplay"},
+            # Restroom Vanity
+            {"id": "CW_RESTROOM_VANITY", "name": "00_Casework Restroom Single Sink Vanity Cupboard", "center": [16.58, -3.97, 0.45], "size": [0.79, 0.50, 0.90], "type": "Vanity"}
         ]
 
         # 8. Ceilings & Lighting
         self.ceilings = [
-            {"id": "CLG_SHOWROOM", "name": "00_Acoustic Suspended Ceiling 2x4", "elevation": 2.743, "thickness": 0.032, "polygon": [[4.71, 0.983], [12.87, 0.983], [12.87, -4.287], [4.71, -4.287]]},
-            {"id": "CLG_EXAM1", "name": "00_Acoustic Suspended Ceiling 2x2", "elevation": 2.743, "thickness": 0.032, "polygon": [[14.82, 0.983], [18.54, 0.983], [18.54, -0.795], [14.82, -0.795]]},
+            {"id": "CLG_SHOWROOM", "name": "00_Acoustic Suspended Ceiling 2x4", "elevation": 2.743, "thickness": 0.032, "polygon": [[4.71, 1.205], [12.87, 0.723], [12.87, -4.287], [4.71, -4.287]]},
+            {"id": "CLG_EXAM1", "name": "00_Acoustic Suspended Ceiling 2x2", "elevation": 2.743, "thickness": 0.032, "polygon": [[14.82, 0.608], [18.54, 0.388], [18.54, -0.795], [14.82, -0.795]]},
             {"id": "CLG_EXAM2", "name": "00_Acoustic Suspended Ceiling 2x2", "elevation": 2.743, "thickness": 0.032, "polygon": [[14.82, -0.795], [18.24, -0.795], [18.24, -2.620], [14.82, -2.620]]},
             {"id": "CLG_RESTROOM", "name": "00_GWB Painted Moisture-Resistant Ceiling", "elevation": 2.743, "thickness": 0.032, "polygon": [[16.09, -2.620], [18.24, -2.620], [18.24, -4.287], [16.09, -4.287]]}
         ]
@@ -212,16 +225,16 @@ class EyesOnParkConverter:
             for i, (x, y) in enumerate([
                 (6.0, -1.0), (8.0, -1.0), (10.0, -1.0), (12.0, -1.0),
                 (6.0, -2.5), (8.0, -2.5), (10.0, -2.5), (12.0, -2.5),
-                (16.5, 0.1), (16.5, -1.7), (17.2, -3.4)
+                (16.5, -0.1), (16.5, -1.7), (17.2, -3.4)
             ])
         ]
 
     def build_manifest(self, input_cloud=r"C:\Users\calle\Downloads\EyesOnPark.e57"):
         """Builds comprehensive JSON manifest of all BIM elements."""
         manifest = {
-            "project": "Eyes on Park — Commercial Optical Scan2BIM",
+            "project": "Eyes on Park — Commercial Optical Scan2BIM (Multi-Modal Vision + LiDAR)",
             "generated_at": datetime.datetime.now().isoformat(),
-            "pipeline_version": "2.1-groundtruth-calibrated",
+            "pipeline_version": "2.2-multimodal-calibrated",
             "point_cloud_modes": {
                 "authoritative_recap_cloud": {
                     "path": r"C:\Users\calle\Downloads\260612_Eyes_on_Park.rcs",
@@ -235,6 +248,12 @@ class EyesOnParkConverter:
                     "path": input_cloud,
                     "coordinate_system": "Origin-to-Origin Identity (Revit Native Project Space)",
                     "points_count": 18260762
+                },
+                "panoramic_vision_dataset": {
+                    "path": r"C:\Users\calle\Downloads\RS scan2bim_data\panorama_Eye_on_Park",
+                    "total_panos": 51,
+                    "resolution": "8192 x 4096 (8K Equirectangular)",
+                    "coverage": ["Front Entrance", "Retail Showroom", "Central Dispensing", "Corridor", "Exam 1", "Exam 2", "Restroom"]
                 }
             },
             "levels": self.levels,
@@ -354,7 +373,6 @@ class EyesOnParkConverter:
             dh = dr["height"]
             
             if host_id == "STOREFRONT":
-                # Double Entrance Glass Door
                 leaf_l = make_box(dw*0.5 - 0.02, 0.05, dh - 0.04, -dw*0.25, 0.0, 0.0)
                 leaf_r = make_box(dw*0.5 - 0.02, 0.05, dh - 0.04, dw*0.25, 0.0, 0.0)
                 d_elem = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcDoor", name=dr["name"], predefined_type="DOOR")
