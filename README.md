@@ -134,5 +134,16 @@ Open [http://localhost:3000](http://localhost:3000) to experience the interface.
 
 ---
 
-## 6. License
+## 6. Antigravity History & BIM/VDC Execution Documentation
+
+Full pair-programming history, conversation transcripts, strategic dossiers, and BIM Execution Plans are maintained in [`docs/antigravity-history/`](docs/antigravity-history/):
+* **[Pair-Programming Conversation Transcripts](docs/antigravity-history/)**: Complete chronological records across the Wasatch Peaks Ranch BEP, Henning Larsen Revit Standards, and VDC Proposal Estimator.
+* **[Wasatch Peaks Ranch BIM Execution Plan v1.2](docs/antigravity-history/artifacts/BIM_EXECUTION_PLAN_WASATCH_PEAKS_RANCH_v1_2.md)**: Autodesk Forma Bridge architecture (`WPR - Lot G9` <-> `25402 Wasatch Peaks Ranch Residence`), master worksets (`A-TRIM`, `A-WALLS`, `S-CONCRETE FOUNDATIONS`), 13 3D coordination views, dynamic cloud clash detection, and Action List issue tracking.
+* **[RACI Coordination Matrix](docs/antigravity-history/artifacts/RACI_COORDINATION_MATRIX.md)**: 42-activity project coordination matrix with Jonathan Griffiths sign-offs and trade assignments.
+* **[Henning Larsen US Office Revit Standards v1.2](docs/antigravity-history/artifacts/HENNING_LARSEN_REVIT_STANDARDS_v1_2.md)**: Firmwide software ecosystem, streamlined BEP workset policy, downstream material naming compatibility, agile bitmap overrides, and multi-view ceiling tagging.
+* **[Exclusions & Local Rebuild Guide](EXCLUSIONS.md)**: Guide for setting up Python/Node environments, acquiring heavy LiDAR scans (`.e57`, `.las`), and linking cloud BIM models.
+
+---
+
+## 7. License
 MIT License • Engineered for Scan-to-BIM Automation.
