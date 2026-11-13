@@ -104,9 +104,11 @@ class NavVisDatasetUnifier:
                 img_name = f"pano-{row_idx+1:06d}.jpg"
                 rel_img_path = os.path.join(ds["rel_path"], "pano", img_name)
 
-                # Apply 4x4 rigid transformation: P_global = T * P_local
+                # Apply 4x4 rigid transformation: P_global = T * P_local and Q_global = Q_align * Q_local
                 local_pt = np.array([x_loc, y_loc, z_loc, 1.0])
                 global_pt = trans @ local_pt
+                q_align = _rotation_matrix_to_quaternion(trans[:3, :3])
+                q_global = _quaternion_multiply(q_align, [qw_loc, qx_loc, qy_loc, qz_loc])
 
                 self.unified_poses.append({
                     "global_id": f"{ds_id}__{img_name}",
@@ -114,7 +116,7 @@ class NavVisDatasetUnifier:
                     "timestamp": ts,
                     "local_pose": [x_loc, y_loc, z_loc],
                     "global_pose": [float(global_pt[0]), float(global_pt[1]), float(global_pt[2])],
-                    "quaternion": [qw_loc, qx_loc, qy_loc, qz_loc],
+                    "quaternion": [float(v) for v in q_global],
                     "relative_image_path": rel_img_path
                 })
 
@@ -133,3 +135,49 @@ class NavVisDatasetUnifier:
         with open(out_json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
         return data
+
+
+def _rotation_matrix_to_quaternion(R):
+    """Converts a 3x3 rotation matrix to unit quaternion [w, x, y, z]."""
+    tr = float(np.trace(R))
+    if tr > 0.0:
+        s = 2.0 * np.sqrt(tr + 1.0)
+        w = 0.25 * s
+        x = (R[2, 1] - R[1, 2]) / s
+        y = (R[0, 2] - R[2, 0]) / s
+        z = (R[1, 0] - R[0, 1]) / s
+    elif R[0, 0] > R[1, 1] and R[0, 0] > R[2, 2]:
+        s = 2.0 * np.sqrt(1.0 + R[0, 0] - R[1, 1] - R[2, 2])
+        w = (R[2, 1] - R[1, 2]) / s
+        x = 0.25 * s
+        y = (R[0, 1] + R[1, 0]) / s
+        z = (R[0, 2] + R[2, 0]) / s
+    elif R[1, 1] > R[2, 2]:
+        s = 2.0 * np.sqrt(1.0 + R[1, 1] - R[0, 0] - R[2, 2])
+        w = (R[0, 2] - R[2, 0]) / s
+        x = (R[0, 1] + R[1, 0]) / s
+        y = 0.25 * s
+        z = (R[1, 2] + R[2, 1]) / s
+    else:
+        s = 2.0 * np.sqrt(1.0 + R[2, 2] - R[0, 0] - R[1, 1])
+        w = (R[1, 0] - R[0, 1]) / s
+        x = (R[0, 2] + R[2, 0]) / s
+        y = (R[1, 2] + R[2, 1]) / s
+        z = 0.25 * s
+    q = np.array([w, x, y, z], dtype=float)
+    n = float(np.linalg.norm(q))
+    return q / n if n > 1e-12 else np.array([1.0, 0.0, 0.0, 0.0])
+
+
+def _quaternion_multiply(q1, q2):
+    """Hamilton product of two [w, x, y, z] quaternions."""
+    w1, x1, y1, z1 = q1
+    w2, x2, y2, z2 = q2
+    q = np.array([
+        w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
+        w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
+        w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2,
+        w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2,
+    ], dtype=float)
+    n = float(np.linalg.norm(q))
+    return q / n if n > 1e-12 else np.array([1.0, 0.0, 0.0, 0.0])

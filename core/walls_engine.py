@@ -92,15 +92,24 @@ class AnalyticalWall:
         """
         BIMCraft-inspired mitred plan outline:
         Computes 2D corners offset by half-thickness on left and right,
-        accounting for mitred junction angles.
+        intersecting left/right face lines with adjacent walls at join_start / join_end.
         """
         ht = self.thickness * 0.5
         n = self.normal
+        d = self.direction
 
         p0_l = self.start + n * ht
         p0_r = self.start - n * ht
         p1_l = self.end + n * ht
         p1_r = self.end - n * ht
+
+        if join_start is not None:
+            p0_l = _intersect_face_with_neighbor(p0_l, d, join_start, side=1.0, is_start=True)
+            p0_r = _intersect_face_with_neighbor(p0_r, d, join_start, side=-1.0, is_start=True)
+
+        if join_end is not None:
+            p1_l = _intersect_face_with_neighbor(p1_l, d, join_end, side=1.0, is_start=False)
+            p1_r = _intersect_face_with_neighbor(p1_r, d, join_end, side=-1.0, is_start=False)
 
         return [
             (float(p0_r[0]), float(p0_r[1])),
@@ -109,7 +118,46 @@ class AnalyticalWall:
             (float(p0_l[0]), float(p0_l[1]))
         ]
 
-    def to_dict(self):
+    def compute_point_residuals(self, xyz, band=0.15):
+        """
+        Vectorized point-to-wall-face residual calculation (in meters).
+        Returns dict with count, mean_abs_error_m, rmse_m, and estimated_thickness_m.
+        """
+        if xyz is None or len(xyz) == 0 or self.length < 1e-6:
+            return {"count": 0, "mean_abs_error_m": 0.0, "rmse_m": 0.0, "estimated_thickness_m": self.thickness}
+
+        z_mask = (xyz[:, 2] >= self.base_z + 0.2) & (xyz[:, 2] <= self.base_z + self.height - 0.2)
+        pts = xyz[z_mask, :2]
+        if len(pts) == 0:
+            return {"count": 0, "mean_abs_error_m": 0.0, "rmse_m": 0.0, "estimated_thickness_m": self.thickness}
+
+        rel = pts - self.start
+        along = rel @ self.direction
+        perp = rel @ self.normal
+
+        ht = self.thickness * 0.5
+        in_len = (along >= 0.0) & (along <= self.length) & (np.abs(perp) <= ht + band)
+        perp_in = perp[in_len]
+        if len(perp_in) == 0:
+            return {"count": 0, "mean_abs_error_m": 0.0, "rmse_m": 0.0, "estimated_thickness_m": self.thickness}
+
+        # Signed distance to nearest wall face (+ht or -ht)
+        face_err = np.abs(np.abs(perp_in) - ht)
+        pos_side = perp_in[perp_in > 0]
+        neg_side = perp_in[perp_in < 0]
+        if len(pos_side) > 5 and len(neg_side) > 5:
+            est_thk = float(np.median(pos_side) - np.median(neg_side))
+        else:
+            est_thk = self.thickness
+
+        return {
+            "count": int(len(perp_in)),
+            "mean_abs_error_m": round(float(np.mean(face_err)), 4),
+            "rmse_m": round(float(np.sqrt(np.mean(face_err ** 2))), 4),
+            "estimated_thickness_m": round(est_thk, 4),
+        }
+
+    def to_dict(self, join_start=None, join_end=None):
         return {
             "id": self.wall_id,
             "name": self.name,
@@ -118,8 +166,88 @@ class AnalyticalWall:
             "length": round(self.length, 3),
             "base_z": round(self.base_z, 3),
             "height": round(self.height, 3),
-            "p1": [round(float(self.start[0]), 3), round(float(self.start[1]), 3)],
-            "p2": [round(float(self.end[0]), 3), round(float(self.end[1]), 3)],
+            "p1": [round(float(v), 3) for v in self.start],
+            "p2": [round(float(v), 3) for v in self.end],
+            "start": [round(float(v), 3) for v in self.start],
+            "end": [round(float(v), 3) for v in self.end],
+            "base_elevation": round(self.base_z, 3),
             "openings": self.openings,
-            "mitred_polygon": self.get_mitred_polygon()
+            "mitred_polygon": self.get_mitred_polygon(join_start=join_start, join_end=join_end)
         }
+
+
+def _line_intersection_2d(p1, d1, p2, d2):
+    """Intersects two 2D rays p1 + t*d1 and p2 + u*d2. Returns None if near-parallel."""
+    cross = d1[0] * d2[1] - d1[1] * d2[0]
+    if abs(cross) < 1e-4:
+        return None
+    dp = p2 - p1
+    t = (dp[0] * d2[1] - dp[1] * d2[0]) / cross
+    return p1 + t * d1
+
+
+def _intersect_face_with_neighbor(face_pt, wall_dir, neighbor_wall, side=1.0, is_start=False):
+    """
+    Computes the mitred corner point where this wall's face line meets a neighbor wall's
+    corresponding face line, choosing outer extension vs inner trim from corner geometry.
+    """
+    n_ht = neighbor_wall.thickness * 0.5
+    n_dir = neighbor_wall.direction
+    n_norm = neighbor_wall.normal
+    wall_norm = np.array([-wall_dir[1], wall_dir[0]])
+    out_dir = -wall_dir if is_start else wall_dir
+    max_reach = max(neighbor_wall.thickness, 0.5) * 2.5
+
+    candidates = []
+    for s in (1.0, -1.0):
+        n_face_pt = neighbor_wall.start + n_norm * (n_ht * s)
+        inter = _line_intersection_2d(face_pt, wall_dir, n_face_pt, n_dir)
+        if inter is not None:
+            t_out = float(np.dot(inter - face_pt, out_dir))
+            if abs(t_out) <= max_reach:
+                candidates.append((t_out, inter))
+
+    if not candidates:
+        return face_pt
+    if len(candidates) == 1:
+        return candidates[0][1]
+
+    # Determine whether `side * wall_norm` is the outer or inner face at this junction
+    neigh_mid = 0.5 * (neighbor_wall.start + neighbor_wall.end)
+    v_neigh = neigh_mid - face_pt
+    side_dot = float(np.dot(v_neigh, wall_norm * side))
+    if side_dot < -0.15:
+        # Outer face: extend further outward
+        return max(candidates, key=lambda c: c[0])[1]
+    elif side_dot > 0.15:
+        # Inner face: trim back
+        return min(candidates, key=lambda c: c[0])[1]
+    # T-join: pick closest face
+    return min(candidates, key=lambda c: abs(c[0]))[1]
+
+
+def mitre_wall_network(walls, join_tolerance=0.25):
+    """
+    Detects L-joins and T-joins across a list of AnalyticalWall instances and
+    returns a dict mapping wall_id -> (join_start_wall, join_end_wall).
+    """
+    joins = {w.wall_id: [None, None] for w in walls}
+    for i, w1 in enumerate(walls):
+        for j, w2 in enumerate(walls):
+            if i == j:
+                continue
+            # Skip parallel walls
+            if abs(float(np.dot(w1.direction, w2.direction))) > 0.98:
+                continue
+            for end_idx, pt in enumerate((w1.start, w1.end)):
+                # Check distance from pt to segment w2
+                v2 = w2.end - w2.start
+                l2_sq = float(np.dot(v2, v2))
+                if l2_sq < 1e-8:
+                    continue
+                t = float(np.clip(np.dot(pt - w2.start, v2) / l2_sq, 0.0, 1.0))
+                proj = w2.start + t * v2
+                dist = float(np.linalg.norm(pt - proj))
+                if dist <= join_tolerance and joins[w1.wall_id][end_idx] is None:
+                    joins[w1.wall_id][end_idx] = w2
+    return {wid: (pair[0], pair[1]) for wid, pair in joins.items()}

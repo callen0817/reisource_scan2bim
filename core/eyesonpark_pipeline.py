@@ -267,67 +267,114 @@ class EyesOnParkConverter:
         return manifest
 
     def export_ifc4(self, output_ifc_path=None):
-        """Generates production-grade IFC4 model."""
+        """Generates production-grade IFC4 model with rotated placements, voids, Psets, and curtain walls."""
         if not HAS_IFC:
             print("Warning: ifcopenshell not installed. Skipping direct IFC export.")
             return None
+
+        from .ifc_classification import (
+            assign_wall_material_layers,
+            attach_pset_and_classification,
+            get_classification,
+        )
 
         if output_ifc_path is None:
             output_ifc_path = os.path.join(self.output_dir, "EyesonPark_Automated_BIM.ifc")
 
         model = ifcopenshell.file(schema="IFC4")
-        
+
         # IFC Project & Setup
         proj = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcProject", name="Eyes on Park - Commercial Interior")
         ifcopenshell.api.run("unit.assign_unit", model, length={"is_metric": True, "raw": "METERS"})
-        
+
         context = ifcopenshell.api.run("context.add_context", model, context_type="Model")
         body = ifcopenshell.api.run(
             "context.add_context", model,
             context_type="Model", context_identifier="Body", target_view="MODEL_VIEW", parent=context
         )
-        
+
         site = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSite", name="Retail District Site")
         ifcopenshell.api.run("aggregate.assign_object", model, relating_object=proj, products=[site])
-        
+
         building = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuilding", name="Optical Retail Facility")
         ifcopenshell.api.run("aggregate.assign_object", model, relating_object=site, products=[building])
-        
+
         storey = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuildingStorey", name="01_Ground Floor")
         ifcopenshell.api.run("aggregate.assign_object", model, relating_object=building, products=[storey])
 
-        def create_extruded_box(pt, dx, dy, dz):
+        omniclass = ifcopenshell.api.run("classification.add_classification", model, classification="OmniClass")
+
+        def create_local_placement(x, y, z, x_axis=(1.0, 0.0, 0.0)):
+            pt = model.createIfcCartesianPoint([float(x), float(y), float(z)])
+            dir_z = model.createIfcDirection([0.0, 0.0, 1.0])
+            dir_x = model.createIfcDirection([float(x_axis[0]), float(x_axis[1]), 0.0])
+            return model.createIfcLocalPlacement(None, model.createIfcAxis2Placement3D(pt, dir_z, dir_x))
+
+        def create_extruded_box(dx, dy, dz, ox=0.0, oy=0.0, oz=0.0):
             return model.createIfcExtrudedAreaSolid(
                 SweptArea=model.createIfcRectangleProfileDef(
                     ProfileType="AREA",
                     XDim=float(dx),
                     YDim=float(dy),
                     Position=model.createIfcAxis2Placement2D(
-                        Location=model.createIfcCartesianPoint([float(pt[0]), float(pt[1])])
+                        Location=model.createIfcCartesianPoint([float(ox), float(oy)])
                     )
                 ),
                 Position=model.createIfcAxis2Placement3D(
-                    Location=model.createIfcCartesianPoint([0.0, 0.0, float(pt[2])])
+                    Location=model.createIfcCartesianPoint([0.0, 0.0, float(oz)])
                 ),
                 ExtrudedDirection=model.createIfcDirection([0.0, 0.0, 1.0]),
                 Depth=float(dz)
             )
 
-        # 1. Create Walls
+        def create_extruded_polygon(polygon_2d, depth, base_z=0.0):
+            pts = [model.createIfcCartesianPoint([float(p[0]), float(p[1])]) for p in polygon_2d]
+            if pts and (polygon_2d[0][0] != polygon_2d[-1][0] or polygon_2d[0][1] != polygon_2d[-1][1]):
+                pts.append(pts[0])
+            curve = model.createIfcPolyline(pts)
+            profile = model.createIfcArbitraryClosedProfileDef("AREA", None, curve)
+            return model.createIfcExtrudedAreaSolid(
+                SweptArea=profile,
+                Position=model.createIfcAxis2Placement3D(
+                    Location=model.createIfcCartesianPoint([0.0, 0.0, float(base_z)])
+                ),
+                ExtrudedDirection=model.createIfcDirection([0.0, 0.0, 1.0]),
+                Depth=float(depth),
+            )
+
+        door_by_id = {d["id"]: d for d in self.doors}
+        placed_doors = set()
+
+        # 1. Create Walls (rotated ObjectPlacement + compound material layers + Psets + offset openings)
         for w in self.walls:
-            wall_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcWallStandardCase", name=w.name)
+            spec = get_classification(w.wall_type, fallback="Interior")
+            wall_ent = ifcopenshell.api.run(
+                "root.create_entity", model,
+                ifc_class=spec["ifc_class"],
+                name=w.name,
+                predefined_type=spec["predefined_type"],
+            )
             p_mid = (w.start + w.end) * 0.5
-            box = create_extruded_box([p_mid[0], p_mid[1], w.base_z], w.thickness, w.length, w.height)
+            x_axis = (float(w.direction[0]), float(w.direction[1]), 0.0)
+            wall_ent.ObjectPlacement = create_local_placement(p_mid[0], p_mid[1], w.base_z, x_axis=x_axis)
+            box = create_extruded_box(w.length, w.thickness, w.height)
             rep = model.createIfcShapeRepresentation(
                 ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[box]
             )
             wall_ent.Representation = model.createIfcProductDefinitionShape(Representations=[rep])
             ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[wall_ent])
+            assign_wall_material_layers(model, wall_ent, w.thickness, w.wall_type)
+            attach_pset_and_classification(model, wall_ent, w.wall_type, classification_entity=omniclass)
 
-            # Punch Parametric Openings
+            # Punch Parametric Openings at exact offset along wall centerline
             for op in w.openings:
-                opening_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcOpeningElement", name=f"Opening_{op['name']}")
-                op_box = create_extruded_box([p_mid[0], p_mid[1], op["sill_z"]], w.thickness * 1.2, op["width"], op["height"])
+                op_pt = w.start + w.direction * op["offset"]
+                opening_ent = ifcopenshell.api.run(
+                    "root.create_entity", model, ifc_class="IfcOpeningElement",
+                    name=f"Opening_{op['name']}", predefined_type="OPENING"
+                )
+                opening_ent.ObjectPlacement = create_local_placement(op_pt[0], op_pt[1], op["sill_z"], x_axis=x_axis)
+                op_box = create_extruded_box(op["width"], w.thickness + 0.08, op["height"])
                 op_rep = model.createIfcShapeRepresentation(
                     ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[op_box]
                 )
@@ -336,60 +383,161 @@ class EyesOnParkConverter:
                     "IfcRelVoidsElement",
                     GlobalId=ifcopenshell.guid.new(),
                     RelatingBuildingElement=wall_ent,
-                    RelatedOpeningElement=opening_ent
+                    RelatedOpeningElement=opening_ent,
                 )
 
-        # 2. Create Doors
+                # Fill opening with hosted IfcDoor via IfcRelFillsElement
+                d = door_by_id.get(op["id"])
+                if d is not None:
+                    door_ent = ifcopenshell.api.run(
+                        "root.create_entity", model, ifc_class="IfcDoor", name=d["name"], predefined_type="DOOR"
+                    )
+                    door_ent.OverallWidth = float(d["width"])
+                    door_ent.OverallHeight = float(d["height"])
+                    door_ent.ObjectPlacement = create_local_placement(op_pt[0], op_pt[1], op["sill_z"], x_axis=x_axis)
+                    d_box = create_extruded_box(d["width"], 0.05, d["height"])
+                    d_rep = model.createIfcShapeRepresentation(
+                        ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[d_box]
+                    )
+                    door_ent.Representation = model.createIfcProductDefinitionShape(Representations=[d_rep])
+                    ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[door_ent])
+                    model.create_entity(
+                        "IfcRelFillsElement",
+                        GlobalId=ifcopenshell.guid.new(),
+                        RelatingOpeningElement=opening_ent,
+                        RelatedBuildingElement=door_ent,
+                    )
+                    attach_pset_and_classification(model, door_ent, "Door", classification_entity=omniclass)
+                    placed_doors.add(d["id"])
+
+        # 2. Unhosted Doors (e.g., Storefront curtain wall doors)
         for d in self.doors:
-            door_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcDoor", name=d["name"])
-            d_box = create_extruded_box([d["pos"][0], d["pos"][1], d["pos"][2]], 0.05, d["width"], d["height"])
+            if d["id"] in placed_doors:
+                continue
+            door_ent = ifcopenshell.api.run(
+                "root.create_entity", model, ifc_class="IfcDoor", name=d["name"], predefined_type="DOOR"
+            )
+            door_ent.OverallWidth = float(d["width"])
+            door_ent.OverallHeight = float(d["height"])
+            door_ent.ObjectPlacement = create_local_placement(d["pos"][0], d["pos"][1], d["pos"][2], x_axis=(0.0, 1.0, 0.0))
+            d_box = create_extruded_box(d["width"], 0.05, d["height"])
             d_rep = model.createIfcShapeRepresentation(
                 ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[d_box]
             )
             door_ent.Representation = model.createIfcProductDefinitionShape(Representations=[d_rep])
             ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[door_ent])
+            attach_pset_and_classification(model, door_ent, "Door", extra_props={"IsExternal": True}, classification_entity=omniclass)
 
-        # 3. Create Plumbing Fixtures
+        # 3. Storefront Curtain Wall System (IfcCurtainWall + IfcMember mullions + IfcPlate panels)
+        if self.curtain_system:
+            cw_ent = ifcopenshell.api.run(
+                "root.create_entity", model, ifc_class="IfcCurtainWall", name=self.curtain_system["name"]
+            )
+            ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[cw_ent])
+            attach_pset_and_classification(model, cw_ent, "CurtainWall", classification_entity=omniclass)
+            cw_parts = []
+            for m in self.curtain_system.get("mullions", []):
+                m_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcMember", name=m["id"], predefined_type="MULLION")
+                m_ent.ObjectPlacement = create_local_placement(m["x"], m["y"], m["z"])
+                m_box = create_extruded_box(m["d"], m["w"], m["h"])
+                m_rep = model.createIfcShapeRepresentation(
+                    ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[m_box]
+                )
+                m_ent.Representation = model.createIfcProductDefinitionShape(Representations=[m_rep])
+                cw_parts.append(m_ent)
+            for p in self.curtain_system.get("panels", []):
+                p_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcPlate", name=p["name"], predefined_type="CURTAIN_PANEL")
+                c = p["center"]
+                s = p["size"]
+                p_ent.ObjectPlacement = create_local_placement(c[0], c[1], c[2] - s[2] * 0.5)
+                p_box = create_extruded_box(s[0], s[1], s[2])
+                p_rep = model.createIfcShapeRepresentation(
+                    ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[p_box]
+                )
+                p_ent.Representation = model.createIfcProductDefinitionShape(Representations=[p_rep])
+                cw_parts.append(p_ent)
+            if cw_parts:
+                ifcopenshell.api.run("aggregate.assign_object", model, relating_object=cw_ent, products=cw_parts)
+
+        # 4. Plumbing Fixtures & ADA Grab Bars
         for p in self.plumbing:
-            plumb_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSanitaryTerminal", name=p["name"])
-            p_box = create_extruded_box(p["pos"], p["size"][0], p["size"][1], p["size"][2])
+            spec = get_classification(p.get("type", "Toilet"), fallback="Toilet")
+            plumb_ent = ifcopenshell.api.run(
+                "root.create_entity", model, ifc_class=spec["ifc_class"],
+                name=p["name"], predefined_type=spec["predefined_type"]
+            )
+            plumb_ent.ObjectPlacement = create_local_placement(p["pos"][0], p["pos"][1], p["pos"][2])
+            p_box = create_extruded_box(p["size"][0], p["size"][1], p["size"][2])
             p_rep = model.createIfcShapeRepresentation(
                 ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[p_box]
             )
             plumb_ent.Representation = model.createIfcProductDefinitionShape(Representations=[p_rep])
             ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[plumb_ent])
+            attach_pset_and_classification(model, plumb_ent, p.get("type", "Toilet"), classification_entity=omniclass)
 
-        # 4. Create Casework
+        # 5. Casework & Furniture
         for c in self.casework:
-            cw_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcFurnishingElement", name=c["name"])
-            c_box = create_extruded_box(c["center"], c["size"][0], c["size"][1], c["size"][2])
+            c_type = c.get("type", "Furniture")
+            spec = get_classification(c_type, fallback="Furniture")
+            cw_ent = ifcopenshell.api.run(
+                "root.create_entity", model, ifc_class=spec["ifc_class"],
+                name=c["name"], predefined_type=spec["predefined_type"]
+            )
+            cw_ent.ObjectPlacement = create_local_placement(c["center"][0], c["center"][1], c["center"][2] - c["size"][2] * 0.5)
+            c_box = create_extruded_box(c["size"][0], c["size"][1], c["size"][2])
             c_rep = model.createIfcShapeRepresentation(
                 ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[c_box]
             )
             cw_ent.Representation = model.createIfcProductDefinitionShape(Representations=[c_rep])
             ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[cw_ent])
+            attach_pset_and_classification(model, cw_ent, c_type, classification_entity=omniclass)
 
-        # 5. Create Floors
+        # 6. Polygonal Floors & ADA Ramp
         for f in self.floors:
-            flr_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSlab", name=f["name"])
-            poly_mid_x = np.mean([pt[0] for pt in f["polygon"]])
-            poly_mid_y = np.mean([pt[1] for pt in f["polygon"]])
-            f_box = create_extruded_box([poly_mid_x, poly_mid_y, f["elevation"]], 14.0, 5.4, f["thickness"])
+            is_ramp = "RAMP" in f["id"].upper()
+            cat_key = "Ramp" if is_ramp else "InteriorFloor"
+            spec = get_classification(cat_key)
+            flr_ent = ifcopenshell.api.run(
+                "root.create_entity", model, ifc_class=spec["ifc_class"],
+                name=f["name"], predefined_type=spec["predefined_type"]
+            )
+            flr_ent.ObjectPlacement = create_local_placement(0.0, 0.0, f["elevation"] - f["thickness"])
+            f_solid = create_extruded_polygon(f["polygon"], f["thickness"])
             f_rep = model.createIfcShapeRepresentation(
-                ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[f_box]
+                ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[f_solid]
             )
             flr_ent.Representation = model.createIfcProductDefinitionShape(Representations=[f_rep])
             ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[flr_ent])
+            attach_pset_and_classification(model, flr_ent, cat_key, classification_entity=omniclass)
+
+        # 7. Polygonal Ceilings (IfcCovering / CEILING)
+        for clg in self.ceilings:
+            spec = get_classification("SuspendedCeiling")
+            clg_ent = ifcopenshell.api.run(
+                "root.create_entity", model, ifc_class=spec["ifc_class"],
+                name=clg["name"], predefined_type=spec["predefined_type"]
+            )
+            clg_ent.ObjectPlacement = create_local_placement(0.0, 0.0, clg["elevation"])
+            c_solid = create_extruded_polygon(clg["polygon"], clg["thickness"])
+            c_rep = model.createIfcShapeRepresentation(
+                ContextOfItems=body, RepresentationIdentifier="Body", RepresentationType="SweptSolid", Items=[c_solid]
+            )
+            clg_ent.Representation = model.createIfcProductDefinitionShape(Representations=[c_rep])
+            ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey, products=[clg_ent])
+            attach_pset_and_classification(model, clg_ent, "SuspendedCeiling", classification_entity=omniclass)
 
         model.write(output_ifc_path)
         print(f"IFC4 Model written to: {output_ifc_path} ({len(model.by_type('IfcProduct'))} products)")
         return output_ifc_path
 
+
 def main():
-    out_dir = r"C:\Users\calle\.gemini\antigravity\scratch\reisource_scan2bim\data"
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    out_dir = os.path.join(repo_root, "data")
     converter = EyesOnParkConverter(out_dir)
     converter.build_manifest()
     converter.export_ifc4()
+
 
 if __name__ == "__main__":
     main()
