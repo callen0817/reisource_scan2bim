@@ -224,7 +224,7 @@ def attach_pset_and_classification(model, element, category_key, extra_props=Non
             "classification.add_reference",
             model,
             products=[element],
-            reference=classification_entity,
+            classification=classification_entity,
             identification=spec["omniclass"],
             name=f"CSI {spec.get('masterformat', '')} / {category_key}",
         )

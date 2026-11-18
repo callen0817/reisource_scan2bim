@@ -100,11 +100,20 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
 
     site = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSite", name=manifest.get("site_address", "Scan2BIM Site"))
     building = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuilding", name=manifest.get("building_name", "Building"))
-    storey_l1 = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuildingStorey", name="01_Ground_Floor")
+
+    levels_spec = manifest.get("levels") or [{"id": "Level_00", "name": "01_Ground_Floor", "elevation": 0.0}]
+    storeys = []
+    for lv in levels_spec:
+        st = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuildingStorey", name=lv["name"])
+        elev = float(lv.get("elevation", 0.0))
+        st.Elevation = elev
+        st.ObjectPlacement = create_local_placement(model, 0.0, 0.0, elev)
+        storeys.append(st)
+    storey_l1 = storeys[0]
 
     ifcopenshell.api.run("aggregate.assign_object", model, relating_object=project, products=[site])
     ifcopenshell.api.run("aggregate.assign_object", model, relating_object=site, products=[building])
-    ifcopenshell.api.run("aggregate.assign_object", model, relating_object=building, products=[storey_l1])
+    ifcopenshell.api.run("aggregate.assign_object", model, relating_object=building, products=storeys)
 
     omniclass = ifcopenshell.api.run("classification.add_classification", model, classification="OmniClass")
     contained_elements = []
@@ -201,7 +210,22 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
         contained_elements.append(wall)
 
     # 5. Openings (Parametric Voids + Door/Window Elements)
-    for op in manifest.get("openings", []):
+    openings_list = list(manifest.get("openings", []))
+    if not openings_list and manifest.get("doors"):
+        for d in manifest["doors"]:
+            pos = d.get("pos", d.get("location", [0.0, 0.0, 0.0]))
+            openings_list.append({
+                "id": d["id"],
+                "name": d.get("name", d["id"]),
+                "host_wall": d.get("host", d.get("host_wall")),
+                "location": pos,
+                "width": d["width"],
+                "height": d["height"],
+                "sill_z": pos[2] if len(pos) >= 3 else 0.0,
+                "type": "Door",
+            })
+
+    for op in openings_list:
         host_id = op["host_wall"]
         host_wall = wall_entities.get(host_id)
         w_meta = wall_metadata.get(host_id)

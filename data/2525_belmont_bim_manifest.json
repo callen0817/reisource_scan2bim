@@ -1,0 +1,5549 @@
+{
+  "project": "2525_Belmont Scan-to-BIM Model",
+  "target_lod": 300,
+  "dominant_orientation_deg": 26.5,
+  "bounds": {
+    "x": [
+      -26.551,
+      34.897
+    ],
+    "y": [
+      -20.062,
+      41.584
+    ],
+    "z": [
+      -8.473,
+      21.237
+    ]
+  },
+  "levels": [
+    {
+      "id": "Level_00",
+      "name": "00_Ground_Floor",
+      "elevation": -7.923
+    },
+    {
+      "id": "Level_01",
+      "name": "01_Ceiling_Level",
+      "elevation": -0.865
+    },
+    {
+      "id": "Level_02",
+      "name": "02_Structure_Deck",
+      "elevation": 6.512
+    }
+  ],
+  "slabs": [
+    {
+      "id": "Floor_Main_Slab",
+      "name": "Architectural Ground Slab",
+      "type": "InteriorFloor",
+      "x_min": -26.551,
+      "x_max": 34.897,
+      "y_min": -20.062,
+      "y_max": 41.584,
+      "polygon": [
+        [
+          -26.551,
+          -20.062
+        ],
+        [
+          34.897,
+          -20.062
+        ],
+        [
+          34.897,
+          41.584
+        ],
+        [
+          -26.551,
+          41.584
+        ]
+      ],
+      "elevation_top": -7.923,
+      "thickness": 0.15
+    }
+  ],
+  "ceilings": [
+    {
+      "id": "Ceiling_Acoustic_Grid",
+      "name": "Suspended Acoustic Ceiling",
+      "type": "SuspendedCeiling",
+      "x_min": -26.551,
+      "x_max": 34.897,
+      "y_min": -20.062,
+      "y_max": 41.584,
+      "polygon": [
+        [
+          -26.551,
+          -20.062
+        ],
+        [
+          34.897,
+          -20.062
+        ],
+        [
+          34.897,
+          41.584
+        ],
+        [
+          -26.551,
+          41.584
+        ]
+      ],
+      "elevation": -0.865,
+      "thickness": 0.04
+    }
+  ],
+  "walls": [
+    {
+      "id": "W_SEG_01",
+      "name": "Interior Wall 01",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 44.809,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -20.176,
+        7.684
+      ],
+      "p2": [
+        23.228,
+        18.816
+      ],
+      "start": [
+        -20.176,
+        7.684
+      ],
+      "end": [
+        23.228,
+        18.816
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_01_1",
+          "name": "Detected Door W_SEG_01_1",
+          "type": "Door",
+          "offset": 12.1,
+          "width": 1.829,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_01_2",
+          "name": "Detected Door W_SEG_01_2",
+          "type": "Door",
+          "offset": 14.1,
+          "width": 1.6,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_01_3",
+          "name": "Detected Door W_SEG_01_3",
+          "type": "Door",
+          "offset": 17.35,
+          "width": 0.762,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_01_4",
+          "name": "Detected Door W_SEG_01_4",
+          "type": "Door",
+          "offset": 18.4,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_01_5",
+          "name": "Detected Door W_SEG_01_5",
+          "type": "Door",
+          "offset": 20.3,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -20.160202708599304,
+          7.622263330365843
+        ],
+        [
+          23.243497390076612,
+          18.754309000265543
+        ],
+        [
+          23.211946030105615,
+          18.877327339077205
+        ],
+        [
+          -20.1917540685703,
+          7.745281669177503
+        ]
+      ],
+      "residuals": {
+        "count": 55013,
+        "mean_abs_error_m": 0.0549,
+        "rmse_m": 0.069,
+        "estimated_thickness_m": 0.1581
+      }
+    },
+    {
+      "id": "W_SEG_02",
+      "name": "Interior Wall 02",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 40.59,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        15.124,
+        16.909
+      ],
+      "p2": [
+        -24.32,
+        7.332
+      ],
+      "start": [
+        15.124,
+        16.909
+      ],
+      "end": [
+        -24.32,
+        7.332
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          15.355530753507262,
+          17.017690052271398
+        ],
+        [
+          -24.332203594091155,
+          7.381847276511015
+        ],
+        [
+          -24.308138015028717,
+          7.282726905726855
+        ],
+        [
+          14.749712362225358,
+          16.765639235721512
+        ]
+      ],
+      "residuals": {
+        "count": 26430,
+        "mean_abs_error_m": 0.054,
+        "rmse_m": 0.07,
+        "estimated_thickness_m": 0.1209
+      }
+    },
+    {
+      "id": "W_SEG_03",
+      "name": "Interior Wall 03",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 32.805,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        22.177,
+        15.246
+      ],
+      "p2": [
+        -0.232,
+        -8.712
+      ],
+      "start": [
+        22.177,
+        15.246
+      ],
+      "end": [
+        -0.232,
+        -8.712
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_03_1",
+          "name": "Detected Door W_SEG_03_1",
+          "type": "Door",
+          "offset": 11.05,
+          "width": 2.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          22.139415521699004,
+          15.280582072749768
+        ],
+        [
+          -0.2697278435637318,
+          -8.677276053216215
+        ],
+        [
+          -0.19523543382137065,
+          -8.746953028543622
+        ],
+        [
+          22.213907931441366,
+          15.21090509742236
+        ]
+      ],
+      "residuals": {
+        "count": 32441,
+        "mean_abs_error_m": 0.0419,
+        "rmse_m": 0.0552,
+        "estimated_thickness_m": 0.0749
+      }
+    },
+    {
+      "id": "W_SEG_04",
+      "name": "Interior Wall 04",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 40.608,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -2.863,
+        -10.06
+      ],
+      "p2": [
+        24.829,
+        19.641
+      ],
+      "start": [
+        -2.863,
+        -10.06
+      ],
+      "end": [
+        24.829,
+        19.641
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_04_1",
+          "name": "Detected Door W_SEG_04_1",
+          "type": "Door",
+          "offset": 10.55,
+          "width": 1.5,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_04_2",
+          "name": "Detected Door W_SEG_04_2",
+          "type": "Door",
+          "offset": 12.95,
+          "width": 1.5,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_04_3",
+          "name": "Detected Door W_SEG_04_3",
+          "type": "Door",
+          "offset": 15.25,
+          "width": 2.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -2.8261492093366227,
+          -10.094560370400208
+        ],
+        [
+          24.86679124496471,
+          19.60613463038322
+        ],
+        [
+          24.79218890072903,
+          19.675693887384295
+        ],
+        [
+          -2.9007515535723023,
+          -10.025001113399137
+        ]
+      ],
+      "residuals": {
+        "count": 22752,
+        "mean_abs_error_m": 0.0439,
+        "rmse_m": 0.0568,
+        "estimated_thickness_m": 0.0895
+      }
+    },
+    {
+      "id": "W_SEG_05",
+      "name": "Interior Wall 05",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 33.37,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -15.557,
+        13.239
+      ],
+      "p2": [
+        8.927,
+        -9.434
+      ],
+      "start": [
+        -15.557,
+        13.239
+      ],
+      "end": [
+        8.927,
+        -9.434
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          -15.591744816886,
+          13.201966885603422
+        ],
+        [
+          8.892482191575077,
+          -9.47128138554718
+        ],
+        [
+          8.96178620094376,
+          -9.396441861995612
+        ],
+        [
+          -15.522440807517317,
+          13.27680640915499
+        ]
+      ],
+      "residuals": {
+        "count": 25759,
+        "mean_abs_error_m": 0.0464,
+        "rmse_m": 0.0578,
+        "estimated_thickness_m": 0.1141
+      }
+    },
+    {
+      "id": "W_SEG_06",
+      "name": "Exterior Wall 06",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 42.706,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -15.609,
+        -0.692
+      ],
+      "p2": [
+        22.61,
+        18.364
+      ],
+      "start": [
+        -15.609,
+        -0.692
+      ],
+      "end": [
+        22.61,
+        18.364
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_06_1",
+          "name": "Detected Door W_SEG_06_1",
+          "type": "Door",
+          "offset": 13.05,
+          "width": 0.762,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_06_2",
+          "name": "Detected Door W_SEG_06_2",
+          "type": "Door",
+          "offset": 19.0,
+          "width": 1.829,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_06_3",
+          "name": "Detected Door W_SEG_06_3",
+          "type": "Door",
+          "offset": 21.2,
+          "width": 0.813,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_06_4",
+          "name": "Detected Door W_SEG_06_4",
+          "type": "Door",
+          "offset": 23.0,
+          "width": 1.829,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_06_5",
+          "name": "Detected Door W_SEG_06_5",
+          "type": "Door",
+          "offset": 25.75,
+          "width": 0.762,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_06_6",
+          "name": "Detected Door W_SEG_06_6",
+          "type": "Door",
+          "offset": 28.15,
+          "width": 2.1,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -15.57476967101368,
+          -0.7598699578341079
+        ],
+        [
+          23.433720646940348,
+          18.689045872628114
+        ],
+        [
+          22.36561055047786,
+          18.326350681641124
+        ],
+        [
+          -15.64259173860637,
+          -0.6238399348706001
+        ]
+      ],
+      "residuals": {
+        "count": 30262,
+        "mean_abs_error_m": 0.0621,
+        "rmse_m": 0.0745,
+        "estimated_thickness_m": 0.2257
+      }
+    },
+    {
+      "id": "W_SEG_07",
+      "name": "Interior Wall 07",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 45.906,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        24.413,
+        18.873
+      ],
+      "p2": [
+        -20.211,
+        8.104
+      ],
+      "start": [
+        24.413,
+        18.873
+      ],
+      "end": [
+        -20.211,
+        8.104
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_07_1",
+          "name": "Detected Door W_SEG_07_1",
+          "type": "Door",
+          "offset": 29.65,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_07_2",
+          "name": "Detected Door W_SEG_07_2",
+          "type": "Door",
+          "offset": 36.05,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          24.179512531205393,
+          18.86902780376866
+        ],
+        [
+          -20.223264874705094,
+          8.153306978520957
+        ],
+        [
+          -20.199336163513493,
+          8.054153477419336
+        ],
+        [
+          23.873319645789923,
+          18.69020606850934
+        ]
+      ],
+      "residuals": {
+        "count": 59516,
+        "mean_abs_error_m": 0.0439,
+        "rmse_m": 0.0562,
+        "estimated_thickness_m": 0.0646
+      }
+    },
+    {
+      "id": "W_SEG_08",
+      "name": "Exterior Wall 08",
+      "type": "Exterior",
+      "thickness": 0.2,
+      "length": 39.126,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        14.457,
+        25.115
+      ],
+      "p2": [
+        -11.797,
+        -3.895
+      ],
+      "start": [
+        14.457,
+        25.115
+      ],
+      "end": [
+        -11.797,
+        -3.895
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_08_1",
+          "name": "Detected Door W_SEG_08_1",
+          "type": "Door",
+          "offset": 24.25,
+          "width": 2.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_08_2",
+          "name": "Detected Door W_SEG_08_2",
+          "type": "Door",
+          "offset": 26.3,
+          "width": 0.813,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          14.383109514113347,
+          25.18179762431467
+        ],
+        [
+          -11.871164592913402,
+          -3.8275904680808774
+        ],
+        [
+          -11.722876982144001,
+          -3.96179473214243
+        ],
+        [
+          14.531397124882748,
+          25.047593360253117
+        ]
+      ],
+      "residuals": {
+        "count": 32627,
+        "mean_abs_error_m": 0.0429,
+        "rmse_m": 0.0555,
+        "estimated_thickness_m": 0.2309
+      }
+    },
+    {
+      "id": "W_SEG_09",
+      "name": "Exterior Wall 09",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 44.703,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        24.082,
+        19.599
+      ],
+      "p2": [
+        -15.924,
+        -0.347
+      ],
+      "start": [
+        24.082,
+        19.599
+      ],
+      "end": [
+        -15.924,
+        -0.347
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_09_1",
+          "name": "Detected Door W_SEG_09_1",
+          "type": "Door",
+          "offset": 15.85,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_09_2",
+          "name": "Detected Door W_SEG_09_2",
+          "type": "Door",
+          "offset": 19.5,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_09_3",
+          "name": "Detected Door W_SEG_09_3",
+          "type": "Door",
+          "offset": 21.95,
+          "width": 1.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_09_4",
+          "name": "Detected Door W_SEG_09_4",
+          "type": "Door",
+          "offset": 28.9,
+          "width": 2.0,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_09_5",
+          "name": "Detected Door W_SEG_09_5",
+          "type": "Door",
+          "offset": 30.4,
+          "width": 0.813,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          24.04770253066829,
+          19.66685387753565
+        ],
+        [
+          -15.958185533268258,
+          -0.2793461249874245
+        ],
+        [
+          -15.890363465675568,
+          -0.41537614795093236
+        ],
+        [
+          24.115524598260983,
+          19.53082385457214
+        ]
+      ],
+      "residuals": {
+        "count": 30024,
+        "mean_abs_error_m": 0.0614,
+        "rmse_m": 0.0738,
+        "estimated_thickness_m": 0.2186
+      }
+    },
+    {
+      "id": "W_SEG_10",
+      "name": "Interior Wall 10",
+      "type": "Interior",
+      "thickness": 0.152,
+      "length": 35.536,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -18.738,
+        12.426
+      ],
+      "p2": [
+        8.35,
+        -10.576
+      ],
+      "start": [
+        -18.738,
+        12.426
+      ],
+      "end": [
+        8.35,
+        -10.576
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          -18.787388584856757,
+          12.367831641854247
+        ],
+        [
+          8.300800341204557,
+          -10.633656015361813
+        ],
+        [
+          8.399184600777577,
+          -10.517791709088188
+        ],
+        [
+          -18.689004325283733,
+          12.483695948127872
+        ]
+      ],
+      "residuals": {
+        "count": 27956,
+        "mean_abs_error_m": 0.0585,
+        "rmse_m": 0.0703,
+        "estimated_thickness_m": 0.2076
+      }
+    },
+    {
+      "id": "W_SEG_11",
+      "name": "Exterior Wall 11",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 31.729,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        9.511,
+        -8.676
+      ],
+      "p2": [
+        -13.258,
+        13.421
+      ],
+      "start": [
+        9.511,
+        -8.676
+      ],
+      "end": [
+        -13.258,
+        13.421
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_11_1",
+          "name": "Detected Door W_SEG_11_1",
+          "type": "Door",
+          "offset": 9.8,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          9.564361267778226,
+          -8.621514524197725
+        ],
+        [
+          -13.205210303295843,
+          13.475043341581037
+        ],
+        [
+          -13.311066369530575,
+          13.365963126870449
+        ],
+        [
+          9.458505201543494,
+          -8.730594738908312
+        ]
+      ],
+      "residuals": {
+        "count": 37565,
+        "mean_abs_error_m": 0.0575,
+        "rmse_m": 0.069,
+        "estimated_thickness_m": 0.2175
+      }
+    },
+    {
+      "id": "W_SEG_12",
+      "name": "Interior Wall 12",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 35.353,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -20.166,
+        10.07
+      ],
+      "p2": [
+        5.824,
+        -13.896
+      ],
+      "start": [
+        -20.166,
+        10.07
+      ],
+      "end": [
+        5.824,
+        -13.896
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          -20.20026138978733,
+          10.032348432775882
+        ],
+        [
+          5.789175825208391,
+          -13.933736240794884
+        ],
+        [
+          5.858322742070174,
+          -13.85875154976725
+        ],
+        [
+          -20.131114472925546,
+          10.107333123803516
+        ]
+      ],
+      "residuals": {
+        "count": 21450,
+        "mean_abs_error_m": 0.0374,
+        "rmse_m": 0.0524,
+        "estimated_thickness_m": 0.1082
+      }
+    },
+    {
+      "id": "W_SEG_13",
+      "name": "Interior Wall 13",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 30.245,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        2.504,
+        26.046
+      ],
+      "p2": [
+        24.96,
+        5.787
+      ],
+      "start": [
+        2.504,
+        26.046
+      ],
+      "end": [
+        24.96,
+        5.787
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_13_1",
+          "name": "Detected Door W_SEG_13_1",
+          "type": "Door",
+          "offset": 15.65,
+          "width": 0.762,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          2.469396424511781,
+          26.008195716153836
+        ],
+        [
+          24.92585512509867,
+          5.7486666281907866
+        ],
+        [
+          24.994180249675445,
+          5.824400883000408
+        ],
+        [
+          2.5377215490885527,
+          26.08392997096346
+        ]
+      ],
+      "residuals": {
+        "count": 22260,
+        "mean_abs_error_m": 0.0479,
+        "rmse_m": 0.0635,
+        "estimated_thickness_m": 0.0751
+      }
+    },
+    {
+      "id": "W_SEG_14",
+      "name": "Interior Wall 14",
+      "type": "Interior",
+      "thickness": 0.152,
+      "length": 43.997,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -12.95,
+        -3.442
+      ],
+      "p2": [
+        22.651,
+        22.409
+      ],
+      "start": [
+        -12.95,
+        -3.442
+      ],
+      "end": [
+        22.651,
+        22.409
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_14_1",
+          "name": "Detected Door W_SEG_14_1",
+          "type": "Door",
+          "offset": 18.9,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_14_2",
+          "name": "Detected Door W_SEG_14_2",
+          "type": "Door",
+          "offset": 22.0,
+          "width": 2.0,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_14_3",
+          "name": "Detected Door W_SEG_14_3",
+          "type": "Door",
+          "offset": 24.65,
+          "width": 1.829,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_14_4",
+          "name": "Detected Door W_SEG_14_4",
+          "type": "Door",
+          "offset": 27.15,
+          "width": 1.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -12.905523126738341,
+          -3.503147380285316
+        ],
+        [
+          22.695996307004503,
+          22.347728377837562
+        ],
+        [
+          22.606687191349746,
+          22.47072383247295
+        ],
+        [
+          -12.994832242393098,
+          -3.38015192564993
+        ]
+      ],
+      "residuals": {
+        "count": 30741,
+        "mean_abs_error_m": 0.062,
+        "rmse_m": 0.0745,
+        "estimated_thickness_m": 0.2214
+      }
+    },
+    {
+      "id": "W_SEG_15",
+      "name": "Exterior Wall 15",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 46.211,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -16.297,
+        -0.229
+      ],
+      "p2": [
+        25.059,
+        20.39
+      ],
+      "start": [
+        -16.297,
+        -0.229
+      ],
+      "end": [
+        25.059,
+        20.39
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_15_1",
+          "name": "Detected Door W_SEG_15_1",
+          "type": "Door",
+          "offset": 16.0,
+          "width": 2.0,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_15_2",
+          "name": "Detected Door W_SEG_15_2",
+          "type": "Door",
+          "offset": 28.1,
+          "width": 0.813,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -16.262843426228365,
+          -0.29676417238445185
+        ],
+        [
+          25.092623090117666,
+          20.322310825135183
+        ],
+        [
+          25.024801022524972,
+          20.458340848098693
+        ],
+        [
+          -16.33066549382106,
+          -0.16073414942094402
+        ]
+      ],
+      "residuals": {
+        "count": 27886,
+        "mean_abs_error_m": 0.0631,
+        "rmse_m": 0.0755,
+        "estimated_thickness_m": 0.2308
+      }
+    },
+    {
+      "id": "W_SEG_16",
+      "name": "Interior Wall 16",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 38.885,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        26.048,
+        18.367
+      ],
+      "p2": [
+        0.184,
+        -10.67
+      ],
+      "start": [
+        26.048,
+        18.367
+      ],
+      "end": [
+        0.184,
+        -10.67
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          26.009514857419255,
+          18.400462954316374
+        ],
+        [
+          0.14550425308201628,
+          -10.63561501340375
+        ],
+        [
+          0.2216694134468649,
+          -10.703459455671315
+        ],
+        [
+          26.085680017784107,
+          18.33261851204881
+        ]
+      ],
+      "residuals": {
+        "count": 16108,
+        "mean_abs_error_m": 0.0443,
+        "rmse_m": 0.0574,
+        "estimated_thickness_m": 0.1207
+      }
+    },
+    {
+      "id": "W_SEG_17",
+      "name": "Interior Wall 17",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 44.416,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        21.904,
+        24.93
+      ],
+      "p2": [
+        -8.819,
+        -7.146
+      ],
+      "start": [
+        21.904,
+        24.93
+      ],
+      "end": [
+        -8.819,
+        -7.146
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_17_1",
+          "name": "Detected Door W_SEG_17_1",
+          "type": "Door",
+          "offset": 29.65,
+          "width": 1.5,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_17_2",
+          "name": "Detected Door W_SEG_17_2",
+          "type": "Door",
+          "offset": 31.75,
+          "width": 2.1,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          21.866950307689063,
+          24.964778594300505
+        ],
+        [
+          -8.856304510674585,
+          -7.111099348427014
+        ],
+        [
+          -8.782643214066235,
+          -7.18165438639013
+        ],
+        [
+          21.940611604297413,
+          24.894223556337387
+        ]
+      ],
+      "residuals": {
+        "count": 22968,
+        "mean_abs_error_m": 0.0534,
+        "rmse_m": 0.0681,
+        "estimated_thickness_m": 0.1555
+      }
+    },
+    {
+      "id": "W_SEG_18",
+      "name": "Interior Wall 18",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 42.318,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        23.789,
+        21.239
+      ],
+      "p2": [
+        -5.533,
+        -9.275
+      ],
+      "start": [
+        23.789,
+        21.239
+      ],
+      "end": [
+        -5.533,
+        -9.275
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_18_1",
+          "name": "Detected Door W_SEG_18_1",
+          "type": "Door",
+          "offset": 19.15,
+          "width": 2.1,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_18_2",
+          "name": "Detected Door W_SEG_18_2",
+          "type": "Door",
+          "offset": 28.2,
+          "width": 1.4,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          23.743046827679542,
+          21.28287657519858
+        ],
+        [
+          -5.578433021238656,
+          -9.23067749509578
+        ],
+        [
+          -5.486859523916685,
+          -9.318673486983041
+        ],
+        [
+          23.834620325001517,
+          21.194880583311317
+        ]
+      ],
+      "residuals": {
+        "count": 20149,
+        "mean_abs_error_m": 0.0519,
+        "rmse_m": 0.0651,
+        "estimated_thickness_m": 0.1677
+      }
+    },
+    {
+      "id": "W_SEG_19",
+      "name": "Exterior Wall 19",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 42.075,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        22.128,
+        17.799
+      ],
+      "p2": [
+        -15.526,
+        -0.975
+      ],
+      "start": [
+        22.128,
+        17.799
+      ],
+      "end": [
+        -15.526,
+        -0.975
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_19_1",
+          "name": "Detected Door W_SEG_19_1",
+          "type": "Door",
+          "offset": 17.2,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_19_2",
+          "name": "Detected Door W_SEG_19_2",
+          "type": "Door",
+          "offset": 29.3,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          22.093734370121382,
+          17.866649099258293
+        ],
+        [
+          -15.560265304736676,
+          -0.9069426082758378
+        ],
+        [
+          -15.492443237143986,
+          -1.0429726312393457
+        ],
+        [
+          22.161556437714076,
+          17.730619076294783
+        ]
+      ],
+      "residuals": {
+        "count": 30480,
+        "mean_abs_error_m": 0.0628,
+        "rmse_m": 0.0753,
+        "estimated_thickness_m": 0.2286
+      }
+    },
+    {
+      "id": "W_SEG_20",
+      "name": "Exterior Wall 20",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 43.527,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        24.061,
+        17.841
+      ],
+      "p2": [
+        -14.893,
+        -1.581
+      ],
+      "start": [
+        24.061,
+        17.841
+      ],
+      "end": [
+        -14.893,
+        -1.581
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_20_1",
+          "name": "Detected Door W_SEG_20_1",
+          "type": "Door",
+          "offset": 25.45,
+          "width": 0.762,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          24.02733607800756,
+          17.909023753447467
+        ],
+        [
+          -14.92651571660683,
+          -1.5126503141864236
+        ],
+        [
+          -14.858693649014139,
+          -1.6486803371499315
+        ],
+        [
+          24.095158145600255,
+          17.772993730483957
+        ]
+      ],
+      "residuals": {
+        "count": 21979,
+        "mean_abs_error_m": 0.0636,
+        "rmse_m": 0.076,
+        "estimated_thickness_m": 0.2324
+      }
+    },
+    {
+      "id": "W_SEG_21",
+      "name": "Interior Wall 21",
+      "type": "Interior",
+      "thickness": 0.152,
+      "length": 52.992,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        30.1,
+        12.844
+      ],
+      "p2": [
+        -22.354,
+        5.314
+      ],
+      "start": [
+        30.1,
+        12.844
+      ],
+      "end": [
+        -22.354,
+        5.314
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_21_1",
+          "name": "Detected Door W_SEG_21_1",
+          "type": "Door",
+          "offset": 22.15,
+          "width": 2.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          30.08966768824045,
+          12.919095335538719
+        ],
+        [
+          -22.364974746273532,
+          5.3892615465102685
+        ],
+        [
+          -22.34337662899059,
+          5.238803840393792
+        ],
+        [
+          30.11126580552339,
+          12.768637629422242
+        ]
+      ],
+      "residuals": {
+        "count": 22193,
+        "mean_abs_error_m": 0.0607,
+        "rmse_m": 0.0733,
+        "estimated_thickness_m": 0.2139
+      }
+    },
+    {
+      "id": "W_SEG_22",
+      "name": "Exterior Wall 22",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 31.9,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        21.721,
+        3.346
+      ],
+      "p2": [
+        -2.319,
+        24.316
+      ],
+      "start": [
+        21.721,
+        3.346
+      ],
+      "end": [
+        -2.319,
+        24.316
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_22_1",
+          "name": "Detected Door W_SEG_22_1",
+          "type": "Door",
+          "offset": 13.75,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_22_2",
+          "name": "Detected Door W_SEG_22_2",
+          "type": "Door",
+          "offset": 15.0,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          21.7706280747334,
+          3.4034999466804945
+        ],
+        [
+          -2.2693493911674283,
+          24.37301295088986
+        ],
+        [
+          -2.369265298401017,
+          24.258466840167195
+        ],
+        [
+          21.67071216749981,
+          3.28895383595783
+        ]
+      ],
+      "residuals": {
+        "count": 24260,
+        "mean_abs_error_m": 0.0583,
+        "rmse_m": 0.0707,
+        "estimated_thickness_m": 0.2161
+      }
+    },
+    {
+      "id": "W_SEG_23",
+      "name": "Exterior Wall 23",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 43.71,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -15.259,
+        -1.376
+      ],
+      "p2": [
+        23.859,
+        18.127
+      ],
+      "start": [
+        -15.259,
+        -1.376
+      ],
+      "end": [
+        23.859,
+        18.127
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_23_1",
+          "name": "Detected Door W_SEG_23_1",
+          "type": "Door",
+          "offset": 11.2,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_23_2",
+          "name": "Detected Door W_SEG_23_2",
+          "type": "Door",
+          "offset": 12.8,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_23_3",
+          "name": "Detected Door W_SEG_23_3",
+          "type": "Door",
+          "offset": 18.95,
+          "width": 1.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -15.225072807855314,
+          -1.444070521352473
+        ],
+        [
+          23.892807347834143,
+          18.059385070312587
+        ],
+        [
+          23.82498528024145,
+          18.195415093276097
+        ],
+        [
+          -15.292894875448004,
+          -1.308040498388965
+        ]
+      ],
+      "residuals": {
+        "count": 26361,
+        "mean_abs_error_m": 0.0623,
+        "rmse_m": 0.0747,
+        "estimated_thickness_m": 0.2269
+      }
+    },
+    {
+      "id": "W_SEG_24",
+      "name": "Interior Wall 24",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 36.367,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        4.355,
+        -15.795
+      ],
+      "p2": [
+        -22.445,
+        8.788
+      ],
+      "start": [
+        4.355,
+        -15.795
+      ],
+      "end": [
+        -22.445,
+        8.788
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          4.389361112489013,
+          -15.75756040820401
+        ],
+        [
+          -22.510803592373392,
+          8.916616051659993
+        ],
+        [
+          -22.823231451143464,
+          9.064780320963772
+        ],
+        [
+          4.32041337645879,
+          -15.832728284962016
+        ]
+      ],
+      "residuals": {
+        "count": 14717,
+        "mean_abs_error_m": 0.0515,
+        "rmse_m": 0.0655,
+        "estimated_thickness_m": 0.1272
+      }
+    },
+    {
+      "id": "W_SEG_25",
+      "name": "Exterior Wall 25",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 38.914,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -9.439,
+        -6.602
+      ],
+      "p2": [
+        22.293,
+        15.923
+      ],
+      "start": [
+        -9.439,
+        -6.602
+      ],
+      "end": [
+        22.293,
+        15.923
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_25_1",
+          "name": "Detected Door W_SEG_25_1",
+          "type": "Door",
+          "offset": 13.55,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_25_2",
+          "name": "Detected Door W_SEG_25_2",
+          "type": "Door",
+          "offset": 15.1,
+          "width": 1.4,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_25_3",
+          "name": "Detected Door W_SEG_25_3",
+          "type": "Door",
+          "offset": 29.15,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -9.39509850936709,
+          -6.663671842499152
+        ],
+        [
+          21.807086183098402,
+          15.485425066651008
+        ],
+        [
+          22.714028692011514,
+          16.31562768496965
+        ],
+        [
+          -9.483082876950638,
+          -6.539725277153748
+        ]
+      ],
+      "residuals": {
+        "count": 22905,
+        "mean_abs_error_m": 0.0617,
+        "rmse_m": 0.074,
+        "estimated_thickness_m": 0.2223
+      }
+    },
+    {
+      "id": "W_SEG_26",
+      "name": "Exterior Wall 26",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 38.81,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        14.348,
+        -6.497
+      ],
+      "p2": [
+        -19.904,
+        11.752
+      ],
+      "start": [
+        14.348,
+        -6.497
+      ],
+      "end": [
+        -19.904,
+        11.752
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_26_1",
+          "name": "Detected Door W_SEG_26_1",
+          "type": "Door",
+          "offset": 10.4,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_26_2",
+          "name": "Detected Door W_SEG_26_2",
+          "type": "Door",
+          "offset": 12.35,
+          "width": 2.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_26_3",
+          "name": "Detected Door W_SEG_26_3",
+          "type": "Door",
+          "offset": 16.85,
+          "width": 2.1,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_26_4",
+          "name": "Detected Door W_SEG_26_4",
+          "type": "Door",
+          "offset": 20.0,
+          "width": 1.6,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_26_5",
+          "name": "Detected Door W_SEG_26_5",
+          "type": "Door",
+          "offset": 22.4,
+          "width": 1.4,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          14.383618367745326,
+          -6.429704831030276
+        ],
+        [
+          -19.86873119088965,
+          11.818955345517566
+        ],
+        [
+          -19.940201870044245,
+          11.684806390914183
+        ],
+        [
+          14.312147688590729,
+          -6.56385378563366
+        ]
+      ],
+      "residuals": {
+        "count": 22435,
+        "mean_abs_error_m": 0.0634,
+        "rmse_m": 0.0758,
+        "estimated_thickness_m": 0.231
+      }
+    },
+    {
+      "id": "W_SEG_27",
+      "name": "Interior Wall 27",
+      "type": "Interior",
+      "thickness": 0.152,
+      "length": 36.747,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -18.046,
+        13.713
+      ],
+      "p2": [
+        9.911,
+        -10.136
+      ],
+      "start": [
+        -18.046,
+        13.713
+      ],
+      "end": [
+        9.911,
+        -10.136
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          -18.095339001846742,
+          13.654726207498982
+        ],
+        [
+          9.861184308755258,
+          -10.193570482682306
+        ],
+        [
+          9.959831440243827,
+          -10.077929903952016
+        ],
+        [
+          -17.996691870358173,
+          13.770366786229271
+        ]
+      ],
+      "residuals": {
+        "count": 21326,
+        "mean_abs_error_m": 0.0594,
+        "rmse_m": 0.0711,
+        "estimated_thickness_m": 0.206
+      }
+    },
+    {
+      "id": "W_SEG_28",
+      "name": "Interior Wall 28",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 40.634,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        1.166,
+        -11.609
+      ],
+      "p2": [
+        28.123,
+        18.795
+      ],
+      "start": [
+        1.166,
+        -11.609
+      ],
+      "end": [
+        28.123,
+        18.795
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          1.204068658102028,
+          -11.642878908777007
+        ],
+        [
+          28.466171818601204,
+          19.105285283101058
+        ],
+        [
+          27.951950969755735,
+          18.679059366903697
+        ],
+        [
+          1.127747187709939,
+          -11.575210355096665
+        ]
+      ],
+      "residuals": {
+        "count": 12232,
+        "mean_abs_error_m": 0.0438,
+        "rmse_m": 0.0583,
+        "estimated_thickness_m": 0.1227
+      }
+    },
+    {
+      "id": "W_SEG_29",
+      "name": "Exterior Wall 29",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 46.901,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -16.615,
+        0.041
+      ],
+      "p2": [
+        25.359,
+        20.968
+      ],
+      "start": [
+        -16.615,
+        0.041
+      ],
+      "end": [
+        25.359,
+        20.968
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_29_1",
+          "name": "Detected Door W_SEG_29_1",
+          "type": "Door",
+          "offset": 29.55,
+          "width": 1.3,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_29_2",
+          "name": "Detected Door W_SEG_29_2",
+          "type": "Door",
+          "offset": 31.15,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -16.581084578210504,
+          -0.027262124160121387
+        ],
+        [
+          25.392500772611218,
+          20.899995555820517
+        ],
+        [
+          25.324678705018524,
+          21.036025578784027
+        ],
+        [
+          -16.648906645803198,
+          0.10876789880338641
+        ]
+      ],
+      "residuals": {
+        "count": 20684,
+        "mean_abs_error_m": 0.0645,
+        "rmse_m": 0.0771,
+        "estimated_thickness_m": 0.2311
+      }
+    },
+    {
+      "id": "W_SEG_30",
+      "name": "Interior Wall 30",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 33.77,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        9.173,
+        -8.55
+      ],
+      "p2": [
+        -15.176,
+        14.849
+      ],
+      "start": [
+        9.173,
+        -8.55
+      ],
+      "end": [
+        -15.176,
+        14.849
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_30_1",
+          "name": "Detected Door W_SEG_30_1",
+          "type": "Door",
+          "offset": 15.45,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          9.208711028624894,
+          -8.512962718119873
+        ],
+        [
+          -15.140708657987524,
+          14.88607475598265
+        ],
+        [
+          -15.211383982258212,
+          14.812528861880848
+        ],
+        [
+          9.138035704354206,
+          -8.586508612221674
+        ]
+      ],
+      "residuals": {
+        "count": 29563,
+        "mean_abs_error_m": 0.0551,
+        "rmse_m": 0.069,
+        "estimated_thickness_m": 0.1666
+      }
+    },
+    {
+      "id": "W_SEG_31",
+      "name": "Exterior Wall 31",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 35.041,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -16.175,
+        11.989
+      ],
+      "p2": [
+        8.851,
+        -12.537
+      ],
+      "start": [
+        -16.175,
+        11.989
+      ],
+      "end": [
+        8.851,
+        -12.537
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          -16.228352337984546,
+          11.934873491957925
+        ],
+        [
+          8.7980810771876,
+          -12.59125631346419
+        ],
+        [
+          8.904470719695762,
+          -12.48269644994647
+        ],
+        [
+          -16.121962695476384,
+          12.043433355475644
+        ]
+      ],
+      "residuals": {
+        "count": 23704,
+        "mean_abs_error_m": 0.0587,
+        "rmse_m": 0.0707,
+        "estimated_thickness_m": 0.2056
+      }
+    },
+    {
+      "id": "W_SEG_32",
+      "name": "Exterior Wall 32",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 48.067,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        28.825,
+        19.199
+      ],
+      "p2": [
+        -14.192,
+        -2.248
+      ],
+      "start": [
+        28.825,
+        19.199
+      ],
+      "end": [
+        -14.192,
+        -2.248
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          28.791296482502094,
+          19.267386460846595
+        ],
+        [
+          -14.225414080297758,
+          -2.1799542647231998
+        ],
+        [
+          -14.157592012705068,
+          -2.315984287686707
+        ],
+        [
+          28.859118550094788,
+          19.131356437883085
+        ]
+      ],
+      "residuals": {
+        "count": 14724,
+        "mean_abs_error_m": 0.0615,
+        "rmse_m": 0.0739,
+        "estimated_thickness_m": 0.2175
+      }
+    },
+    {
+      "id": "W_SEG_33",
+      "name": "Interior Wall 33",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 32.918,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -5.385,
+        20.485
+      ],
+      "p2": [
+        18.81,
+        -1.835
+      ],
+      "start": [
+        -5.385,
+        20.485
+      ],
+      "end": [
+        18.81,
+        -1.835
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_33_1",
+          "name": "Detected Door W_SEG_33_1",
+          "type": "Door",
+          "offset": 14.55,
+          "width": 0.914,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_33_2",
+          "name": "Detected Door W_SEG_33_2",
+          "type": "Door",
+          "offset": 15.95,
+          "width": 0.762,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_33_3",
+          "name": "Detected Door W_SEG_33_3",
+          "type": "Door",
+          "offset": 17.1,
+          "width": 1.4,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -5.428545938751332,
+          20.43827360595484
+        ],
+        [
+          18.766586348057427,
+          -1.881203957622062
+        ],
+        [
+          18.852697730407744,
+          -1.7878560608609841
+        ],
+        [
+          -5.342434556401011,
+          20.53162150271592
+        ]
+      ],
+      "residuals": {
+        "count": 18446,
+        "mean_abs_error_m": 0.0472,
+        "rmse_m": 0.0598,
+        "estimated_thickness_m": 0.1372
+      }
+    },
+    {
+      "id": "W_SEG_34",
+      "name": "Interior Wall 34",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 34.54,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -9.433,
+        18.463
+      ],
+      "p2": [
+        16.186,
+        -4.704
+      ],
+      "start": [
+        -9.433,
+        18.463
+      ],
+      "end": [
+        16.186,
+        -4.704
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_34_1",
+          "name": "Detected Door W_SEG_34_1",
+          "type": "Door",
+          "offset": 22.9,
+          "width": 1.2,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          -9.475209200323306,
+          18.415880338200736
+        ],
+        [
+          16.143820435724997,
+          -4.751128544502793
+        ],
+        [
+          16.229001934507316,
+          -4.656931345684582
+        ],
+        [
+          -9.390027701540987,
+          18.510077537018944
+        ]
+      ],
+      "residuals": {
+        "count": 17948,
+        "mean_abs_error_m": 0.0487,
+        "rmse_m": 0.0611,
+        "estimated_thickness_m": 0.149
+      }
+    },
+    {
+      "id": "W_SEG_35",
+      "name": "Interior Wall 35",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 35.84,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        22.832,
+        16.518
+      ],
+      "p2": [
+        -1.506,
+        -9.791
+      ],
+      "start": [
+        22.832,
+        16.518
+      ],
+      "end": [
+        -1.506,
+        -9.791
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_35_1",
+          "name": "Detected Door W_SEG_35_1",
+          "type": "Door",
+          "offset": 12.35,
+          "width": 2.1,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          22.43507684882461,
+          16.164285482643674
+        ],
+        [
+          -1.5434599491927146,
+          -9.756608495570916
+        ],
+        [
+          -1.4685842684980428,
+          -9.825873439377357
+        ],
+        [
+          22.888666374964103,
+          16.50441171722926
+        ]
+      ],
+      "residuals": {
+        "count": 14672,
+        "mean_abs_error_m": 0.0614,
+        "rmse_m": 0.0758,
+        "estimated_thickness_m": 0.1635
+      }
+    },
+    {
+      "id": "W_SEG_36",
+      "name": "Exterior Wall 36",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 37.624,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        12.996,
+        15.98
+      ],
+      "p2": [
+        -23.289,
+        6.03
+      ],
+      "start": [
+        12.996,
+        15.98
+      ],
+      "end": [
+        -23.289,
+        6.03
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_36_1",
+          "name": "Detected Door W_SEG_36_1",
+          "type": "Door",
+          "offset": 5.55,
+          "width": 1.067,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          13.649413307061316,
+          16.237996663927035
+        ],
+        [
+          -23.309099099940262,
+          6.1033975064519534
+        ],
+        [
+          -23.268902230550246,
+          5.956808926776585
+        ],
+        [
+          13.253120264212109,
+          15.971715758756773
+        ]
+      ],
+      "residuals": {
+        "count": 22273,
+        "mean_abs_error_m": 0.0678,
+        "rmse_m": 0.0804,
+        "estimated_thickness_m": 0.2531
+      }
+    },
+    {
+      "id": "W_SEG_37",
+      "name": "Interior Wall 37",
+      "type": "Interior",
+      "thickness": 0.127,
+      "length": 45.426,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        19.266,
+        28.289
+      ],
+      "p2": [
+        -6.114,
+        -9.385
+      ],
+      "start": [
+        19.266,
+        28.289
+      ],
+      "end": [
+        -6.114,
+        -9.385
+      ],
+      "base_elevation": -7.923,
+      "openings": [
+        {
+          "id": "OP_W_SEG_37_1",
+          "name": "Detected Door W_SEG_37_1",
+          "type": "Door",
+          "offset": 30.7,
+          "width": 1.6,
+          "height": 2.134,
+          "sill_z": -7.923
+        },
+        {
+          "id": "OP_W_SEG_37_2",
+          "name": "Detected Door W_SEG_37_2",
+          "type": "Door",
+          "offset": 32.3,
+          "width": 0.813,
+          "height": 2.134,
+          "sill_z": -7.923
+        }
+      ],
+      "mitred_polygon": [
+        [
+          19.21358792718576,
+          28.324107679967472
+        ],
+        [
+          -6.166722554464197,
+          -9.350001084810877
+        ],
+        [
+          -6.06139436580888,
+          -9.420958626161955
+        ],
+        [
+          19.31891611584108,
+          28.253150138616395
+        ]
+      ],
+      "residuals": {
+        "count": 23495,
+        "mean_abs_error_m": 0.0614,
+        "rmse_m": 0.0747,
+        "estimated_thickness_m": 0.2122
+      }
+    },
+    {
+      "id": "W_SEG_38",
+      "name": "Exterior Wall 38",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 51.754,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        -22.396,
+        8.994
+      ],
+      "p2": [
+        29.354,
+        9.631
+      ],
+      "start": [
+        -22.396,
+        8.994
+      ],
+      "end": [
+        29.354,
+        9.631
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          -22.510803592373392,
+          8.916616051659993
+        ],
+        [
+          29.3548580265303,
+          9.555292787570645
+        ],
+        [
+          29.352986431695882,
+          9.707281264544315
+        ],
+        [
+          -22.823231451143464,
+          9.064780320963772
+        ]
+      ],
+      "residuals": {
+        "count": 23586,
+        "mean_abs_error_m": 0.0617,
+        "rmse_m": 0.0741,
+        "estimated_thickness_m": 0.2225
+      }
+    },
+    {
+      "id": "W_SEG_39",
+      "name": "Exterior Wall 39",
+      "type": "Exterior",
+      "thickness": 0.152,
+      "length": 32.8,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        21.612,
+        3.225
+      ],
+      "p2": [
+        -3.35,
+        24.503
+      ],
+      "start": [
+        21.612,
+        3.225
+      ],
+      "end": [
+        -3.35,
+        24.503
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          21.66126114043771,
+          3.2832557255167196
+        ],
+        [
+          -3.3011928410210216,
+          24.56083395182778
+        ],
+        [
+          -3.3997953612824277,
+          24.445155332376743
+        ],
+        [
+          21.5626586201763,
+          3.167577106065678
+        ]
+      ],
+      "residuals": {
+        "count": 23392,
+        "mean_abs_error_m": 0.0574,
+        "rmse_m": 0.0697,
+        "estimated_thickness_m": 0.2076
+      }
+    },
+    {
+      "id": "W_SEG_40",
+      "name": "Interior Wall 40",
+      "type": "Interior",
+      "thickness": 0.102,
+      "length": 47.264,
+      "base_z": -7.923,
+      "height": 7.058,
+      "p1": [
+        27.96,
+        18.976
+      ],
+      "p2": [
+        -14.338,
+        -2.113
+      ],
+      "start": [
+        27.96,
+        18.976
+      ],
+      "end": [
+        -14.338,
+        -2.113
+      ],
+      "base_elevation": -7.923,
+      "openings": [],
+      "mitred_polygon": [
+        [
+          28.752157517750213,
+          19.427840560006615
+        ],
+        [
+          -14.360913064881323,
+          -2.067543499202923
+        ],
+        [
+          -14.315400887944122,
+          -2.1588268040863294
+        ],
+        [
+          28.326719233317565,
+          19.101750016779924
+        ]
+      ],
+      "residuals": {
+        "count": 15009,
+        "mean_abs_error_m": 0.0628,
+        "rmse_m": 0.0764,
+        "estimated_thickness_m": 0.2022
+      }
+    }
+  ],
+  "doors": [
+    {
+      "id": "OP_W_SEG_01_1",
+      "name": "Detected Door W_SEG_01_1",
+      "host": "W_SEG_01",
+      "width": 1.829,
+      "height": 2.134,
+      "pos": [
+        -8.455,
+        10.69,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_01_2",
+      "name": "Detected Door W_SEG_01_2",
+      "host": "W_SEG_01",
+      "width": 1.6,
+      "height": 2.134,
+      "pos": [
+        -6.518,
+        11.187,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_01_3",
+      "name": "Detected Door W_SEG_01_3",
+      "host": "W_SEG_01",
+      "width": 0.762,
+      "height": 2.134,
+      "pos": [
+        -3.37,
+        11.994,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_01_4",
+      "name": "Detected Door W_SEG_01_4",
+      "host": "W_SEG_01",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        -2.353,
+        12.255,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_01_5",
+      "name": "Detected Door W_SEG_01_5",
+      "host": "W_SEG_01",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        -0.512,
+        12.727,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_03_1",
+      "name": "Detected Door W_SEG_03_1",
+      "host": "W_SEG_03",
+      "width": 2.3,
+      "height": 2.134,
+      "pos": [
+        14.628,
+        7.176,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_04_1",
+      "name": "Detected Door W_SEG_04_1",
+      "host": "W_SEG_04",
+      "width": 1.5,
+      "height": 2.134,
+      "pos": [
+        4.331,
+        -2.344,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_04_2",
+      "name": "Detected Door W_SEG_04_2",
+      "host": "W_SEG_04",
+      "width": 1.5,
+      "height": 2.134,
+      "pos": [
+        5.968,
+        -0.588,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_04_3",
+      "name": "Detected Door W_SEG_04_3",
+      "host": "W_SEG_04",
+      "width": 2.3,
+      "height": 2.134,
+      "pos": [
+        7.536,
+        1.094,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_06_1",
+      "name": "Detected Door W_SEG_06_1",
+      "host": "W_SEG_06",
+      "width": 0.762,
+      "height": 2.134,
+      "pos": [
+        -3.93,
+        5.131,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_06_2",
+      "name": "Detected Door W_SEG_06_2",
+      "host": "W_SEG_06",
+      "width": 1.829,
+      "height": 2.134,
+      "pos": [
+        1.395,
+        7.786,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_06_3",
+      "name": "Detected Door W_SEG_06_3",
+      "host": "W_SEG_06",
+      "width": 0.813,
+      "height": 2.134,
+      "pos": [
+        3.364,
+        8.768,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_06_4",
+      "name": "Detected Door W_SEG_06_4",
+      "host": "W_SEG_06",
+      "width": 1.829,
+      "height": 2.134,
+      "pos": [
+        4.975,
+        9.571,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_06_5",
+      "name": "Detected Door W_SEG_06_5",
+      "host": "W_SEG_06",
+      "width": 0.762,
+      "height": 2.134,
+      "pos": [
+        7.436,
+        10.798,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_06_6",
+      "name": "Detected Door W_SEG_06_6",
+      "host": "W_SEG_06",
+      "width": 2.1,
+      "height": 2.134,
+      "pos": [
+        9.584,
+        11.869,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_07_1",
+      "name": "Detected Door W_SEG_07_1",
+      "host": "W_SEG_07",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        -4.409,
+        11.917,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_07_2",
+      "name": "Detected Door W_SEG_07_2",
+      "host": "W_SEG_07",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        -10.631,
+        10.416,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_08_1",
+      "name": "Detected Door W_SEG_08_1",
+      "host": "W_SEG_08",
+      "width": 2.3,
+      "height": 2.134,
+      "pos": [
+        -1.815,
+        7.135,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_08_2",
+      "name": "Detected Door W_SEG_08_2",
+      "host": "W_SEG_08",
+      "width": 0.813,
+      "height": 2.134,
+      "pos": [
+        -3.191,
+        5.615,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_09_1",
+      "name": "Detected Door W_SEG_09_1",
+      "host": "W_SEG_09",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        9.897,
+        12.527,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_09_2",
+      "name": "Detected Door W_SEG_09_2",
+      "host": "W_SEG_09",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        6.63,
+        10.898,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_09_3",
+      "name": "Detected Door W_SEG_09_3",
+      "host": "W_SEG_09",
+      "width": 1.3,
+      "height": 2.134,
+      "pos": [
+        4.438,
+        9.805,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_09_4",
+      "name": "Detected Door W_SEG_09_4",
+      "host": "W_SEG_09",
+      "width": 2.0,
+      "height": 2.134,
+      "pos": [
+        -1.782,
+        6.704,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_09_5",
+      "name": "Detected Door W_SEG_09_5",
+      "host": "W_SEG_09",
+      "width": 0.813,
+      "height": 2.134,
+      "pos": [
+        -3.124,
+        6.034,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_11_1",
+      "name": "Detected Door W_SEG_11_1",
+      "host": "W_SEG_11",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        2.479,
+        -1.851,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_13_1",
+      "name": "Detected Door W_SEG_13_1",
+      "host": "W_SEG_13",
+      "width": 0.762,
+      "height": 2.134,
+      "pos": [
+        14.124,
+        15.563,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_14_1",
+      "name": "Detected Door W_SEG_14_1",
+      "host": "W_SEG_14",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        2.343,
+        7.663,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_14_2",
+      "name": "Detected Door W_SEG_14_2",
+      "host": "W_SEG_14",
+      "width": 2.0,
+      "height": 2.134,
+      "pos": [
+        4.852,
+        9.485,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_14_3",
+      "name": "Detected Door W_SEG_14_3",
+      "host": "W_SEG_14",
+      "width": 1.829,
+      "height": 2.134,
+      "pos": [
+        6.996,
+        11.042,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_14_4",
+      "name": "Detected Door W_SEG_14_4",
+      "host": "W_SEG_14",
+      "width": 1.3,
+      "height": 2.134,
+      "pos": [
+        9.019,
+        12.511,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_15_1",
+      "name": "Detected Door W_SEG_15_1",
+      "host": "W_SEG_15",
+      "width": 2.0,
+      "height": 2.134,
+      "pos": [
+        -1.978,
+        6.91,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_15_2",
+      "name": "Detected Door W_SEG_15_2",
+      "host": "W_SEG_15",
+      "width": 0.813,
+      "height": 2.134,
+      "pos": [
+        8.851,
+        12.309,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_17_1",
+      "name": "Detected Door W_SEG_17_1",
+      "host": "W_SEG_17",
+      "width": 1.5,
+      "height": 2.134,
+      "pos": [
+        1.394,
+        3.517,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_17_2",
+      "name": "Detected Door W_SEG_17_2",
+      "host": "W_SEG_17",
+      "width": 2.1,
+      "height": 2.134,
+      "pos": [
+        -0.058,
+        2.001,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_18_1",
+      "name": "Detected Door W_SEG_18_1",
+      "host": "W_SEG_18",
+      "width": 2.1,
+      "height": 2.134,
+      "pos": [
+        10.52,
+        7.431,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_18_2",
+      "name": "Detected Door W_SEG_18_2",
+      "host": "W_SEG_18",
+      "width": 1.4,
+      "height": 2.134,
+      "pos": [
+        4.25,
+        0.905,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_19_1",
+      "name": "Detected Door W_SEG_19_1",
+      "host": "W_SEG_19",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        6.735,
+        10.124,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_19_2",
+      "name": "Detected Door W_SEG_19_2",
+      "host": "W_SEG_19",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        -4.094,
+        4.725,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_20_1",
+      "name": "Detected Door W_SEG_20_1",
+      "host": "W_SEG_20",
+      "width": 0.762,
+      "height": 2.134,
+      "pos": [
+        1.285,
+        6.485,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_21_1",
+      "name": "Detected Door W_SEG_21_1",
+      "host": "W_SEG_21",
+      "width": 2.3,
+      "height": 2.134,
+      "pos": [
+        8.175,
+        9.697,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_22_1",
+      "name": "Detected Door W_SEG_22_1",
+      "host": "W_SEG_22",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        11.359,
+        12.385,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_22_2",
+      "name": "Detected Door W_SEG_22_2",
+      "host": "W_SEG_22",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        10.417,
+        13.206,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_23_1",
+      "name": "Detected Door W_SEG_23_1",
+      "host": "W_SEG_23",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        -5.236,
+        3.621,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_23_2",
+      "name": "Detected Door W_SEG_23_2",
+      "host": "W_SEG_23",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        -3.804,
+        4.335,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_23_3",
+      "name": "Detected Door W_SEG_23_3",
+      "host": "W_SEG_23",
+      "width": 1.3,
+      "height": 2.134,
+      "pos": [
+        1.7,
+        7.079,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_25_1",
+      "name": "Detected Door W_SEG_25_1",
+      "host": "W_SEG_25",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        1.61,
+        1.242,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_25_2",
+      "name": "Detected Door W_SEG_25_2",
+      "host": "W_SEG_25",
+      "width": 1.4,
+      "height": 2.134,
+      "pos": [
+        2.874,
+        2.139,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_25_3",
+      "name": "Detected Door W_SEG_25_3",
+      "host": "W_SEG_25",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        14.331,
+        10.272,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_26_1",
+      "name": "Detected Door W_SEG_26_1",
+      "host": "W_SEG_26",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        5.169,
+        -1.607,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_26_2",
+      "name": "Detected Door W_SEG_26_2",
+      "host": "W_SEG_26",
+      "width": 2.3,
+      "height": 2.134,
+      "pos": [
+        3.448,
+        -0.69,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_26_3",
+      "name": "Detected Door W_SEG_26_3",
+      "host": "W_SEG_26",
+      "width": 2.1,
+      "height": 2.134,
+      "pos": [
+        -0.523,
+        1.426,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_26_4",
+      "name": "Detected Door W_SEG_26_4",
+      "host": "W_SEG_26",
+      "width": 1.6,
+      "height": 2.134,
+      "pos": [
+        -3.303,
+        2.907,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_26_5",
+      "name": "Detected Door W_SEG_26_5",
+      "host": "W_SEG_26",
+      "width": 1.4,
+      "height": 2.134,
+      "pos": [
+        -5.421,
+        4.036,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_29_1",
+      "name": "Detected Door W_SEG_29_1",
+      "host": "W_SEG_29",
+      "width": 1.3,
+      "height": 2.134,
+      "pos": [
+        9.83,
+        13.226,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_29_2",
+      "name": "Detected Door W_SEG_29_2",
+      "host": "W_SEG_29",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        11.262,
+        13.94,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_30_1",
+      "name": "Detected Door W_SEG_30_1",
+      "host": "W_SEG_30",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        -1.967,
+        2.155,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_33_1",
+      "name": "Detected Door W_SEG_33_1",
+      "host": "W_SEG_33",
+      "width": 0.914,
+      "height": 2.134,
+      "pos": [
+        5.309,
+        10.619,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_33_2",
+      "name": "Detected Door W_SEG_33_2",
+      "host": "W_SEG_33",
+      "width": 0.762,
+      "height": 2.134,
+      "pos": [
+        6.338,
+        9.67,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_33_3",
+      "name": "Detected Door W_SEG_33_3",
+      "host": "W_SEG_33",
+      "width": 1.4,
+      "height": 2.134,
+      "pos": [
+        7.183,
+        8.89,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_34_1",
+      "name": "Detected Door W_SEG_34_1",
+      "host": "W_SEG_34",
+      "width": 1.2,
+      "height": 2.134,
+      "pos": [
+        7.553,
+        3.103,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_35_1",
+      "name": "Detected Door W_SEG_35_1",
+      "host": "W_SEG_35",
+      "width": 2.1,
+      "height": 2.134,
+      "pos": [
+        14.445,
+        7.452,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_36_1",
+      "name": "Detected Door W_SEG_36_1",
+      "host": "W_SEG_36",
+      "width": 1.067,
+      "height": 2.134,
+      "pos": [
+        7.644,
+        14.512,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_37_1",
+      "name": "Detected Door W_SEG_37_1",
+      "host": "W_SEG_37",
+      "width": 1.6,
+      "height": 2.134,
+      "pos": [
+        2.114,
+        2.827,
+        -7.923
+      ]
+    },
+    {
+      "id": "OP_W_SEG_37_2",
+      "name": "Detected Door W_SEG_37_2",
+      "host": "W_SEG_37",
+      "width": 0.813,
+      "height": 2.134,
+      "pos": [
+        1.22,
+        1.5,
+        -7.923
+      ]
+    }
+  ],
+  "spaces": [
+    {
+      "id": "SPACE_01",
+      "name": "Room 01",
+      "area_m2": 3.67,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          1.349,
+          -10.312
+        ],
+        [
+          4.199,
+          -10.312
+        ],
+        [
+          4.199,
+          -7.312
+        ],
+        [
+          1.349,
+          -7.312
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_02",
+      "name": "Room 02",
+      "area_m2": 5.08,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -4.051,
+          -9.412
+        ],
+        [
+          -0.901,
+          -9.412
+        ],
+        [
+          -0.901,
+          -6.412
+        ],
+        [
+          -4.051,
+          -6.412
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_03",
+      "name": "Room 03",
+      "area_m2": 4.3,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          0.149,
+          -9.412
+        ],
+        [
+          3.149,
+          -9.412
+        ],
+        [
+          3.149,
+          -6.262
+        ],
+        [
+          0.149,
+          -6.262
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_04",
+      "name": "Room 04",
+      "area_m2": 2.0,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -0.601,
+          -8.212
+        ],
+        [
+          1.949,
+          -8.212
+        ],
+        [
+          1.949,
+          -5.512
+        ],
+        [
+          -0.601,
+          -5.512
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_05",
+      "name": "Room 05",
+      "area_m2": 1.71,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -4.651,
+          -7.762
+        ],
+        [
+          -2.701,
+          -7.762
+        ],
+        [
+          -2.701,
+          -5.512
+        ],
+        [
+          -4.651,
+          -5.512
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_06",
+      "name": "Room 06",
+      "area_m2": 7.27,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -2.401,
+          -7.612
+        ],
+        [
+          1.349,
+          -7.612
+        ],
+        [
+          1.349,
+          -3.862
+        ],
+        [
+          -2.401,
+          -3.862
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_07",
+      "name": "Room 07",
+      "area_m2": 5.98,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -6.901,
+          -7.162
+        ],
+        [
+          -3.601,
+          -7.162
+        ],
+        [
+          -3.601,
+          -3.862
+        ],
+        [
+          -6.901,
+          -3.862
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_08",
+      "name": "Room 08",
+      "area_m2": 1.55,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          2.849,
+          -6.562
+        ],
+        [
+          4.499,
+          -6.562
+        ],
+        [
+          4.499,
+          -4.912
+        ],
+        [
+          2.849,
+          -4.912
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_09",
+      "name": "Room 09",
+      "area_m2": 4.3,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -3.301,
+          -5.962
+        ],
+        [
+          -0.301,
+          -5.962
+        ],
+        [
+          -0.301,
+          -2.662
+        ],
+        [
+          -3.301,
+          -2.662
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_10",
+      "name": "Room 10",
+      "area_m2": 3.1,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          5.699,
+          -5.512
+        ],
+        [
+          8.249,
+          -5.512
+        ],
+        [
+          8.249,
+          -2.812
+        ],
+        [
+          5.699,
+          -2.812
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_11",
+      "name": "Room 11",
+      "area_m2": 5.78,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -5.101,
+          -5.212
+        ],
+        [
+          -1.501,
+          -5.212
+        ],
+        [
+          -1.501,
+          -1.762
+        ],
+        [
+          -5.101,
+          -1.762
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_12",
+      "name": "Room 12",
+      "area_m2": 9.47,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -10.201,
+          -4.912
+        ],
+        [
+          -5.551,
+          -4.912
+        ],
+        [
+          -5.551,
+          -0.712
+        ],
+        [
+          -10.201,
+          -0.712
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_13",
+      "name": "Room 13",
+      "area_m2": 2.59,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          0.149,
+          -4.762
+        ],
+        [
+          2.549,
+          -4.762
+        ],
+        [
+          2.549,
+          -2.662
+        ],
+        [
+          0.149,
+          -2.662
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_14",
+      "name": "Room 14",
+      "area_m2": 2.83,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          4.649,
+          -4.612
+        ],
+        [
+          7.049,
+          -4.612
+        ],
+        [
+          7.049,
+          -2.212
+        ],
+        [
+          4.649,
+          -2.212
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_15",
+      "name": "Room 15",
+      "area_m2": 1.78,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          1.349,
+          -3.712
+        ],
+        [
+          3.449,
+          -3.712
+        ],
+        [
+          3.449,
+          -1.612
+        ],
+        [
+          1.349,
+          -1.612
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_16",
+      "name": "Room 16",
+      "area_m2": 13.61,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -8.551,
+          -3.412
+        ],
+        [
+          -3.151,
+          -3.412
+        ],
+        [
+          -3.151,
+          1.388
+        ],
+        [
+          -8.551,
+          1.388
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_17",
+      "name": "Room 17",
+      "area_m2": 2.09,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -1.201,
+          -3.262
+        ],
+        [
+          0.749,
+          -3.262
+        ],
+        [
+          0.749,
+          -1.312
+        ],
+        [
+          -1.201,
+          -1.312
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_18",
+      "name": "Room 18",
+      "area_m2": 4.72,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          7.499,
+          -3.262
+        ],
+        [
+          11.099,
+          -3.262
+        ],
+        [
+          11.099,
+          0.488
+        ],
+        [
+          7.499,
+          0.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_19",
+      "name": "Room 19",
+      "area_m2": 3.33,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          2.249,
+          -2.962
+        ],
+        [
+          4.799,
+          -2.962
+        ],
+        [
+          4.799,
+          -0.562
+        ],
+        [
+          2.249,
+          -0.562
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_20",
+      "name": "Room 20",
+      "area_m2": 5.2,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          6.149,
+          -2.512
+        ],
+        [
+          10.049,
+          -2.512
+        ],
+        [
+          10.049,
+          1.388
+        ],
+        [
+          6.149,
+          1.388
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_21",
+      "name": "Room 21",
+      "area_m2": 1.73,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -0.151,
+          -2.062
+        ],
+        [
+          1.799,
+          -2.062
+        ],
+        [
+          1.799,
+          -0.112
+        ],
+        [
+          -0.151,
+          -0.112
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_22",
+      "name": "Room 22",
+      "area_m2": 2.02,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -11.551,
+          -1.762
+        ],
+        [
+          -9.001,
+          -1.762
+        ],
+        [
+          -9.001,
+          0.038
+        ],
+        [
+          -11.551,
+          0.038
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_23",
+      "name": "Room 23",
+      "area_m2": 2.88,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          5.249,
+          -1.762
+        ],
+        [
+          8.999,
+          -1.762
+        ],
+        [
+          8.999,
+          1.988
+        ],
+        [
+          5.249,
+          1.988
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_24",
+      "name": "Room 24",
+      "area_m2": 10.91,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          3.149,
+          -1.462
+        ],
+        [
+          8.399,
+          -1.462
+        ],
+        [
+          8.399,
+          3.488
+        ],
+        [
+          3.149,
+          3.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_25",
+      "name": "Room 25",
+      "area_m2": 1.89,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          0.449,
+          -1.312
+        ],
+        [
+          2.849,
+          -1.312
+        ],
+        [
+          2.849,
+          0.638
+        ],
+        [
+          0.449,
+          0.638
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_26",
+      "name": "Room 26",
+      "area_m2": 3.94,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -5.551,
+          -0.862
+        ],
+        [
+          -2.101,
+          -0.862
+        ],
+        [
+          -2.101,
+          2.288
+        ],
+        [
+          -5.551,
+          2.288
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_27",
+      "name": "Room 27",
+      "area_m2": 8.82,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          1.049,
+          -0.262
+        ],
+        [
+          6.749,
+          -0.262
+        ],
+        [
+          6.749,
+          4.388
+        ],
+        [
+          1.049,
+          4.388
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_28",
+      "name": "Room 28",
+      "area_m2": 4.32,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          10.499,
+          -0.112
+        ],
+        [
+          13.649,
+          -0.112
+        ],
+        [
+          13.649,
+          3.488
+        ],
+        [
+          10.499,
+          3.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_29",
+      "name": "Room 29",
+      "area_m2": 1.8,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -9.901,
+          0.338
+        ],
+        [
+          -6.601,
+          0.338
+        ],
+        [
+          -6.601,
+          2.288
+        ],
+        [
+          -9.901,
+          2.288
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_30",
+      "name": "Room 30",
+      "area_m2": 2.65,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -4.051,
+          0.488
+        ],
+        [
+          -1.051,
+          0.488
+        ],
+        [
+          -1.051,
+          2.888
+        ],
+        [
+          -4.051,
+          2.888
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_31",
+      "name": "Room 31",
+      "area_m2": 3.96,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          9.449,
+          0.788
+        ],
+        [
+          12.749,
+          0.788
+        ],
+        [
+          12.749,
+          4.238
+        ],
+        [
+          9.449,
+          4.238
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_32",
+      "name": "Room 32",
+      "area_m2": 4.52,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -0.451,
+          0.938
+        ],
+        [
+          4.199,
+          0.938
+        ],
+        [
+          4.199,
+          6.038
+        ],
+        [
+          -0.451,
+          6.038
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_33",
+      "name": "Room 33",
+      "area_m2": 6.77,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          1.049,
+          0.938
+        ],
+        [
+          5.849,
+          0.938
+        ],
+        [
+          5.849,
+          5.888
+        ],
+        [
+          1.049,
+          5.888
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_34",
+      "name": "Room 34",
+      "area_m2": 13.7,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -18.901,
+          1.388
+        ],
+        [
+          -12.001,
+          1.388
+        ],
+        [
+          -12.001,
+          6.188
+        ],
+        [
+          -18.901,
+          6.188
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_35",
+      "name": "Room 35",
+      "area_m2": 10.71,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -2.701,
+          1.538
+        ],
+        [
+          3.899,
+          1.538
+        ],
+        [
+          3.899,
+          6.488
+        ],
+        [
+          -2.701,
+          6.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_36",
+      "name": "Room 36",
+      "area_m2": 2.11,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          8.699,
+          1.838
+        ],
+        [
+          11.699,
+          1.838
+        ],
+        [
+          11.699,
+          4.988
+        ],
+        [
+          8.699,
+          4.988
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_37",
+      "name": "Room 37",
+      "area_m2": 7.63,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          7.049,
+          2.438
+        ],
+        [
+          11.099,
+          2.438
+        ],
+        [
+          11.099,
+          6.488
+        ],
+        [
+          7.049,
+          6.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_38",
+      "name": "Room 38",
+      "area_m2": 14.11,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -15.751,
+          2.588
+        ],
+        [
+          -9.001,
+          2.588
+        ],
+        [
+          -9.001,
+          6.638
+        ],
+        [
+          -15.751,
+          6.638
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_39",
+      "name": "Room 39",
+      "area_m2": 5.89,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          13.049,
+          2.888
+        ],
+        [
+          17.249,
+          2.888
+        ],
+        [
+          17.249,
+          7.388
+        ],
+        [
+          13.049,
+          7.388
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_40",
+      "name": "Room 40",
+      "area_m2": 4.93,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          12.149,
+          3.788
+        ],
+        [
+          16.349,
+          3.788
+        ],
+        [
+          16.349,
+          8.138
+        ],
+        [
+          12.149,
+          8.138
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_41",
+      "name": "Room 41",
+      "area_m2": 2.07,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          6.299,
+          3.938
+        ],
+        [
+          9.599,
+          3.938
+        ],
+        [
+          9.599,
+          6.638
+        ],
+        [
+          6.299,
+          6.638
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_42",
+      "name": "Room 42",
+      "area_m2": 1.96,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -11.851,
+          4.088
+        ],
+        [
+          -8.551,
+          4.088
+        ],
+        [
+          -8.551,
+          6.788
+        ],
+        [
+          -11.851,
+          6.788
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_43",
+      "name": "Room 43",
+      "area_m2": 2.83,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -2.251,
+          4.088
+        ],
+        [
+          3.299,
+          4.088
+        ],
+        [
+          3.299,
+          7.088
+        ],
+        [
+          -2.251,
+          7.088
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_44",
+      "name": "Room 44",
+      "area_m2": 1.6,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -10.351,
+          4.388
+        ],
+        [
+          -7.651,
+          4.388
+        ],
+        [
+          -7.651,
+          6.488
+        ],
+        [
+          -10.351,
+          6.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_45",
+      "name": "Room 45",
+      "area_m2": 1.84,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -3.901,
+          4.388
+        ],
+        [
+          1.949,
+          4.388
+        ],
+        [
+          1.949,
+          7.538
+        ],
+        [
+          -3.901,
+          7.538
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_46",
+      "name": "Room 46",
+      "area_m2": 10.08,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          4.499,
+          4.538
+        ],
+        [
+          9.299,
+          4.538
+        ],
+        [
+          9.299,
+          8.438
+        ],
+        [
+          4.499,
+          8.438
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_47",
+      "name": "Room 47",
+      "area_m2": 2.79,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          11.549,
+          4.688
+        ],
+        [
+          15.299,
+          4.688
+        ],
+        [
+          15.299,
+          8.738
+        ],
+        [
+          11.549,
+          8.738
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_48",
+      "name": "Room 48",
+      "area_m2": 1.78,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -9.901,
+          4.988
+        ],
+        [
+          -6.901,
+          4.988
+        ],
+        [
+          -6.901,
+          7.088
+        ],
+        [
+          -9.901,
+          7.088
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_49",
+      "name": "Room 49",
+      "area_m2": 2.92,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -8.851,
+          5.138
+        ],
+        [
+          -5.701,
+          5.138
+        ],
+        [
+          -5.701,
+          7.388
+        ],
+        [
+          -8.851,
+          7.388
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_50",
+      "name": "Room 50",
+      "area_m2": 8.53,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          9.899,
+          5.288
+        ],
+        [
+          14.699,
+          5.288
+        ],
+        [
+          14.699,
+          9.338
+        ],
+        [
+          9.899,
+          9.338
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_51",
+      "name": "Room 51",
+      "area_m2": 3.71,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -20.101,
+          5.888
+        ],
+        [
+          -16.351,
+          5.888
+        ],
+        [
+          -16.351,
+          7.538
+        ],
+        [
+          -20.101,
+          7.538
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_52",
+      "name": "Room 52",
+      "area_m2": 6.41,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -6.901,
+          5.888
+        ],
+        [
+          -0.901,
+          5.888
+        ],
+        [
+          -0.901,
+          8.288
+        ],
+        [
+          -6.901,
+          8.288
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_53",
+      "name": "Room 53",
+      "area_m2": 6.03,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -17.251,
+          6.338
+        ],
+        [
+          -12.301,
+          6.338
+        ],
+        [
+          -12.301,
+          8.438
+        ],
+        [
+          -17.251,
+          8.438
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_54",
+      "name": "Room 54",
+      "area_m2": 2.54,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -21.301,
+          6.938
+        ],
+        [
+          -17.851,
+          6.938
+        ],
+        [
+          -17.851,
+          8.438
+        ],
+        [
+          -21.301,
+          8.438
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_55",
+      "name": "Room 55",
+      "area_m2": 5.89,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          7.799,
+          6.938
+        ],
+        [
+          12.149,
+          6.938
+        ],
+        [
+          12.149,
+          9.338
+        ],
+        [
+          7.799,
+          9.338
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_56",
+      "name": "Room 56",
+      "area_m2": 2.18,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -12.301,
+          7.088
+        ],
+        [
+          -9.301,
+          7.088
+        ],
+        [
+          -9.301,
+          9.038
+        ],
+        [
+          -12.301,
+          9.038
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_57",
+      "name": "Room 57",
+      "area_m2": 3.15,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          16.799,
+          7.088
+        ],
+        [
+          19.649,
+          7.088
+        ],
+        [
+          19.649,
+          9.488
+        ],
+        [
+          16.799,
+          9.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_58",
+      "name": "Room 58",
+      "area_m2": 2.63,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -10.801,
+          7.388
+        ],
+        [
+          -7.801,
+          7.388
+        ],
+        [
+          -7.801,
+          9.038
+        ],
+        [
+          -10.801,
+          9.038
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_59",
+      "name": "Room 59",
+      "area_m2": 8.62,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -8.551,
+          7.538
+        ],
+        [
+          -0.151,
+          7.538
+        ],
+        [
+          -0.151,
+          9.188
+        ],
+        [
+          -8.551,
+          9.188
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_60",
+      "name": "Room 60",
+      "area_m2": 1.75,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -17.851,
+          7.688
+        ],
+        [
+          -14.401,
+          7.688
+        ],
+        [
+          -14.401,
+          8.888
+        ],
+        [
+          -17.851,
+          8.888
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_61",
+      "name": "Room 61",
+      "area_m2": 1.64,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -22.351,
+          8.138
+        ],
+        [
+          -18.901,
+          8.138
+        ],
+        [
+          -18.901,
+          8.888
+        ],
+        [
+          -22.351,
+          8.888
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_62",
+      "name": "Room 62",
+      "area_m2": 13.66,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -9.301,
+          9.188
+        ],
+        [
+          0.299,
+          9.188
+        ],
+        [
+          0.299,
+          11.738
+        ],
+        [
+          -9.301,
+          11.738
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_63",
+      "name": "Room 63",
+      "area_m2": 6.12,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          0.599,
+          9.338
+        ],
+        [
+          4.799,
+          9.338
+        ],
+        [
+          4.799,
+          12.338
+        ],
+        [
+          0.599,
+          12.338
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_64",
+      "name": "Room 64",
+      "area_m2": 1.6,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          9.749,
+          9.488
+        ],
+        [
+          13.049,
+          9.488
+        ],
+        [
+          13.049,
+          10.238
+        ],
+        [
+          9.749,
+          10.238
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_65",
+      "name": "Room 65",
+      "area_m2": 1.51,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          14.249,
+          9.488
+        ],
+        [
+          16.349,
+          9.488
+        ],
+        [
+          16.349,
+          10.838
+        ],
+        [
+          14.249,
+          10.838
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_66",
+      "name": "Room 66",
+      "area_m2": 1.62,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          16.949,
+          9.488
+        ],
+        [
+          19.199,
+          9.488
+        ],
+        [
+          19.199,
+          11.138
+        ],
+        [
+          16.949,
+          11.138
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_67",
+      "name": "Room 67",
+      "area_m2": 7.45,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -1.951,
+          9.788
+        ],
+        [
+          2.999,
+          9.788
+        ],
+        [
+          2.999,
+          12.938
+        ],
+        [
+          -1.951,
+          12.938
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_68",
+      "name": "Room 68",
+      "area_m2": 1.84,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          8.249,
+          9.788
+        ],
+        [
+          12.149,
+          9.788
+        ],
+        [
+          12.149,
+          11.588
+        ],
+        [
+          8.249,
+          11.588
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_69",
+      "name": "Room 69",
+      "area_m2": 2.68,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          -9.751,
+          9.938
+        ],
+        [
+          -2.401,
+          9.938
+        ],
+        [
+          -2.401,
+          12.038
+        ],
+        [
+          -9.751,
+          12.038
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_70",
+      "name": "Room 70",
+      "area_m2": 3.1,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          13.649,
+          10.538
+        ],
+        [
+          17.249,
+          10.538
+        ],
+        [
+          17.249,
+          13.088
+        ],
+        [
+          13.649,
+          13.088
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_71",
+      "name": "Room 71",
+      "area_m2": 11.63,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          3.299,
+          10.988
+        ],
+        [
+          9.299,
+          10.988
+        ],
+        [
+          9.299,
+          14.588
+        ],
+        [
+          3.299,
+          14.588
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_72",
+      "name": "Room 72",
+      "area_m2": 5.54,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          18.749,
+          11.288
+        ],
+        [
+          24.599,
+          11.288
+        ],
+        [
+          24.599,
+          16.988
+        ],
+        [
+          18.749,
+          16.988
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_73",
+      "name": "Room 73",
+      "area_m2": 2.29,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          12.149,
+          11.438
+        ],
+        [
+          16.199,
+          11.438
+        ],
+        [
+          16.199,
+          13.688
+        ],
+        [
+          12.149,
+          13.688
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_74",
+      "name": "Room 74",
+      "area_m2": 9.13,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          20.249,
+          11.588
+        ],
+        [
+          27.599,
+          11.588
+        ],
+        [
+          27.599,
+          18.488
+        ],
+        [
+          20.249,
+          18.488
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_75",
+      "name": "Room 75",
+      "area_m2": 1.78,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          17.999,
+          11.888
+        ],
+        [
+          21.149,
+          11.888
+        ],
+        [
+          21.149,
+          14.888
+        ],
+        [
+          17.999,
+          14.888
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_76",
+      "name": "Room 76",
+      "area_m2": 1.53,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          16.949,
+          12.638
+        ],
+        [
+          19.949,
+          12.638
+        ],
+        [
+          19.949,
+          14.588
+        ],
+        [
+          16.949,
+          14.588
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_77",
+      "name": "Room 77",
+      "area_m2": 2.9,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          16.499,
+          13.388
+        ],
+        [
+          21.749,
+          13.388
+        ],
+        [
+          21.749,
+          16.538
+        ],
+        [
+          16.499,
+          16.538
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_78",
+      "name": "Room 78",
+      "area_m2": 2.99,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          9.749,
+          13.538
+        ],
+        [
+          12.899,
+          13.538
+        ],
+        [
+          12.899,
+          15.788
+        ],
+        [
+          9.749,
+          15.788
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_79",
+      "name": "Room 79",
+      "area_m2": 1.51,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          5.099,
+          14.588
+        ],
+        [
+          7.349,
+          14.588
+        ],
+        [
+          7.349,
+          16.088
+        ],
+        [
+          5.099,
+          16.088
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_80",
+      "name": "Room 80",
+      "area_m2": 11.92,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          6.749,
+          15.338
+        ],
+        [
+          11.849,
+          15.338
+        ],
+        [
+          11.849,
+          19.538
+        ],
+        [
+          6.749,
+          19.538
+        ]
+      ]
+    },
+    {
+      "id": "SPACE_81",
+      "name": "Room 81",
+      "area_m2": 1.96,
+      "elevation": -7.923,
+      "height": 7.058,
+      "polygon": [
+        [
+          18.749,
+          15.788
+        ],
+        [
+          23.699,
+          15.788
+        ],
+        [
+          23.699,
+          18.638
+        ],
+        [
+          18.749,
+          18.638
+        ]
+      ]
+    }
+  ],
+  "plumbing_fixtures": [],
+  "casework": [],
+  "source_point_cloud": "C:\\Users\\ChristopherAllen\\Downloads\\2525 Belmont.e57",
+  "navvis_bundle": {
+    "bundle_path": "C:\\Users\\ChristopherAllen\\Downloads\\261113_2525_Belmont_2026-11-18.bundle",
+    "datasets_count": 12,
+    "total_panoramas": 528,
+    "index_json": "data\\2525_belmont_navvis_index.json"
+  }
+}

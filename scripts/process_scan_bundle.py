@@ -76,9 +76,36 @@ def load_point_cloud(cloud_path, max_points=5_000_000):
             n_scans = e57.scan_count
             stride = max(1, n_scans // 20)
             for idx in range(0, n_scans, stride):
-                raw = e57.read_scan(idx, intensity=False, colors=False, ignore_missing_fields=True)
-                pts = np.column_stack([raw["cartesianX"], raw["cartesianY"], raw["cartesianZ"]])
-                chunks.append(pts)
+                header = e57.get_header(idx)
+                n_pts = int(header.point_count)
+                if n_pts > 20_000_000:
+                    # Stream large scans in 5M-point chunks to avoid multi-GB RAM spikes
+                    chunk_size = 5_000_000
+                    pt_step = max(1, n_pts // max_points)
+                    data, bufs = e57.make_buffers(["cartesianX", "cartesianY", "cartesianZ"], chunk_size)
+                    reader = header.points.reader(bufs)
+                    scan_chunks = []
+                    try:
+                        while True:
+                            got = reader.read()
+                            if got == 0:
+                                break
+                            pts_chunk = np.column_stack([
+                                data["cartesianX"][:got:pt_step],
+                                data["cartesianY"][:got:pt_step],
+                                data["cartesianZ"][:got:pt_step],
+                            ])
+                            scan_chunks.append(pts_chunk)
+                    finally:
+                        reader.close()
+                    pts = np.vstack(scan_chunks)
+                    if header.has_pose():
+                        pts = e57.to_global(pts, header.rotation, header.translation)
+                    chunks.append(pts)
+                else:
+                    raw = e57.read_scan(idx, intensity=False, colors=False, ignore_missing_fields=True)
+                    pts = np.column_stack([raw["cartesianX"], raw["cartesianY"], raw["cartesianZ"]])
+                    chunks.append(pts)
             xyz = np.vstack(chunks)
         except ImportError:
             try:

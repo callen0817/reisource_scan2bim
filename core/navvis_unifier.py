@@ -24,31 +24,69 @@ class NavVisDatasetUnifier:
         self.datasets = []
         self.alignments = {}
 
-        # Look for alignment XMLs (NavVis Desktop / IVION format)
+        # Look for alignment XMLs (NavVis Desktop format) and alignment.json (NavVis IVION web-v4 bundle format)
         align_files = glob.glob(os.path.join(self.project_root, "*alignment*.xml")) + \
                       glob.glob(os.path.join(self.project_root, "dataset_alignment.xml"))
-        
+
         for af in align_files:
             self._parse_alignment_xml(af)
 
-        # Scan for dataset directories containing poses.csv
         for root, dirs, files in os.walk(self.project_root):
+            if "alignment.json" in files:
+                self._parse_alignment_json(os.path.join(root, "alignment.json"), os.path.basename(root))
+
+        # Scan for dataset directories containing poses.csv or info/*-info.json (web-v4 bundle format)
+        for root, dirs, files in os.walk(self.project_root):
+            rel_dir = os.path.relpath(root, self.project_root)
+            ds_id = os.path.basename(root) if rel_dir != "." else "root_dataset"
+
             if "poses.csv" in files:
-                rel_dir = os.path.relpath(root, self.project_root)
-                # Avoid root itself if poses.csv is at root
-                ds_id = os.path.basename(root) if rel_dir != "." else "root_dataset"
-                has_panos = os.path.isdir(os.path.join(root, "pano")) or any(f.endswith(".jpg") for f in files)
-                
+                has_panos = os.path.isdir(os.path.join(root, "pano")) or any(f.endswith((".jpg", ".nvr")) for f in files)
                 self.datasets.append({
                     "id": ds_id,
                     "path": root,
                     "rel_path": rel_dir,
                     "poses_csv": os.path.join(root, "poses.csv"),
+                    "info_dir": None,
                     "has_panos": has_panos,
                     "transform": self.alignments.get(ds_id, np.identity(4))
                 })
+            elif "dataset.json" in files and os.path.isdir(os.path.join(root, "info")):
+                info_dir = os.path.join(root, "info")
+                info_files = sorted(glob.glob(os.path.join(info_dir, "*-info.json")))
+                if info_files:
+                    has_panos = os.path.isdir(os.path.join(root, "pano"))
+                    self.datasets.append({
+                        "id": ds_id,
+                        "path": root,
+                        "rel_path": rel_dir,
+                        "poses_csv": None,
+                        "info_dir": info_dir,
+                        "info_files": info_files,
+                        "has_panos": has_panos,
+                        "transform": self.alignments.get(ds_id, np.identity(4))
+                    })
 
         return self.datasets
+
+    def _parse_alignment_json(self, json_path, default_ds_id):
+        """Parses NavVis IVION web-v4 alignment.json 4x4 transform matrix."""
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            name = data.get("name") or default_ds_id
+            tf = data.get("site_transform") or data.get("transform")
+            if isinstance(tf, dict) and "r11" in tf:
+                mat = np.array([
+                    [float(tf["r11"]), float(tf["r12"]), float(tf["r13"]), float(tf["tx"])],
+                    [float(tf["r21"]), float(tf["r22"]), float(tf["r23"]), float(tf["ty"])],
+                    [float(tf["r31"]), float(tf["r32"]), float(tf["r33"]), float(tf["tz"])],
+                    [0.0, 0.0, 0.0, 1.0],
+                ], dtype=float)
+                self.alignments[name] = mat
+                self.alignments[default_ds_id] = mat
+        except Exception as e:
+            print(f"[Warning] Failed parsing alignment JSON {json_path}: {e}")
 
     def _parse_alignment_xml(self, xml_path):
         """Parses 4x4 rigid transformation matrices for each dataset walk."""
@@ -74,51 +112,84 @@ class NavVisDatasetUnifier:
         for ds in self.datasets:
             ds_id = ds["id"]
             trans = ds["transform"]
-            csv_path = ds["poses_csv"]
+            csv_path = ds.get("poses_csv")
+            q_align = _rotation_matrix_to_quaternion(trans[:3, :3])
 
-            with open(csv_path, "r", encoding="utf-8") as f:
-                lines = [l.strip() for l in f if l.strip()]
+            if csv_path and os.path.isfile(csv_path):
+                with open(csv_path, "r", encoding="utf-8") as f:
+                    lines = [l.strip() for l in f if l.strip()]
 
-            if not lines:
-                continue
-
-            # Check header
-            header = lines[0].split(";") if ";" in lines[0] else lines[0].split(",")
-            data_rows = lines[1:]
-
-            for row_idx, line in enumerate(data_rows):
-                parts = line.split(";") if ";" in line else line.split(",")
-                if len(parts) < 8:
+                if not lines:
                     continue
 
-                try:
-                    # Typical NavVis format: timestamp, x, y, z, qx, qy, qz, qw (or with image_name)
-                    ts = float(parts[0])
-                    x_loc, y_loc, z_loc = float(parts[1]), float(parts[2]), float(parts[3])
-                    qx_loc, qy_loc, qz_loc, qw_loc = float(parts[4]), float(parts[5]), float(parts[6]), float(parts[7])
-                except ValueError:
-                    continue
+                data_rows = lines[1:]
+                for row_idx, line in enumerate(data_rows):
+                    parts = line.split(";") if ";" in line else line.split(",")
+                    if len(parts) < 8:
+                        continue
 
-                # Relative image path preservation
-                # Usually pano_index corresponds to row_idx + 1: pano-000001.jpg
-                img_name = f"pano-{row_idx+1:06d}.jpg"
-                rel_img_path = os.path.join(ds["rel_path"], "pano", img_name)
+                    try:
+                        ts = float(parts[0])
+                        x_loc, y_loc, z_loc = float(parts[1]), float(parts[2]), float(parts[3])
+                        qx_loc, qy_loc, qz_loc, qw_loc = float(parts[4]), float(parts[5]), float(parts[6]), float(parts[7])
+                    except ValueError:
+                        continue
 
-                # Apply 4x4 rigid transformation: P_global = T * P_local and Q_global = Q_align * Q_local
-                local_pt = np.array([x_loc, y_loc, z_loc, 1.0])
-                global_pt = trans @ local_pt
-                q_align = _rotation_matrix_to_quaternion(trans[:3, :3])
-                q_global = _quaternion_multiply(q_align, [qw_loc, qx_loc, qy_loc, qz_loc])
+                    img_name = f"pano-{row_idx+1:06d}.jpg"
+                    rel_img_path = os.path.join(ds["rel_path"], "pano", img_name)
 
-                self.unified_poses.append({
-                    "global_id": f"{ds_id}__{img_name}",
-                    "dataset_source": ds_id,
-                    "timestamp": ts,
-                    "local_pose": [x_loc, y_loc, z_loc],
-                    "global_pose": [float(global_pt[0]), float(global_pt[1]), float(global_pt[2])],
-                    "quaternion": [float(v) for v in q_global],
-                    "relative_image_path": rel_img_path
-                })
+                    local_pt = np.array([x_loc, y_loc, z_loc, 1.0])
+                    global_pt = trans @ local_pt
+                    q_global = _quaternion_multiply(q_align, [qw_loc, qx_loc, qy_loc, qz_loc])
+
+                    self.unified_poses.append({
+                        "global_id": f"{ds_id}__{img_name}",
+                        "dataset_source": ds_id,
+                        "timestamp": ts,
+                        "local_pose": [x_loc, y_loc, z_loc],
+                        "global_pose": [float(global_pt[0]), float(global_pt[1]), float(global_pt[2])],
+                        "quaternion": [float(v) for v in q_global],
+                        "relative_image_path": rel_img_path
+                    })
+
+            elif ds.get("info_files"):
+                for info_file in ds["info_files"]:
+                    try:
+                        with open(info_file, "r", encoding="utf-8") as f:
+                            info = json.load(f)
+                    except Exception:
+                        continue
+
+                    cam = info.get("cam_head") or info.get("footprint") or info.get("cam0")
+                    if not isinstance(cam, dict) or "position" not in cam or "quaternion" not in cam:
+                        continue
+
+                    pos = cam["position"]
+                    quat = cam["quaternion"]  # NavVis info.json quaternion is [w, x, y, z]
+                    if len(pos) < 3 or len(quat) < 4:
+                        continue
+
+                    x_loc, y_loc, z_loc = float(pos[0]), float(pos[1]), float(pos[2])
+                    qw_loc, qx_loc, qy_loc, qz_loc = float(quat[0]), float(quat[1]), float(quat[2]), float(quat[3])
+                    ts = float(info.get("timestamp", 0.0))
+
+                    stem = os.path.basename(info_file).replace("-info.json", "")
+                    img_name = f"{stem}.nvr"
+                    rel_img_path = os.path.join(ds["rel_path"], "pano", img_name)
+
+                    local_pt = np.array([x_loc, y_loc, z_loc, 1.0])
+                    global_pt = trans @ local_pt
+                    q_global = _quaternion_multiply(q_align, [qw_loc, qx_loc, qy_loc, qz_loc])
+
+                    self.unified_poses.append({
+                        "global_id": f"{ds_id}__{img_name}",
+                        "dataset_source": ds_id,
+                        "timestamp": ts,
+                        "local_pose": [x_loc, y_loc, z_loc],
+                        "global_pose": [float(global_pt[0]), float(global_pt[1]), float(global_pt[2])],
+                        "quaternion": [float(v) for v in q_global],
+                        "relative_image_path": rel_img_path
+                    })
 
         return self.unified_poses
 
