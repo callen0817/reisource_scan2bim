@@ -181,7 +181,7 @@ class NavVisDatasetUnifier:
                     global_pt = trans @ local_pt
                     q_global = _quaternion_multiply(q_align, [qw_loc, qx_loc, qy_loc, qz_loc])
 
-                    self.unified_poses.append({
+                    pose_entry = {
                         "global_id": f"{ds_id}__{img_name}",
                         "dataset_source": ds_id,
                         "timestamp": ts,
@@ -189,9 +189,36 @@ class NavVisDatasetUnifier:
                         "global_pose": [float(global_pt[0]), float(global_pt[1]), float(global_pt[2])],
                         "quaternion": [float(v) for v in q_global],
                         "relative_image_path": rel_img_path
-                    })
+                    }
+                    fp = info.get("footprint")
+                    if isinstance(fp, dict) and "position" in fp and len(fp["position"]) >= 3:
+                        fp_local = np.array([float(fp["position"][0]), float(fp["position"][1]), float(fp["position"][2]), 1.0])
+                        fp_global = trans @ fp_local
+                        pose_entry["footprint_pose"] = [float(fp_global[0]), float(fp_global[1]), float(fp_global[2])]
+
+                    self.unified_poses.append(pose_entry)
 
         return self.unified_poses
+
+    def _parse_site_model(self):
+        """Extracts floor Z-intervals from NavVis bundle site_model.json if present."""
+        floors = []
+        for root, dirs, files in os.walk(self.project_root):
+            if "site_model.json" in files:
+                try:
+                    with open(os.path.join(root, "site_model.json"), "r", encoding="utf-8") as f:
+                        sm = json.load(f)
+                    for bldg in sm if isinstance(sm, list) else [sm]:
+                        for child in bldg.get("children", []):
+                            if child.get("type") == "FLOOR":
+                                floors.append({
+                                    "name": str(child.get("name") or len(floors)),
+                                    "z_min": child.get("scs_z_min"),
+                                    "z_max": child.get("scs_z_max"),
+                                })
+                except Exception:
+                    pass
+        return floors
 
     def export_unified_index(self, out_json_path):
         """Exports the master pose index for downstream Vision & BIM processing."""
@@ -201,6 +228,7 @@ class NavVisDatasetUnifier:
             "datasets_count": len(self.datasets),
             "datasets": [d["id"] for d in self.datasets],
             "total_panoramas": len(poses),
+            "site_floors": self._parse_site_model(),
             "panos": poses
         }
         with open(out_json_path, "w", encoding="utf-8") as f:

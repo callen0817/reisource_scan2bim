@@ -60,21 +60,28 @@ def build_model(doc):
     t.Start()
 
     existing_lvls = {{l.Name: l for l in FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).WhereElementIsNotElementType()}}
+    level_map = {{}}
     base_level = None
     for lvl_info in MANIFEST_DATA.get("levels", []):
         lvl = existing_lvls.get(lvl_info["name"])
         if not lvl:
             lvl = Level.Create(doc, m2ft(lvl_info["elevation"]))
             lvl.Name = lvl_info["name"]
+        level_map[lvl_info.get("id", lvl_info["name"])] = lvl
+        level_map[lvl_info["name"]] = lvl
         if base_level is None:
             base_level = lvl
     if not base_level:
         base_level = Level.Create(doc, 0.0)
         base_level.Name = "01_Ground Floor"
 
+    def _get_lvl(item):
+        return level_map.get(item.get("level_id") or item.get("level_name"), base_level)
+
     floor_type = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Floors).WhereElementIsElementType().FirstElement()
     if floor_type is not None:
         for s in MANIFEST_DATA.get("slabs", MANIFEST_DATA.get("floors", [])):
+            lvl = _get_lvl(s)
             elev = m2ft(s.get("elevation_top", s.get("elevation", 0.0)))
             poly = s.get("polygon") or [
                 [s["x_min"], s["y_min"]], [s["x_max"], s["y_min"]],
@@ -84,9 +91,10 @@ def build_model(doc):
             for i in range(len(poly)):
                 pa, pb = poly[i], poly[(i + 1) % len(poly)]
                 loop.Append(Line.CreateBound(XYZ(m2ft(pa[0]), m2ft(pa[1]), elev), XYZ(m2ft(pb[0]), m2ft(pb[1]), elev)))
-            Floor.Create(doc, [loop], floor_type.Id, base_level.Id)
+            Floor.Create(doc, [loop], floor_type.Id, lvl.Id)
 
     created_walls = {{}}
+    wall_levels = {{}}
     for w in MANIFEST_DATA.get("walls", []):
         p1 = w.get("start", w.get("p1"))
         p2 = w.get("end", w.get("p2"))
@@ -94,9 +102,11 @@ def build_model(doc):
         pa, pb = XYZ(m2ft(p1[0]), m2ft(p1[1]), z_ft), XYZ(m2ft(p2[0]), m2ft(p2[1]), z_ft)
         if pa.DistanceTo(pb) < 0.1:
             continue
+        lvl = _get_lvl(w)
         wt = _match_wall_type(doc, w.get("thickness", 0.127))
         if wt is not None:
-            created_walls[w["id"]] = Wall.Create(doc, Line.CreateBound(pa, pb), wt.Id, base_level.Id, m2ft(w["height"]), 0.0, False, False)
+            created_walls[w["id"]] = Wall.Create(doc, Line.CreateBound(pa, pb), wt.Id, lvl.Id, m2ft(w["height"]), 0.0, False, False)
+            wall_levels[w["id"]] = lvl
 
     door_sym = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Doors).WhereElementIsElementType().FirstElement()
     if door_sym is not None:
@@ -104,10 +114,12 @@ def build_model(doc):
             door_sym.Activate()
             doc.Regenerate()
         for d in MANIFEST_DATA.get("doors", MANIFEST_DATA.get("openings", [])):
-            host = created_walls.get(d.get("host", d.get("host_wall")))
+            host_id = d.get("host", d.get("host_wall"))
+            host = created_walls.get(host_id)
             pos = d.get("pos", d.get("location"))
             if host and pos:
-                doc.Create.NewFamilyInstance(XYZ(m2ft(pos[0]), m2ft(pos[1]), m2ft(pos[2])), door_sym, host, base_level, Structure.StructuralType.NonStructural)
+                lvl = wall_levels.get(host_id, base_level)
+                doc.Create.NewFamilyInstance(XYZ(m2ft(pos[0]), m2ft(pos[1]), m2ft(pos[2])), door_sym, host, lvl, Structure.StructuralType.NonStructural)
 
     print("Revit elements instantiated successfully.")
     t.Commit()

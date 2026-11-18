@@ -103,13 +103,22 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
 
     levels_spec = manifest.get("levels") or [{"id": "Level_00", "name": "01_Ground_Floor", "elevation": 0.0}]
     storeys = []
+    storey_by_key = {}
+    storey_elements = {}
     for lv in levels_spec:
         st = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcBuildingStorey", name=lv["name"])
         elev = float(lv.get("elevation", 0.0))
         st.Elevation = elev
         st.ObjectPlacement = create_local_placement(model, 0.0, 0.0, elev)
         storeys.append(st)
+        storey_by_key[lv.get("id", lv["name"])] = st
+        storey_by_key[lv["name"]] = st
+        storey_elements[st] = []
     storey_l1 = storeys[0]
+
+    def _get_storey(item):
+        k = item.get("level_id") or item.get("level_name")
+        return storey_by_key.get(k, storey_l1)
 
     ifcopenshell.api.run("aggregate.assign_object", model, relating_object=project, products=[site])
     ifcopenshell.api.run("aggregate.assign_object", model, relating_object=site, products=[building])
@@ -117,6 +126,11 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
 
     omniclass = ifcopenshell.api.run("classification.add_classification", model, classification="OmniClass")
     contained_elements = []
+
+    def _register_elem(elem, item_dict=None):
+        contained_elements.append(elem)
+        st = _get_storey(item_dict) if item_dict else storey_l1
+        storey_elements[st].append(elem)
 
     # 2. Slabs / Floors (supports both bounding-box and polygon schemas)
     for s in manifest.get("slabs", manifest.get("floors", [])):
@@ -141,7 +155,7 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
         s_item = slab.Representation.Representations[0].Items[0]
         add_surface_style(model, s_item, "Carpet_Tile_Charcoal", 0.28, 0.29, 0.31)
         attach_pset_and_classification(model, slab, cat_key, classification_entity=omniclass)
-        contained_elements.append(slab)
+        _register_elem(slab, s)
 
     # 3. Ceilings (IfcCovering / CEILING)
     for c in manifest.get("ceilings", []):
@@ -162,7 +176,7 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
         c_item = clg.Representation.Representations[0].Items[0]
         add_surface_style(model, c_item, "Acoustic_Ceiling_Drywall", 0.94, 0.94, 0.95)
         attach_pset_and_classification(model, clg, "SuspendedCeiling", classification_entity=omniclass)
-        contained_elements.append(clg)
+        _register_elem(clg, c)
 
     # 4. Architectural Walls
     wall_entities = {}
@@ -205,9 +219,11 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
             "ux": ux, "uy": uy,
             "x0": x0, "y0": y0,
             "cx": cx, "cy": cy,
-            "thick": thick
+            "thick": thick,
+            "level_id": w.get("level_id"),
+            "level_name": w.get("level_name"),
         }
-        contained_elements.append(wall)
+        _register_elem(wall, w)
 
     # 5. Openings (Parametric Voids + Door/Window Elements)
     openings_list = list(manifest.get("openings", []))
@@ -281,7 +297,7 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
             RelatingOpeningElement=void_elem,
             RelatedBuildingElement=filling_elem
         )
-        contained_elements.append(filling_elem)
+        _register_elem(filling_elem, w_meta)
 
     # 6. Linear MEP Runs & Structural Framing (IfcDuctSegment, IfcBeam)
     for run in manifest.get("linear_runs", []):
@@ -365,6 +381,7 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
 
     # 9. Architectural Spaces / Rooms (IfcSpace)
     space_entities = []
+    storey_spaces = {st: [] for st in storeys}
     for sp in manifest.get("spaces", []):
         sp_ent = ifcopenshell.api.run("root.create_entity", model, ifc_class="IfcSpace", name=sp["name"], predefined_type="SPACE")
         sp_ent.ObjectPlacement = create_local_placement(model, 0.0, 0.0, sp.get("elevation", 0.0))
@@ -376,12 +393,15 @@ def export_ifc(manifest_path=DEFAULT_MANIFEST_PATH, out_ifc_path=DEFAULT_OUT_IFC
             classification_entity=omniclass,
         )
         space_entities.append(sp_ent)
-    if space_entities:
-        ifcopenshell.api.run("aggregate.assign_object", model, relating_object=storey_l1, products=space_entities)
+        storey_spaces[_get_storey(sp)].append(sp_ent)
+    for st, sp_list in storey_spaces.items():
+        if sp_list:
+            ifcopenshell.api.run("aggregate.assign_object", model, relating_object=st, products=sp_list)
 
-    # 10. Aggregate all elements into Storey Level 1
-    if contained_elements:
-        ifcopenshell.api.run("spatial.assign_container", model, relating_structure=storey_l1, products=contained_elements)
+    # 10. Assign each element to its matching IfcBuildingStorey
+    for st, elems in storey_elements.items():
+        if elems:
+            ifcopenshell.api.run("spatial.assign_container", model, relating_structure=st, products=elems)
 
     # 11. Write Model
     out_dir = os.path.dirname(os.path.abspath(out_ifc_path))

@@ -189,25 +189,29 @@ def run_scan_pipeline(e57_path, bundle_path=None, project_name="2525_Belmont", o
     cloud_data = load_point_cloud(resolved_cloud)
     print(f"      Loaded {len(cloud_data['xyz']):,} valid 3D points.")
 
-    print(f"[2/4] Running SpatialBIMExtractor (voxel_size={voxel_size}m)...")
-    extractor = SpatialBIMExtractor(target_lod=300, voxel_size=voxel_size)
-    manifest = extractor.extract_from_pointcloud(cloud_data, site_name=project_name)
-    manifest["source_point_cloud"] = os.path.abspath(resolved_cloud)
-
+    navvis_index = None
+    index_path = None
     if bundle_path and os.path.exists(bundle_path):
-        print(f"[2b/4] Unifying NavVis Bundle: {bundle_path}")
+        print(f"[2/4] Unifying NavVis Bundle: {bundle_path}")
         index_path = os.path.join(out_dir, f"{slug}_navvis_index.json")
         navvis_index = ingest_navvis_bundle(bundle_path, index_path)
         if navvis_index:
-            manifest["navvis_bundle"] = {
-                "bundle_path": os.path.abspath(bundle_path),
-                "datasets_count": navvis_index["datasets_count"],
-                "total_panoramas": navvis_index["total_panoramas"],
-                "index_json": index_path,
-            }
             print(
                 f"      Unified {navvis_index['total_panoramas']} panoramas across {navvis_index['datasets_count']} walk(s)."
             )
+
+    print(f"[2b/4] Running SpatialBIMExtractor (voxel_size={voxel_size}m)...")
+    extractor = SpatialBIMExtractor(target_lod=300, voxel_size=voxel_size)
+    manifest = extractor.extract_from_pointcloud(cloud_data, site_name=project_name, navvis_index=navvis_index)
+    manifest["source_point_cloud"] = os.path.abspath(resolved_cloud)
+
+    if navvis_index:
+        manifest["navvis_bundle"] = {
+            "bundle_path": os.path.abspath(bundle_path),
+            "datasets_count": navvis_index["datasets_count"],
+            "total_panoramas": navvis_index["total_panoramas"],
+            "index_json": index_path,
+        }
 
     manifest_path = os.path.join(out_dir, f"{slug}_bim_manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:
