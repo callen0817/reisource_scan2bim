@@ -162,6 +162,39 @@ class TestCorePipeline(unittest.TestCase):
                 code = f.read()
             compile(code, out_py, "exec")
 
+    def test_process_scan_bundle_end_to_end(self):
+        import zipfile
+        from scripts.process_scan_bundle import run_scan_pipeline
+
+        rng = np.random.default_rng(77)
+        floor_xy = rng.uniform([0.0, 0.0], [6.0, 4.0], size=(1500, 2))
+        floor_pts = np.column_stack([floor_xy, rng.normal(0.0, 0.003, size=1500)])
+        ceil_pts = np.column_stack([floor_xy, rng.normal(2.74, 0.003, size=1500)])
+        w_s = _sample_wall_box([0.0, 0.0], [6.0, 0.0], 0.0, 2.74, 0.152, seed=10)
+        w_n = _sample_wall_box([0.0, 4.0], [6.0, 4.0], 0.0, 2.74, 0.152, seed=11)
+        xyz = np.vstack([floor_pts, ceil_pts, w_s, w_n])
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cloud_npz = os.path.join(tmpdir, "2525_Belmont.npz")
+            np.savez(cloud_npz, xyz=xyz)
+
+            bundle_zip = os.path.join(tmpdir, "261113_2525_Belmont_2026-11-18.bundle")
+            with zipfile.ZipFile(bundle_zip, "w") as zf:
+                zf.writestr(
+                    "dataset_walk_01/poses.csv",
+                    "timestamp;x;y;z;qx;qy;qz;qw\n1700000000.0;1.0;2.0;1.5;0.0;0.0;0.0;1.0\n",
+                )
+
+            manifest_path = run_scan_pipeline(
+                e57_path=tmpdir,
+                bundle_path=bundle_zip,
+                project_name="2525_Belmont",
+                out_dir=tmpdir,
+            )
+            self.assertTrue(os.path.isfile(manifest_path))
+            self.assertTrue(os.path.isfile(os.path.join(tmpdir, "build_2525_belmont_revit.py")))
+            self.assertTrue(os.path.isfile(os.path.join(tmpdir, "2525_belmont_navvis_index.json")))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
