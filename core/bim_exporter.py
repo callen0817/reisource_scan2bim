@@ -121,6 +121,30 @@ def build_model(doc):
                 lvl = wall_levels.get(host_id, base_level)
                 doc.Create.NewFamilyInstance(XYZ(m2ft(pos[0]), m2ft(pos[1]), m2ft(pos[2])), door_sym, host, lvl, Structure.StructuralType.NonStructural)
 
+    col_sym = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_StructuralColumns).WhereElementIsElementType().FirstElement()
+    if col_sym is not None:
+        if not col_sym.IsActive:
+            col_sym.Activate()
+            doc.Regenerate()
+        for c in MANIFEST_DATA.get("columns", []):
+            lvl = _get_lvl(c)
+            cx, cy = c["center"]
+            pt = XYZ(m2ft(cx), m2ft(cy), m2ft(c.get("base_z", 0.0)))
+            doc.Create.NewFamilyInstance(pt, col_sym, lvl, Structure.StructuralType.Column)
+
+    beam_sym = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_StructuralFraming).WhereElementIsElementType().FirstElement()
+    if beam_sym is not None:
+        if not beam_sym.IsActive:
+            beam_sym.Activate()
+            doc.Regenerate()
+        for b in MANIFEST_DATA.get("beams", []):
+            lvl = _get_lvl(b)
+            s, e = b["start"], b["end"]
+            pa = XYZ(m2ft(s[0]), m2ft(s[1]), m2ft(b.get("top_z", s[2])))
+            pb = XYZ(m2ft(e[0]), m2ft(e[1]), m2ft(b.get("top_z", e[2])))
+            if pa.DistanceTo(pb) >= 0.2:
+                doc.Create.NewFamilyInstance(Line.CreateBound(pa, pb), beam_sym, lvl, Structure.StructuralType.Beam)
+
     print("Revit elements instantiated successfully.")
     t.Commit()
 

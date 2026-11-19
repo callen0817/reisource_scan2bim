@@ -176,6 +176,25 @@ IFC4_TAXONOMY = {
         "pset_name": "Pset_FurnitureTypeCommon",
         "pset_props": {},
     },
+    # Structural Columns & Beams
+    "Column": {
+        "ifc_class": "IfcColumn",
+        "predefined_type": "COLUMN",
+        "revit_category": "OST_StructuralColumns",
+        "omniclass": "21-01 10 10",
+        "masterformat": "03 30 00",
+        "pset_name": "Pset_ColumnCommon",
+        "pset_props": {"IsExternal": False, "LoadBearing": True},
+    },
+    "Beam": {
+        "ifc_class": "IfcBeam",
+        "predefined_type": "BEAM",
+        "revit_category": "OST_StructuralFraming",
+        "omniclass": "21-01 10 20",
+        "masterformat": "05 12 00",
+        "pset_name": "Pset_BeamCommon",
+        "pset_props": {"IsExternal": False, "LoadBearing": True},
+    },
     # MEP & Lighting
     "LightFixture": {
         "ifc_class": "IfcLightFixture",
@@ -230,10 +249,10 @@ def attach_pset_and_classification(model, element, category_key, extra_props=Non
         )
 
 
-def assign_wall_material_layers(model, wall_entity, thickness_m, wall_type="Interior"):
+def assign_wall_material_layers(model, wall_entity, thickness_m, wall_type="Interior", _cache=None):
     """
-    Assigns an IfcMaterialLayerSetUsage to an IfcWall so BIM viewers and Revit
-    recognize compound stud + gypsum wallboard assemblies.
+    Assigns an IfcMaterialLayerSetUsage (with shared IfcMaterialLayerSet) to an IfcWall
+    so BIM viewers and Revit recognize native compound wall assemblies.
     """
     import ifcopenshell.api
 
@@ -260,10 +279,23 @@ def assign_wall_material_layers(model, wall_entity, thickness_m, wall_type="Inte
         layers_spec = [(f"Partition Core ({wall_type})", thk)]
         set_name = f"Single Layer Assembly ({int(round(thk * 1000))}mm)"
 
-    layer_set = ifcopenshell.api.run("material.add_material_set", model, name=set_name, set_type="IfcMaterialLayerSet")
-    for mat_name, layer_thk in layers_spec:
-        mat = ifcopenshell.api.run("material.add_material", model, name=mat_name)
-        layer = ifcopenshell.api.run("material.add_layer", model, layer_set=layer_set, material=mat)
-        ifcopenshell.api.run("material.edit_layer", model, layer=layer, attributes={"LayerThickness": float(layer_thk)})
+    cache_key = (id(model), set_name, round(thk, 3))
+    if _cache is not None and cache_key in _cache:
+        layer_set = _cache[cache_key]
+    else:
+        layer_set = ifcopenshell.api.run("material.add_material_set", model, name=set_name, set_type="IfcMaterialLayerSet")
+        for mat_name, layer_thk in layers_spec:
+            mat = ifcopenshell.api.run("material.add_material", model, name=mat_name)
+            layer = ifcopenshell.api.run("material.add_layer", model, layer_set=layer_set, material=mat)
+            ifcopenshell.api.run("material.edit_layer", model, layer=layer, attributes={"LayerThickness": float(layer_thk)})
+        if _cache is not None:
+            _cache[cache_key] = layer_set
 
-    ifcopenshell.api.run("material.assign_material", model, products=[wall_entity], material=layer_set)
+    usage = model.create_entity(
+        "IfcMaterialLayerSetUsage",
+        ForLayerSet=layer_set,
+        LayerSetDirection="AXIS2",
+        DirectionSense="POSITIVE",
+        OffsetFromReferenceLine=-0.5 * thk,
+    )
+    ifcopenshell.api.run("material.assign_material", model, products=[wall_entity], material=usage)
